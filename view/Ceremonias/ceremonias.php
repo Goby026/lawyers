@@ -5,10 +5,8 @@
                 <!--                <img src="./images/ceremonias-lima-2019.jpg" class="img-fluid" alt="Responsive image" style="width: 100% !important;">-->
                 <section class="row no-gutter align-items-center">
                     <div class="col-lg-12 text-center p-0 d-flex align-items-center">
-                        <?php foreach($ceremonia as $r): ?>
-                            <img class="img-fluid position-relative mx-auto" src="<?php echo $r->imagenC; ?>" alt="banner ceremonias" style="width: 100% !important;">
-                            <h1 class="w-100 position-absolute text-light my-auto" style="text-align: left; margin-top: 30px !important; margin-left: 20px !important;"><?php echo $r->titulo; ?><br><?php echo $r->DescripcionC; ?></h1>
-                        <?php endforeach; ?>
+                        <img class="img-fluid position-relative mx-auto" src="<?php echo $ceremonia->imagenC; ?>" alt="banner ceremonias" style="width: 100% !important;">
+                        <h1 class="w-100 position-absolute text-light my-auto" style="text-align: left; margin-top: 30px !important; margin-left: 20px !important;"><?php echo $ceremonia->titulo; ?><br><?php echo $ceremonia->DescripcionC; ?></h1>
                     </div>
                 </section>
 
@@ -25,7 +23,7 @@
                         <div class="card-body">
                             <h2 class="card-title"><?php echo $tipoCeremonia2->NombreC; ?></h2>
                             <p class="card-text"><?php echo $tipoCeremonia2->descripcionTipoC; ?></p>
-                            <a href="./inauguracion.php" class="btn btn-primary btn-block"> <h4>Ver mas +</h4></a>
+                            <a href="?c=ceremonias&a=getInauguracion" class="btn btn-primary btn-block"> <h4>Ver mas +</h4></a>
                         </div>
                     </div>
                 </div>
@@ -47,7 +45,7 @@
                                 <div class="card-body">
                                     <h2 class="card-title"><?php echo $tipoCeremonia3->NombreC; ?></h2>
                                     <p class="card-text"><?php echo $tipoCeremonia3->descripcionTipoC; ?></p>
-                                    <a href="./clausura.php" class="btn btn-primary"><h4>Ver mas +</h4></a>
+                                    <a href="?c=ceremonias&a=getClausura" class="btn btn-primary"><h4>Ver mas +</h4></a>
                                 </div>
                             </div>
                         </div>

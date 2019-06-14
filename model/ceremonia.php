@@ -41,11 +41,12 @@ class Ceremonia {
 	{
 		try 
 		{
-			$stm = $this->pdo
-			          ->prepare("SELECT * FROM alumnos WHERE id = ?");
-			          
+            $consulta = "CALL SP_CEREMONIA(".$id.");";
 
-			$stm->execute(array($id));
+            $stm = $this->pdo->query($consulta);
+
+			//$stm->execute(array($id));
+
 			return $stm->fetch(PDO::FETCH_OBJ);
 		} catch (Exception $e) 
 		{
@@ -71,7 +72,7 @@ class Ceremonia {
 	{
 		try 
 		{
-			$sql = "UPDATE alumnos SET 
+			$sql = "UPDATE ________ SET 
 						Nombre          = ?, 
 						Apellido        = ?,
                         Correo        = ?,

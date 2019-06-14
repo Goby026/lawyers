@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-06-2019 a las 07:34:46
+-- Tiempo de generación: 14-06-2019 a las 21:58:37
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -31,8 +31,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_AUSPICIADORES` ()  BEGIN
 	inner join auspiciadores a on ta.idTipoAuspiciador = a.idTipoAuspiciador;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_CEREMONIA` (`idTipo` INT)  BEGIN
+	SELECT * FROM ceremonias where idCeremonias = idTipo;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_CEREMONIAS` ()  BEGIN
-	SELECT * FROM ceremonias WHERE idCeremonias = 2;
+	SELECT * FROM ceremonias;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_CEREMTIPO` (`idCeremonia` INT)  BEGIN
+	SELECT * FROM tipoceremonias WHERE idCeremonias = idCeremonia;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_COMITE` ()  BEGIN
@@ -56,6 +64,11 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_TIPOCEREMONIAS` (`id` INT)  BEGIN
 	SELECT * FROM tipoceremonias where idTipoCeremonias = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_TIPOINSTITUCIONAL` ()  BEGIN
+	SELECT ti.NombreInstitucional, i.descripInstitucional, i.imagenInstitucional FROM institucional i
+	INNER JOIN tipoinstitucional ti ON i.idTipoInstitucional = ti.idTipoInstitucional;
 END$$
 
 DELIMITER ;
@@ -399,10 +412,20 @@ CREATE TABLE `horarioeventos` (
 
 CREATE TABLE `institucional` (
   `idInstitucional` int(11) NOT NULL,
-  `descripInstitucional` varchar(100) DEFAULT NULL,
-  `imagenInstitucional` longblob,
+  `descripInstitucional` text,
+  `imagenInstitucional` varchar(200) DEFAULT NULL,
   `idTipoInstitucional` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `institucional`
+--
+
+INSERT INTO `institucional` (`idInstitucional`, `descripInstitucional`, `imagenInstitucional`, `idTipoInstitucional`) VALUES
+(1, 'Ejecutar con eficacia las acciones necesarias para el desarrollo de los XVIII Juegos Panamericanos y Juegos Parapanamericanos del 2019, de manera planificada y coordinada con los actores involucrados.', './assets/images/institucional/mision.jpg', 1),
+(2, 'Excelente organización de los XVIII Juegos Panamericanos y Juegos Parapanamericanos del 2019, contribuyendo con el desarrollo del deporte nacional y el posicionamiento internacional de la ciudad de Lima.', './assets/images/institucional/vision.jpg', 2),
+(3, 'Estamos preparando el camino a los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos.', './assets/images/institucional/conocenos.jpg', 3),
+(4, 'Las personas que cumplan con los requisitos especificados en las bases de la Convocatoria, deberán enviar la documentación de acuerdo a las indicaciones brindadas en el cronograma de los Procesos de Selección, publicados por la Oficina de Personal de los Juegos.', './assets/images/institucional/trabaja.jpg', 4);
 
 -- --------------------------------------------------------
 
@@ -738,10 +761,20 @@ INSERT INTO `tipoceremonias` (`idTipoCeremonias`, `NombreC`, `subTitulo`, `descr
 
 CREATE TABLE `tipoinstitucional` (
   `idTipoInstitucional` int(11) NOT NULL,
-  `NombreInstitucional` varchar(50) DEFAULT NULL,
-  `imgInstitucional` longblob,
-  `DescripTipoInstitucional` varchar(50) DEFAULT NULL
+  `NombreInstitucional` varchar(150) DEFAULT NULL,
+  `imgInstitucional` varchar(200) DEFAULT NULL,
+  `DescripTipoInstitucional` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `tipoinstitucional`
+--
+
+INSERT INTO `tipoinstitucional` (`idTipoInstitucional`, `NombreInstitucional`, `imgInstitucional`, `DescripTipoInstitucional`) VALUES
+(1, 'MISION', 'NULL', 'NULL'),
+(2, 'VISION', 'NULL', 'NULL'),
+(3, 'CONOCENOS', 'NULL', 'NULL'),
+(4, 'TRABAJA CON NOSTROS', 'NULL', 'NULL');
 
 -- --------------------------------------------------------
 
@@ -1322,7 +1355,7 @@ ALTER TABLE `horarioeventos`
 -- AUTO_INCREMENT de la tabla `institucional`
 --
 ALTER TABLE `institucional`
-  MODIFY `idInstitucional` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idInstitucional` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `medallas`
@@ -1424,7 +1457,7 @@ ALTER TABLE `tipoceremonias`
 -- AUTO_INCREMENT de la tabla `tipoinstitucional`
 --
 ALTER TABLE `tipoinstitucional`
-  MODIFY `idTipoInstitucional` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idTipoInstitucional` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `tipomedalla`

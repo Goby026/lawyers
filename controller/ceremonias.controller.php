@@ -16,7 +16,7 @@ class CeremoniasController{
 
         session_start();
 
-        $ceremonia = $this->getCeremonias();
+        $ceremonia = $this->getCeremonia(2);
         $tipoCeremonia2 = $this->getTipoCeremonia(2);
         $tipoCeremonia3 = $this->getTipoCeremonia(3);
 
@@ -26,9 +26,9 @@ class CeremoniasController{
 
     }
 
-    public function getCeremonias(){
+    public function getCeremonia($id){
 
-        return $this->model->Listar();
+        return $this->model->Obtener($id);
 
     }
 
@@ -36,5 +36,31 @@ class CeremoniasController{
 
         return $this->tipoCeremonias->Obtener($id);
 
+    }
+
+    public function getInauguracion(){
+
+        session_start();
+
+        $ceremonia = $this->getCeremonia(3);
+
+        $tipoCerem = $this->tipoCeremonias->_Obtener(3);
+
+        require_once 'view/header.php';
+        require_once 'view/Ceremonias/inauguracion.php';
+        require_once 'view/footer.php';
+    }
+
+    public function getClausura(){
+
+        session_start();
+
+        $ceremonia = $this->getCeremonia(4);
+
+        $tipoCerem = $this->tipoCeremonias->_Obtener(4);
+
+        require_once 'view/header.php';
+        require_once 'view/Ceremonias/clausura.php';
+        require_once 'view/footer.php';
     }
 }

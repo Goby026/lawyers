@@ -57,6 +57,24 @@ class TipoCeremonia {
         }
     }
 
+    //metodo para obtener tipoCeremonia segun idCeremonia
+    public function _Obtener($id)
+    {
+        try
+        {
+            $consulta = "CALL SP_CEREMTIPO(".$id.");";
+
+            $stm = $this->pdo->query($consulta);
+
+
+            //$stm->execute(array($id));
+            return $stm->fetch(PDO::FETCH_OBJ);
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
     public function Eliminar($id)
     {
         try

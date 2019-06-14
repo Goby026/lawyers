@@ -79,7 +79,7 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="?c=comiteorganizador&a=index">Comite Organizador</a>
-                                <a class="dropdown-item" href="./ceremonia.php">Organigrama</a>
+                                <a class="dropdown-item" href="#">Organigrama</a>
                             </div>
                         </li>
                         <li class="nav-item">

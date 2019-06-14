@@ -1,4 +1,16 @@
 <main>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="jumbotron jumbotron-fluid">
+                    <div class="container">
+                        <h1 class="display-4">INSTITUCIONAL</h1>
+                        <p class="lead">Juegos panamericanos Lima 2019</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <?php foreach ($institucional as $r): ?>
