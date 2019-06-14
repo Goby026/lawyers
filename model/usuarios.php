@@ -1,0 +1,149 @@
+<?php
+class Usuarios
+{
+    private $pdo;
+
+    public $idUsuario;
+    public $NombreU;
+    public $ApellidoU;
+    public $emailU;
+    public $telefonoU;
+    public $passwordU;
+    public $DocIdentidad;
+    public $idTipoUsuario;
+    public $idGaleria;
+    public $idEstadoUsuario;
+
+    public function __CONSTRUCT()
+    {
+        try
+        {
+            $this->pdo = Database::StartUp();
+        }
+        catch(Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
+    public function Listar()
+    {
+        try
+        {
+            $result = array();
+
+            $stm = $this->pdo->prepare("SELECT * FROM alumnos");
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_OBJ);
+        }
+        catch(Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
+    public function Obtener($id)
+    {
+        try
+        {
+            $stm = $this->pdo
+                ->prepare("SELECT * FROM alumnos WHERE id = ?");
+
+
+            $stm->execute(array($id));
+            return $stm->fetch(PDO::FETCH_OBJ);
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
+    public function Eliminar($id)
+    {
+        try
+        {
+            $stm = $this->pdo
+                ->prepare("DELETE FROM alumnos WHERE id = ?");
+
+            $stm->execute(array($id));
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
+    public function Actualizar($data)
+    {
+        try
+        {
+            $sql = "UPDATE alumnos SET 
+						Nombre          = ?, 
+						Apellido        = ?,
+                        Correo        = ?,
+						Sexo            = ?, 
+						FechaNacimiento = ?
+				    WHERE id = ?";
+
+            $this->pdo->prepare($sql)
+                ->execute(
+                    array(
+                        $data->Nombre,
+                        $data->Correo,
+                        $data->Apellido,
+                        $data->Sexo,
+                        $data->FechaNacimiento,
+                        $data->id
+                    )
+                );
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
+    public function Registrar(Alumno $data)
+    {
+        try
+        {
+            $sql = "INSERT INTO alumnos (Nombre,Correo,Apellido,Sexo,FechaNacimiento,FechaRegistro) 
+		        VALUES (?, ?, ?, ?, ?, ?)";
+
+            $this->pdo->prepare($sql)
+                ->execute(
+                    array(
+                        $data->Nombre,
+                        $data->Correo,
+                        $data->Apellido,
+                        $data->Sexo,
+                        $data->FechaNacimiento,
+                        date('Y-m-d')
+                    )
+                );
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
+    public function Login($user, $pass){
+        try
+        {
+            $result = array();
+
+            $consulta = "CALL SP_LOGIN('".$user."','".$pass."');";
+
+            $stm = $this->pdo->query($consulta);
+
+//            $stm->execute();
+
+//            return $stm->fetchAll(PDO::FETCH_OBJ);
+
+            return $stm->rowCount();
+        }
+        catch(Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+}

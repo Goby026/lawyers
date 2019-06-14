@@ -1,0 +1,14 @@
+@charset "utf-8";
+
+
+
+.contador {text-align:center;}
+
+.contador .label {font-size: 14px; font-weight:600; letter-spacing:1px; text-transform:uppercase; position:relative;}
+
+.contador .block {display: inline-block; padding-top: 50px; margin: 0 20px 20px; height: 190px; width: 190px; font-size: 49px; font-weight:bold; }
+
+.contador .conta {padding: 0 0 20px;}
+
+                 
+.dias .block {color:black;}
