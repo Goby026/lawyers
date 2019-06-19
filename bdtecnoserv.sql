@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.2
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-06-2019 a las 21:58:37
--- Versión del servidor: 10.1.34-MariaDB
--- Versión de PHP: 7.2.7
+-- Tiempo de generación: 19-06-2019 a las 05:35:52
+-- Versión del servidor: 10.1.30-MariaDB
+-- Versión de PHP: 7.2.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -26,6 +26,281 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_AsientosxIdCategoria` (IN `_idCategAsiento` INT(11))  SELECT `idAsiento`, `numero`, `IdEstado` FROM `asientos` WHERE idCategAsiento = _idCategAsiento$$
+
+CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_AsientosxIdCategoriaXIdSede` (IN `_idCategAsiento` INT(11), IN `_IdSede` INT(11))  SELECT `idAsiento`, `numero`, `IdEstado`, `precio` FROM `asientos` WHERE idCategAsiento = _idCategAsiento AND IdSede = _IdSede$$
+
+CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_CategoriaAsiento` ()  SELECT idCategoriaAsiento, NombreCategoriaA FROM categoriaasiento$$
+
+CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_CategoriaAsientoxidCategoriaAsiento` (IN `_idCategoriaAsiento` INT(11))  SELECT NombreCategoriaA FROM categoriaasiento WHERE idCategoriaAsiento = _idCategoriaAsiento$$
+
+CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_Sedes` ()  SELECT `idSede`, `imgSede`, `DireccionSede` FROM `sedes`$$
+
+CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_SedexIdSede` (IN `_idSede` INT(11))  SELECT `DireccionSede` FROM `sedes` WHERE idSede = _idSede$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_foto` ()  NO SQL
+select * from foto$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_video` ()  NO SQL
+select* From video$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_conocenos_sp` ()  BEGIN
+SELECT co_desc AS descripcion, co_imagen AS rutaImagen FROM vision WHERE co_fecha = fechaActual;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_delete_medalleroHistorico_SP` (`idmed` INT)  BEGIN
+DELETE FROM medallerohistorico
+WHERE idmedHis_PK = idmed;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_confSedeDeporte_SP` (`sede` INT, `deporte` INT)  BEGIN
+INSERT INTO config_sede_deporte(idSedeFK, idDeporteFK)
+VALUES(sede, deporte);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_Equipo_SP` (`codigoPais` INT, `numeroIntegrantes` INT)  BEGIN
+INSERT INTO equipo(idPaisFK,totalIntegrantes)
+VALUES(codigoPais, numeroIntegrantes);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_eventos_SP` (`sede` INT, `horario` INT, `dir` VARCHAR(100), `depFK` INT, `confSedeDeporte` INT)  BEGIN
+INSERT INTO eventos(idSede, idHorarioEventos, direccion, idDeportesFK, idConfig_Sede_DeporteFK)
+VALUES(sede, horario, dir, depFK, confSedeDeporte);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_integrantes_SP` (`equifk` INT, `depFK` INT)  BEGIN
+INSERT INTO eventos(idEquipoFK, idDeportistasFK)
+VALUES(equifk, depFK);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_medalleroHistorico_SP` (`puesto` INT, `pais` INT, `oro` INT, `plata` INT, `bronce` INT, `total` INT)  BEGIN
+INSERT INTO medallerohistorico(medHisPue, pai_FK, medHisOro, medHisPla, medHisBro, medHisTot)
+VALUES(puesto, pais, oro, plata, bronce, total);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_participanteGrupal_SP` (`idEve` INT, `idEq1` INT, `idEq2` INT)  BEGIN
+INSERT INTO participantegrupal(idEventoFK, idEquipo1FK, idEquipo2FK)
+VALUES(idEve, idEq1, idEq2);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_participanteIndividual_SP` (`idDepIndividual` INT, `idPaFK` INT, `idEvFK` INT)  BEGIN
+INSERT INTO participanteindividual(idDeportistasFK, idPaisFk, idEventoFK)
+VALUES(idDepIndividual, idPaFK, idEvFK);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_reglamento_SP` (`numSeccion` INT, `tituloSecc` VARCHAR(255), `norma` INT, `subnorma` INT)  BEGIN
+INSERT INTO seccionreglamento(numSec, titsec, normaFK, subNorFK)
+VALUES(numSeccion, tituloSecc, norma, subnorma);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_resultadoGrupal_SP` (`idParticipanteGrupal` INT, `resultadoPuesto` VARCHAR(25))  BEGIN
+INSERT INTO resultadogrupal(idPartGrupalFK, res_gr_puesto)
+VALUES (idParticipanteGrupal, resultadoPuesto);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_resultadoIndividual_SP` (`idparticipanteIndividual` INT, `resultadoPuesto` VARCHAR(25))  BEGIN
+INSERT INTO resultadoindividual(idPartIndividualFK,fechaResultado,res_in_puesto)
+VALUES (idparticipanteIndividual,NOW(),resultadoPuesto);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarNorma_SP` (`id` INT)  SELECT
+N.idNormaPK AS codigo,
+N.numNor AS numeroNorma,
+N.contNor AS contenido
+FROM
+norma AS N
+WHERE
+N.SecRegFK = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarPais_SP` ()  BEGIN
+SELECT
+P.idPais AS codigo,
+P.NombrePais AS pais
+FROM
+pais AS P;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarSeccion_SP` ()  BEGIN
+SELECT
+SR.TitSec AS seccion,
+SR.idSecRegPK codigo
+FROM
+seccionreglamento AS SR;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarSubnorma_SP` (`id` INT)  SELECT
+SN.idSubNor AS codigo,
+SN.numSubNor AS numeroSubnorma,
+SN.contSubNor AS contenido
+FROM
+subnorma AS SN
+WHERE
+SN.normaFK = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarConocenos_sp` ()  BEGIN
+SELECT
+C.co_desc AS descripcion,
+C.co_imagen AS rutaImagen
+FROM
+conocenos AS C
+WHERE
+C.bEstPri = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarMedalleroPorId_SP` (`id` INT)  BEGIN
+SELECT
+MH.idmedHis_PK AS codigo,
+MH.medHisPue AS puesto,
+MH.pai_FK AS pais,
+MH.medHisOro AS oro,
+MH.medHisPla AS plata,
+MH.medHisBro AS bronce,
+MH.medHisTot AS total
+FROM
+medallerohistorico AS MH
+WHERE MH.idmedHis_PK = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarMision_sp` ()  BEGIN
+SELECT
+M.mi_desc AS descripcion,
+M.mi_imagen AS rutaImagen
+FROM
+mision AS M
+WHERE
+M.bEstPri = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarOficinasOrganigrama_sp` ()  BEGIN
+	SELECT
+		OO.idSecretaria AS codigo,
+		OO.se_nombre AS oficina,
+		OO.se_tipo AS tipo
+	FROM
+		oficinasorganigrama AS OO;
+	END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarParticipantesEvento_SP` (`idEvento` INT)  SELECT
+PI.idPartIndividual AS codigo,
+D.Nombre_Deportista AS nombreDeportista,
+DE.NombDeporte AS deporte
+FROM
+participanteindividual AS PI
+INNER JOIN deportistas AS D ON PI.idDeportistasFK = D.idDeportistas
+INNER JOIN deportes AS DE ON D.idDeporte = DE.idDeporte
+WHERE
+PI.idEventoFK = idEvento$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarSedeEvento_SP` ()  SELECT
+E.idEvento AS codigo,
+CONCAT(DE.NombDeporte , '-' , S.NombreSede) AS evento
+FROM
+eventos AS E
+INNER JOIN deportes AS DE ON E.idDeportesFK = DE.idDeporte
+INNER JOIN sedes AS S ON E.idSede = S.idSede$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarTrabajaConNosotros_sp` ()  BEGIN
+SELECT
+T.tra_desc AS descripcion,
+T.tra_imagen AS rutaImagen
+FROM
+trabajaconnosotros AS T
+WHERE
+T.bEstPri = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarUnidadesOrganigrama_sp` (IN `CODIGOOFICINA` INT)  BEGIN
+	SELECT
+		OO.se_tipo AS tipo,
+		UO.U_nombre AS unidad
+	FROM
+		oficinasorganigrama AS OO
+	INNER JOIN unidadorganizacional AS UO ON UO.idSecUniOrgFK = OO.idSecretaria
+	WHERE
+		OO.idSecretaria = CODIGOOFICINA;
+	END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarVision_sp` ()  BEGIN
+SELECT
+V.vi_desc AS descripcion,
+V.vi_imagen AS rutaImagen
+FROM
+vision AS V
+WHERE
+V.bEstPri = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrar_medalleroHistorico_SP` ()  SELECT
+MH.medHisPue AS puesto,
+MH.medHisOro AS medallaOro,
+MH.medHisPla AS medallaPlata,
+MH.medHisBro AS medallaBronce,
+MH.medHisTot AS medallaTotal,
+P.BanderaPais AS bandera,
+P.NombrePais AS pais,
+MH.idmedHis_PK AS codigo
+FROM
+medallerohistorico AS MH
+INNER JOIN pais AS P ON MH.pai_FK = P.idPais$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrar_Reglamento_SP` ()  BEGIN
+SELECT
+SR.TitSec AS tituloSeccion,
+N.contNor AS contenidoNorma,
+SN.contSubNor AS subContenidoNorma
+FROM
+seccionreglamento AS SR
+INNER JOIN norma AS N ON N.SecRegFK = SR.idSecRegPK
+INNER JOIN subnorma AS SN ON SN.normaFK = N.idNormaPK;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_preguntasFrecuentes_SP` ()  BEGIN
+SELECT
+PFA.nomAre,
+PF.pregResCont
+FROM
+pregfrecareas AS PFA
+INNER JOIN preguntasfrecuentes AS PF ON PF.idAreaPreFreFK = PFA.idareaPreFrePK;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_registrarMision_sp` (IN `descripcion` TEXT(400), `imagen` NVARCHAR(50))  BEGIN
+insert into mision (mi_desc,mi_imagen,mi_fecha) values(descripcion,imagen,NOW());
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_trabajaConNosotros_sp` (IN `fechaActual` DATE)  BEGIN
+SELECT tra_desc AS descripcion, tra_imagen AS rutaImagen FROM vision WHERE tra_fecha = fechaActual;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_update_medalleroHistorico_SP` (`idmed` INT, `puesto` INT, `pais` INT, `oro` INT, `plata` INT, `bronce` INT, `total` INT)  BEGIN
+UPDATE medallerohistorico
+SET  medHisPue = puesto, pai_FK = pais, medHisOro = oro, medHisPla = plata, medHisBro = bronce, medHisTot = total
+WHERE idmedHis_PK = idmed;
+END$$
+
+CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `set_CompraEntrada` (IN `_idUsuario` INT(11), IN `_idSede` INT(11), IN `_idHorarioEvento` INT(11), IN `_idMoneda` INT(11), IN `_idReporteEntrada` INT(11), IN `_idAsiento` INT(11), IN `_NumTarjeta` VARCHAR(30))  INSERT INTO `compra_entrada` VALUES (null, _idUsuario, _idSede, _idHorarioEvento, _idMoneda, _idReporteEntrada, _idAsiento, _NumTarjeta)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizarf_datos` (IN `nombreF` VARCHAR(40), IN `fotoF` VARCHAR(200), IN `codigoF` INT)  NO SQL
+BEGIN
+	update foto set nombre=nombreF,
+						foto=fotoF
+				where codigo=codigoF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizarv_datos` (IN `nombreV` VARCHAR(200))  NO SQL
+BEGIN
+	update video set nombre=nombreV,
+						video=videoV
+				where codigo=codigoV;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_datos` (IN `disciplinaU` VARCHAR(150), IN `sedeU` VARCHAR(200), IN `direccionU` VARCHAR(200), IN `idjuegoU` INT)  NO SQL
+BEGIN
+	update disciplinas set disciplina=disciplinaU,
+						sedeU=sedeU,
+						direccion=direccionU
+				where id_juego=idJuegoU;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_AUSPICIADORES` ()  BEGIN
 	SELECT ta.NomAuspiciador, a.descripcionAus, a.imagenE FROM tipoauspiciadores ta 
 	inner join auspiciadores a on ta.idTipoAuspiciador = a.idTipoAuspiciador;
@@ -50,16 +325,96 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_COMITE` ()  BEGIN
 	INNER JOIN tiporepresentante tr on c.idTipoRepresentante = tr.idTipoRepresentante;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminarf_datos` (IN `codigoF` INT)  NO SQL
+BEGIN
+delete from foto
+where codigo=codigoF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminarV_datos` (IN `codigoV` INT)  NO SQL
+BEGIN
+delete from video
+where codigo=codigoV;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminar_datos` (IN `idjuegoD` INT)  NO SQL
+BEGIN
+	delete from disciplinas 
+    where id_juego=idJuegoD;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDOCUMENTOS` ()  BEGIN
+SELECT * FROM `documentos` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFOTOS` ()  BEGIN
+	SELECT * FROM `foto` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETVIDEOS` ()  BEGIN
+select * from video where 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarf_datos` (IN `nombre_f` VARCHAR(40), IN `foto_f` VARCHAR(200))  NO SQL
+insert into foto (nombre,foto) VALUES (nombre_f,foto_f)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarv_datos` (IN `nombre_V` VARCHAR(40), IN `video_V` VARCHAR(200))  NO SQL
+insert into video (nombre,video) VALUES (nombre_V,video_V)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_datos` (IN `disciplinaI` VARCHAR(150), IN `sedeI` VARCHAR(200), IN `direccionI` VARCHAR(200))  NO SQL
+BEGIN
+	insert into disciplinas (disciplina,
+							sede,
+							direccion)
+			values (disciplinaI,sedeI,direccionI);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_LOGIN` (`usuario` VARCHAR(100), `pass` VARCHAR(100))  BEGIN
-	SELECT * FROM usuarios WHERE emailU= usuario and passwordU= pass;
+	SELECT * FROM usuarios WHERE usuario= usuario and password= pass;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_MEDALLERO` ()  BEGIN
 	SELECT p.NombrePais, m.oro, m.plata, m.bronce, (m.oro + m.plata + m.bronce) as 'total' FROM medallero m inner join pais p on m.idPais = p.idPais;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_mostrar_datos` ()  NO SQL
+BEGIN
+	select id_juego,
+			disciplina,
+			sede,
+			direccion 
+	from disciplinas;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtenerF_regjuego` (IN `codigoF` INT)  NO SQL
+BEGIN
+	select * from foto where codigo=codigoF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtenerV_regJuego` (IN `codigoV` INT)  NO SQL
+BEGIN
+	select * from video where codigo=codigoV;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_regJuego` (IN `idjuegoO` INT)  NO SQL
+BEGIN
+	select * from disciplinas where id_juego=idJuegoO;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_PAIS` ()  BEGIN
 	SELECT * FROM pais;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGDOCUMENTOS` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
+INSERT INTO documentos (nombre, documentos) VALUES (_name, _picture);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGFOTO` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
+	INSERT INTO foto (nombre, foto) VALUES (_name, _picture);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGVIDEO` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
+INSERT INTO video (nombre, video) VALUES (_name, _picture);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_TIPOCEREMONIAS` (`id` INT)  BEGIN
@@ -81,11 +436,11 @@ DELIMITER ;
 
 CREATE TABLE `asientos` (
   `idAsiento` int(11) NOT NULL,
-  `fila` int(11) DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
-  `estado` int(11) DEFAULT NULL,
+  `IdEstado` int(11) DEFAULT NULL,
   `idCategAsiento` int(11) DEFAULT NULL,
-  `idStockAsiento` int(11) DEFAULT NULL
+  `Precio` decimal(10,0) NOT NULL,
+  `IdSede` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -130,6 +485,17 @@ CREATE TABLE `categoriaasiento` (
   `DescripCategoriaA` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `categoriaasiento`
+--
+
+INSERT INTO `categoriaasiento` (`idCategoriaAsiento`, `NombreCategoriaA`, `DescripCategoriaA`) VALUES
+(1, 'CategorÃ­a 1', NULL),
+(2, 'CategorÃ­a 2', NULL),
+(3, 'CategorÃ­a 3', NULL),
+(4, 'CategorÃ­a 4', NULL),
+(5, 'Palco', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -148,7 +514,7 @@ CREATE TABLE `ceremonias` (
 --
 
 INSERT INTO `ceremonias` (`idCeremonias`, `titulo`, `DescripcionC`, `imagenC`) VALUES
-(2, 'CEREMONIAS', 'La historia deportiva comienza y finaliza <br> con espectáctulos que jamás podrás olvidar.', './assets/images/ceremonias-lima-2019.jpg'),
+(2, 'CEREMONIAS', 'ESTAMOS PROBANDO', './assets/images/ceremonias-lima-2019.jpg'),
 (3, 'INAUGURACIÓN', 'La cuenta regresiva agota su último grano de arena.<br> ¡Conoce a los campeones!', './assets/images/inauguracion/inauguracion-panamericanos-lima-2019.jpg'),
 (4, 'CLAUSURA', 'La primera etapa de nuestros juegos llega a su fin. <br> ¡Celebra con nosotros!', './assets/images/clausura/clausura-panamericanos-lima-2019.jpg');
 
@@ -212,6 +578,32 @@ CREATE TABLE `compra_entrada` (
 CREATE TABLE `comprobantepago` (
   `idPagosEntrada` int(11) NOT NULL,
   `idCompraEntrada` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `config_sede_deporte`
+--
+
+CREATE TABLE `config_sede_deporte` (
+  `idConfigSedeDeporte` int(11) NOT NULL,
+  `idSedeFK` int(11) NOT NULL,
+  `idDeporteFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `conocenos`
+--
+
+CREATE TABLE `conocenos` (
+  `idconocenos` int(11) NOT NULL,
+  `co_desc` text NOT NULL,
+  `co_imagen` varchar(50) NOT NULL,
+  `co_fecha` date NOT NULL,
+  `bEstPri` bit(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -299,11 +691,42 @@ CREATE TABLE `detalleeventos` (
 --
 
 CREATE TABLE `disciplina` (
-  `iddisciplina` int(11) NOT NULL,
-  `idDeporte` int(11) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
-  `descripcion` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
+  `id_juego` int(11) NOT NULL,
+  `disciplina` int(11) NOT NULL,
+  `sede` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `direccion` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `documentos`
+--
+
+CREATE TABLE `documentos` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `documentos` varchar(150) COLLATE utf8_spanish2_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `documentos`
+--
+
+INSERT INTO `documentos` (`id`, `nombre`, `documentos`) VALUES
+(1, 'archivo', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `equipo`
+--
+
+CREATE TABLE `equipo` (
+  `idEquipo` int(11) NOT NULL,
+  `idPaisFK` int(11) NOT NULL,
+  `totalIntegrantes` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -359,6 +782,32 @@ CREATE TABLE `fechaevento` (
   `idHora` int(11) DEFAULT NULL,
   `fecha` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `foto`
+--
+
+CREATE TABLE `foto` (
+  `codigo` int(11) NOT NULL,
+  `nombre` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `foto` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `foto`
+--
+
+INSERT INTO `foto` (`codigo`, `nombre`, `foto`) VALUES
+(1, 'cualquier cosa', './assets/images/4.jpg'),
+(2, 'cualquier cosa', '12045613_1129230253764312_4076110757615716063'),
+(3, 'otra foto', 'vcredist.bmp'),
+(4, 'mas fotos', './assets/images/atleta.jpg'),
+(5, 'otra foto', './assets/images/3.jpg'),
+(6, 'nuevo documento', './assets/images/'),
+(7, 'nuevo documento', './assets/images/'),
+(8, 'nuevo video', './assets/images/');
 
 -- --------------------------------------------------------
 
@@ -430,6 +879,18 @@ INSERT INTO `institucional` (`idInstitucional`, `descripInstitucional`, `imagenI
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `integrantes`
+--
+
+CREATE TABLE `integrantes` (
+  `idIntegrante` int(11) NOT NULL,
+  `idEquipoFK` int(11) NOT NULL,
+  `idDeportistasFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `medallas`
 --
 
@@ -480,6 +941,22 @@ INSERT INTO `medallero` (`idmedallero`, `idPais`, `oro`, `plata`, `bronce`) VALU
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `medallerohistorico`
+--
+
+CREATE TABLE `medallerohistorico` (
+  `idmedHis_PK` int(11) NOT NULL,
+  `medHisPue` int(11) NOT NULL,
+  `pai_FK` int(11) NOT NULL,
+  `medHisOro` int(11) NOT NULL,
+  `medHisPla` int(11) NOT NULL,
+  `medHisBro` int(11) NOT NULL,
+  `medHisTot` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `menuprincipal`
 --
 
@@ -496,12 +973,51 @@ CREATE TABLE `menuprincipal` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `mision`
+--
+
+CREATE TABLE `mision` (
+  `idmision` int(11) NOT NULL,
+  `mi_desc` text NOT NULL,
+  `mi_imagen` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `mi_fecha` date NOT NULL,
+  `bEstPri` bit(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `moneda`
 --
 
 CREATE TABLE `moneda` (
   `idMoneda` int(11) NOT NULL,
   `idTipoMoneda` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `norma`
+--
+
+CREATE TABLE `norma` (
+  `idNormaPK` int(11) NOT NULL,
+  `numNor` int(11) NOT NULL,
+  `contNor` text NOT NULL,
+  `SecRegFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `oficinasorganigrama`
+--
+
+CREATE TABLE `oficinasorganigrama` (
+  `idSecretaria` int(11) NOT NULL,
+  `se_nombre` varchar(60) NOT NULL,
+  `se_tipo` bit(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -562,6 +1078,43 @@ INSERT INTO `pais` (`idPais`, `NombrePais`, `bandera`) VALUES
 (39, 'Trinidad y Tobago Trinidad y Tobago (TTO', 'some_flag'),
 (40, 'Uruguay.svg Uruguay (URU)', 'some_flag'),
 (41, 'Venezuela Venezuela (VEN)', 'some_flag');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `participantegrupal`
+--
+
+CREATE TABLE `participantegrupal` (
+  `idPartGrupal` int(11) NOT NULL,
+  `idEventoFK` int(11) NOT NULL,
+  `idEquipo1FK` int(11) NOT NULL,
+  `idEquipo2FK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `participanteindividual`
+--
+
+CREATE TABLE `participanteindividual` (
+  `idPartIndividual` int(11) NOT NULL,
+  `idDeportistasFK` int(11) NOT NULL,
+  `idPaisFK` int(11) NOT NULL,
+  `idEventoFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pregfrecareas`
+--
+
+CREATE TABLE `pregfrecareas` (
+  `idareaPreFrePK` int(11) NOT NULL,
+  `nomAre` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -640,6 +1193,44 @@ INSERT INTO `representantes` (`IdRepresentateORG`, `DescripcionR`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `resultadogrupal`
+--
+
+CREATE TABLE `resultadogrupal` (
+  `idResGrupal` int(11) NOT NULL,
+  `idPartGrupalFK` int(11) NOT NULL,
+  `fechaResultadoGr` date NOT NULL,
+  `res_gr_puesto` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `resultadoindividual`
+--
+
+CREATE TABLE `resultadoindividual` (
+  `idResIndividual` int(11) NOT NULL,
+  `idPartIndividualFK` int(11) NOT NULL,
+  `fechaResultado` date NOT NULL,
+  `res_in_puesto` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `seccionreglamento`
+--
+
+CREATE TABLE `seccionreglamento` (
+  `idSecRegPK` int(11) NOT NULL,
+  `numSec` int(11) NOT NULL,
+  `TitSec` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `sedes`
 --
 
@@ -659,6 +1250,19 @@ CREATE TABLE `sedes` (
 CREATE TABLE `stockasientos` (
   `idStockAsiento` int(11) NOT NULL,
   `CantiDisponible` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subnorma`
+--
+
+CREATE TABLE `subnorma` (
+  `idSubNor` int(11) NOT NULL,
+  `numSubNor` char(255) NOT NULL,
+  `contSubNor` text NOT NULL,
+  `normaFK` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -869,28 +1473,95 @@ INSERT INTO `tipousuario` (`idTipoUsuario`, `nombreTipoU`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `trabajaconnosotros`
+--
+
+CREATE TABLE `trabajaconnosotros` (
+  `idtrabajaConNosotros` int(11) NOT NULL,
+  `tra_desc` text NOT NULL,
+  `tra_imagen` varchar(50) NOT NULL,
+  `tra_fecha` date NOT NULL,
+  `bEstPri` bit(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `unidadorganizacional`
+--
+
+CREATE TABLE `unidadorganizacional` (
+  `idUnidadOrganizacional` int(11) NOT NULL,
+  `U_nombre` varchar(100) NOT NULL,
+  `idSecUniOrgFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuarios`
 --
 
 CREATE TABLE `usuarios` (
-  `idUsuario` int(11) NOT NULL,
-  `NombreU` varchar(50) DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `usuario` varchar(30) DEFAULT NULL,
+  `nombre` varchar(100) DEFAULT NULL,
   `ApellidoU` varchar(50) DEFAULT NULL,
-  `emailU` varchar(50) DEFAULT NULL,
   `telefonoU` varchar(20) DEFAULT NULL,
-  `passwordU` varchar(40) DEFAULT NULL,
   `DocIdentidad` varchar(20) DEFAULT NULL,
-  `idTipoUsuario` int(11) DEFAULT NULL,
-  `idGaleria` int(11) DEFAULT NULL,
-  `idEstadoUsuario` int(11) DEFAULT NULL
+  `correo` int(11) DEFAULT NULL,
+  `password` varchar(40) DEFAULT NULL,
+  `last_session` int(11) DEFAULT NULL,
+  `activacion` int(11) DEFAULT NULL,
+  `token` varchar(45) DEFAULT NULL,
+  `token_password` varchar(45) DEFAULT NULL,
+  `password_request` varchar(45) DEFAULT NULL,
+  `id_tipo` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`idUsuario`, `NombreU`, `ApellidoU`, `emailU`, `telefonoU`, `passwordU`, `DocIdentidad`, `idTipoUsuario`, `idGaleria`, `idEstadoUsuario`) VALUES
-(1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '123', '45068903', 1, 1, 1);
+INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `ApellidoU`, `telefonoU`, `DocIdentidad`, `correo`, `password`, `last_session`, `activacion`, `token`, `token_password`, `password_request`, `id_tipo`) VALUES
+(1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '45068903', 1, '123', 1, 1, NULL, NULL, NULL, NULL),
+(2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', 1, '1234', 1, 1, NULL, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `video`
+--
+
+CREATE TABLE `video` (
+  `codigo` int(11) NOT NULL,
+  `nombre` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `video` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `video`
+--
+
+INSERT INTO `video` (`codigo`, `nombre`, `video`) VALUES
+(1, 'nuevo video', NULL),
+(2, 'cualquier cosa', ''),
+(3, 'nuevo video', ''),
+(4, 'nuevo documento', '');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `vision`
+--
+
+CREATE TABLE `vision` (
+  `idVision` int(11) NOT NULL,
+  `vi_desc` text NOT NULL,
+  `vi_imagen` varchar(50) NOT NULL,
+  `vi_fecha` date NOT NULL,
+  `bEstPri` bit(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Índices para tablas volcadas
@@ -902,8 +1573,8 @@ INSERT INTO `usuarios` (`idUsuario`, `NombreU`, `ApellidoU`, `emailU`, `telefono
 ALTER TABLE `asientos`
   ADD PRIMARY KEY (`idAsiento`),
   ADD KEY `FK_Asientos_CategoriaAsiento` (`idCategAsiento`),
-  ADD KEY `FK_Asientos_EstadoAsiento` (`estado`),
-  ADD KEY `FK_Asientos_StockAsientos` (`idStockAsiento`);
+  ADD KEY `FK_Asientos_EstadoAsiento` (`Precio`),
+  ADD KEY `FK_Asientos_StockAsientos` (`IdSede`);
 
 --
 -- Indices de la tabla `auspiciadores`
@@ -949,6 +1620,20 @@ ALTER TABLE `compra_entrada`
 ALTER TABLE `comprobantepago`
   ADD PRIMARY KEY (`idPagosEntrada`),
   ADD KEY `FK_ComprobantePago_Compra_Entrada` (`idCompraEntrada`);
+
+--
+-- Indices de la tabla `config_sede_deporte`
+--
+ALTER TABLE `config_sede_deporte`
+  ADD PRIMARY KEY (`idConfigSedeDeporte`),
+  ADD KEY `idSedeFK` (`idSedeFK`),
+  ADD KEY `idDeporteFK` (`idDeporteFK`);
+
+--
+-- Indices de la tabla `conocenos`
+--
+ALTER TABLE `conocenos`
+  ADD PRIMARY KEY (`idconocenos`);
 
 --
 -- Indices de la tabla `deportedestacado`
@@ -1000,7 +1685,20 @@ ALTER TABLE `detalleeventos`
 -- Indices de la tabla `disciplina`
 --
 ALTER TABLE `disciplina`
-  ADD PRIMARY KEY (`iddisciplina`);
+  ADD PRIMARY KEY (`id_juego`);
+
+--
+-- Indices de la tabla `documentos`
+--
+ALTER TABLE `documentos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  ADD PRIMARY KEY (`idEquipo`),
+  ADD KEY `FK_equipo_pais` (`idPaisFK`);
 
 --
 -- Indices de la tabla `estadoasiento`
@@ -1030,6 +1728,12 @@ ALTER TABLE `fechaevento`
   ADD KEY `FK_FechaEvento_Hora` (`idHora`);
 
 --
+-- Indices de la tabla `foto`
+--
+ALTER TABLE `foto`
+  ADD PRIMARY KEY (`codigo`);
+
+--
 -- Indices de la tabla `galeria`
 --
 ALTER TABLE `galeria`
@@ -1056,6 +1760,14 @@ ALTER TABLE `institucional`
   ADD KEY `FK_Institucional_TipoInstitucional` (`idTipoInstitucional`);
 
 --
+-- Indices de la tabla `integrantes`
+--
+ALTER TABLE `integrantes`
+  ADD PRIMARY KEY (`idIntegrante`),
+  ADD KEY `FK_integrantes_equipo` (`idEquipoFK`),
+  ADD KEY `FK_integrnates_deportistas` (`idDeportistasFK`);
+
+--
 -- Indices de la tabla `medallas`
 --
 ALTER TABLE `medallas`
@@ -1070,6 +1782,13 @@ ALTER TABLE `medallero`
   ADD KEY `medallero.pais_idx` (`idPais`);
 
 --
+-- Indices de la tabla `medallerohistorico`
+--
+ALTER TABLE `medallerohistorico`
+  ADD PRIMARY KEY (`idmedHis_PK`),
+  ADD KEY `FK_medHist_Pais` (`pai_FK`);
+
+--
 -- Indices de la tabla `menuprincipal`
 --
 ALTER TABLE `menuprincipal`
@@ -1082,6 +1801,12 @@ ALTER TABLE `menuprincipal`
   ADD KEY `FK_MenuPrincipal_PreguntasFrecuentes` (`idPreguntasFrecuentes`);
 
 --
+-- Indices de la tabla `mision`
+--
+ALTER TABLE `mision`
+  ADD PRIMARY KEY (`idmision`);
+
+--
 -- Indices de la tabla `moneda`
 --
 ALTER TABLE `moneda`
@@ -1089,10 +1814,48 @@ ALTER TABLE `moneda`
   ADD KEY `FK_Moneda_TipoMoneda` (`idTipoMoneda`);
 
 --
+-- Indices de la tabla `norma`
+--
+ALTER TABLE `norma`
+  ADD PRIMARY KEY (`idNormaPK`),
+  ADD KEY `FK_Norma_SeccReg` (`SecRegFK`);
+
+--
+-- Indices de la tabla `oficinasorganigrama`
+--
+ALTER TABLE `oficinasorganigrama`
+  ADD PRIMARY KEY (`idSecretaria`),
+  ADD KEY `idSecretaria` (`idSecretaria`);
+
+--
 -- Indices de la tabla `pais`
 --
 ALTER TABLE `pais`
   ADD PRIMARY KEY (`idPais`);
+
+--
+-- Indices de la tabla `participantegrupal`
+--
+ALTER TABLE `participantegrupal`
+  ADD PRIMARY KEY (`idPartGrupal`),
+  ADD KEY `FK_partGrupal_Equipo1` (`idEquipo1FK`),
+  ADD KEY `FK_partGrupal_Equipo2` (`idEquipo2FK`),
+  ADD KEY `Fk_partGrupal_eventos` (`idEventoFK`);
+
+--
+-- Indices de la tabla `participanteindividual`
+--
+ALTER TABLE `participanteindividual`
+  ADD PRIMARY KEY (`idPartIndividual`),
+  ADD KEY `FK_partiipanteIndividual_Eventos` (`idEventoFK`),
+  ADD KEY `FK_partIndividual_deportistas` (`idDeportistasFK`),
+  ADD KEY `FK_Partiindividual_Pais` (`idPaisFK`);
+
+--
+-- Indices de la tabla `pregfrecareas`
+--
+ALTER TABLE `pregfrecareas`
+  ADD PRIMARY KEY (`idareaPreFrePK`);
 
 --
 -- Indices de la tabla `preguntasfrecuentes`
@@ -1130,6 +1893,26 @@ ALTER TABLE `representantes`
   ADD PRIMARY KEY (`IdRepresentateORG`);
 
 --
+-- Indices de la tabla `resultadogrupal`
+--
+ALTER TABLE `resultadogrupal`
+  ADD PRIMARY KEY (`idResGrupal`),
+  ADD KEY `FK_resGrupal_partGrupal` (`idPartGrupalFK`);
+
+--
+-- Indices de la tabla `resultadoindividual`
+--
+ALTER TABLE `resultadoindividual`
+  ADD PRIMARY KEY (`idResIndividual`),
+  ADD KEY `ResIndividual_partIndividual_FK` (`idPartIndividualFK`);
+
+--
+-- Indices de la tabla `seccionreglamento`
+--
+ALTER TABLE `seccionreglamento`
+  ADD PRIMARY KEY (`idSecRegPK`);
+
+--
 -- Indices de la tabla `sedes`
 --
 ALTER TABLE `sedes`
@@ -1141,6 +1924,13 @@ ALTER TABLE `sedes`
 --
 ALTER TABLE `stockasientos`
   ADD PRIMARY KEY (`idStockAsiento`);
+
+--
+-- Indices de la tabla `subnorma`
+--
+ALTER TABLE `subnorma`
+  ADD PRIMARY KEY (`idSubNor`),
+  ADD KEY `FK_SubNorma_Norma` (`normaFK`);
 
 --
 -- Indices de la tabla `sysdiagrams`
@@ -1213,13 +2003,38 @@ ALTER TABLE `tipousuario`
   ADD PRIMARY KEY (`idTipoUsuario`);
 
 --
+-- Indices de la tabla `trabajaconnosotros`
+--
+ALTER TABLE `trabajaconnosotros`
+  ADD PRIMARY KEY (`idtrabajaConNosotros`);
+
+--
+-- Indices de la tabla `unidadorganizacional`
+--
+ALTER TABLE `unidadorganizacional`
+  ADD PRIMARY KEY (`idUnidadOrganizacional`),
+  ADD KEY `idSecUniOrgFK` (`idSecUniOrgFK`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`idUsuario`),
-  ADD KEY `FK_Usuarios_EstadoUsuario` (`idEstadoUsuario`),
-  ADD KEY `FK_Usuarios_Galeria` (`idGaleria`),
-  ADD KEY `FK_Usuarios_TipoUsuario` (`idTipoUsuario`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_Usuarios_EstadoUsuario` (`activacion`),
+  ADD KEY `FK_Usuarios_Galeria` (`last_session`),
+  ADD KEY `FK_Usuarios_TipoUsuario` (`correo`);
+
+--
+-- Indices de la tabla `video`
+--
+ALTER TABLE `video`
+  ADD PRIMARY KEY (`codigo`);
+
+--
+-- Indices de la tabla `vision`
+--
+ALTER TABLE `vision`
+  ADD PRIMARY KEY (`idVision`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -1241,7 +2056,7 @@ ALTER TABLE `auspiciadores`
 -- AUTO_INCREMENT de la tabla `categoriaasiento`
 --
 ALTER TABLE `categoriaasiento`
-  MODIFY `idCategoriaAsiento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idCategoriaAsiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `ceremonias`
@@ -1266,6 +2081,18 @@ ALTER TABLE `compra_entrada`
 --
 ALTER TABLE `comprobantepago`
   MODIFY `idPagosEntrada` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `config_sede_deporte`
+--
+ALTER TABLE `config_sede_deporte`
+  MODIFY `idConfigSedeDeporte` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `conocenos`
+--
+ALTER TABLE `conocenos`
+  MODIFY `idconocenos` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `deportedestacado`
@@ -1307,7 +2134,13 @@ ALTER TABLE `detalleeventos`
 -- AUTO_INCREMENT de la tabla `disciplina`
 --
 ALTER TABLE `disciplina`
-  MODIFY `iddisciplina` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  MODIFY `idEquipo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `estadoasiento`
@@ -1334,6 +2167,12 @@ ALTER TABLE `fechaevento`
   MODIFY `idFechaEvento` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `foto`
+--
+ALTER TABLE `foto`
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT de la tabla `galeria`
 --
 ALTER TABLE `galeria`
@@ -1358,6 +2197,12 @@ ALTER TABLE `institucional`
   MODIFY `idInstitucional` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `integrantes`
+--
+ALTER TABLE `integrantes`
+  MODIFY `idIntegrante` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `medallas`
 --
 ALTER TABLE `medallas`
@@ -1370,10 +2215,22 @@ ALTER TABLE `medallero`
   MODIFY `idmedallero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT de la tabla `medallerohistorico`
+--
+ALTER TABLE `medallerohistorico`
+  MODIFY `idmedHis_PK` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `menuprincipal`
 --
 ALTER TABLE `menuprincipal`
   MODIFY `idMenuPrincipal` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `mision`
+--
+ALTER TABLE `mision`
+  MODIFY `idmision` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `moneda`
@@ -1382,10 +2239,40 @@ ALTER TABLE `moneda`
   MODIFY `idMoneda` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `norma`
+--
+ALTER TABLE `norma`
+  MODIFY `idNormaPK` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `oficinasorganigrama`
+--
+ALTER TABLE `oficinasorganigrama`
+  MODIFY `idSecretaria` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `pais`
 --
 ALTER TABLE `pais`
   MODIFY `idPais` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+
+--
+-- AUTO_INCREMENT de la tabla `participantegrupal`
+--
+ALTER TABLE `participantegrupal`
+  MODIFY `idPartGrupal` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `participanteindividual`
+--
+ALTER TABLE `participanteindividual`
+  MODIFY `idPartIndividual` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `pregfrecareas`
+--
+ALTER TABLE `pregfrecareas`
+  MODIFY `idareaPreFrePK` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `preguntasfrecuentes`
@@ -1418,6 +2305,24 @@ ALTER TABLE `representantes`
   MODIFY `IdRepresentateORG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT de la tabla `resultadogrupal`
+--
+ALTER TABLE `resultadogrupal`
+  MODIFY `idResGrupal` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `resultadoindividual`
+--
+ALTER TABLE `resultadoindividual`
+  MODIFY `idResIndividual` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `seccionreglamento`
+--
+ALTER TABLE `seccionreglamento`
+  MODIFY `idSecRegPK` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `sedes`
 --
 ALTER TABLE `sedes`
@@ -1428,6 +2333,12 @@ ALTER TABLE `sedes`
 --
 ALTER TABLE `stockasientos`
   MODIFY `idStockAsiento` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `subnorma`
+--
+ALTER TABLE `subnorma`
+  MODIFY `idSubNor` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `sysdiagrams`
@@ -1496,10 +2407,34 @@ ALTER TABLE `tipousuario`
   MODIFY `idTipoUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `trabajaconnosotros`
+--
+ALTER TABLE `trabajaconnosotros`
+  MODIFY `idtrabajaConNosotros` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `unidadorganizacional`
+--
+ALTER TABLE `unidadorganizacional`
+  MODIFY `idUnidadOrganizacional` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `video`
+--
+ALTER TABLE `video`
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `vision`
+--
+ALTER TABLE `vision`
+  MODIFY `idVision` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -1509,15 +2444,7 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `asientos`
 --
 ALTER TABLE `asientos`
-  ADD CONSTRAINT `FK_Asientos_CategoriaAsiento` FOREIGN KEY (`idCategAsiento`) REFERENCES `categoriaasiento` (`idCategoriaAsiento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_Asientos_EstadoAsiento` FOREIGN KEY (`estado`) REFERENCES `estadoasiento` (`idEstadoA`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_Asientos_StockAsientos` FOREIGN KEY (`idStockAsiento`) REFERENCES `stockasientos` (`idStockAsiento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `auspiciadores`
---
-ALTER TABLE `auspiciadores`
-  ADD CONSTRAINT `FK_Auspiciadores_TipoAuspiciadores` FOREIGN KEY (`idTipoAuspiciador`) REFERENCES `tipoauspiciadores` (`idTipoAuspiciador`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_Asientos_CategoriaAsiento` FOREIGN KEY (`idCategAsiento`) REFERENCES `categoriaasiento` (`idCategoriaAsiento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `comiteorganizador`
@@ -1543,6 +2470,13 @@ ALTER TABLE `comprobantepago`
   ADD CONSTRAINT `FK_ComprobantePago_Compra_Entrada` FOREIGN KEY (`idCompraEntrada`) REFERENCES `compra_entrada` (`idCompraEntrada`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `config_sede_deporte`
+--
+ALTER TABLE `config_sede_deporte`
+  ADD CONSTRAINT `config_sede_deporte_ibfk_1` FOREIGN KEY (`idSedeFK`) REFERENCES `sedes` (`idSede`),
+  ADD CONSTRAINT `config_sede_deporte_ibfk_2` FOREIGN KEY (`idDeporteFK`) REFERENCES `deportes` (`idDeporte`);
+
+--
 -- Filtros para la tabla `deportedestacado`
 --
 ALTER TABLE `deportedestacado`
@@ -1560,7 +2494,7 @@ ALTER TABLE `deportes`
 -- Filtros para la tabla `deportistadisciplina`
 --
 ALTER TABLE `deportistadisciplina`
-  ADD CONSTRAINT `ddisciplina` FOREIGN KEY (`iddisciplina`) REFERENCES `disciplina` (`iddisciplina`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `ddisciplina` FOREIGN KEY (`iddisciplina`) REFERENCES `disciplina` (`id_juego`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `deportistadd` FOREIGN KEY (`idDeportistas`) REFERENCES `deportistas` (`idDeportistas`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
@@ -1576,6 +2510,12 @@ ALTER TABLE `deportistas`
 ALTER TABLE `detalleeventos`
   ADD CONSTRAINT `FK_DetalleEventos_Deportistas` FOREIGN KEY (`idDeportista`) REFERENCES `deportistas` (`idDeportistas`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_DetalleEventos_Eventos` FOREIGN KEY (`idEvento`) REFERENCES `eventos` (`idEvento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  ADD CONSTRAINT `FK_equipo_pais` FOREIGN KEY (`idPaisFK`) REFERENCES `pais` (`idPais`);
 
 --
 -- Filtros para la tabla `eventos`
@@ -1603,6 +2543,13 @@ ALTER TABLE `institucional`
   ADD CONSTRAINT `FK_Institucional_TipoInstitucional` FOREIGN KEY (`idTipoInstitucional`) REFERENCES `tipoinstitucional` (`idTipoInstitucional`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `integrantes`
+--
+ALTER TABLE `integrantes`
+  ADD CONSTRAINT `FK_integrantes_equipo` FOREIGN KEY (`idEquipoFK`) REFERENCES `equipo` (`idEquipo`),
+  ADD CONSTRAINT `FK_integrnates_deportistas` FOREIGN KEY (`idDeportistasFK`) REFERENCES `deportistas` (`idDeportistas`);
+
+--
 -- Filtros para la tabla `medallas`
 --
 ALTER TABLE `medallas`
@@ -1613,6 +2560,12 @@ ALTER TABLE `medallas`
 --
 ALTER TABLE `medallero`
   ADD CONSTRAINT `medallero.pais` FOREIGN KEY (`idPais`) REFERENCES `pais` (`idPais`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `medallerohistorico`
+--
+ALTER TABLE `medallerohistorico`
+  ADD CONSTRAINT `FK_medHist_Pais` FOREIGN KEY (`pai_FK`) REFERENCES `pais` (`idPais`);
 
 --
 -- Filtros para la tabla `menuprincipal`
@@ -1630,6 +2583,28 @@ ALTER TABLE `menuprincipal`
 --
 ALTER TABLE `moneda`
   ADD CONSTRAINT `FK_Moneda_TipoMoneda` FOREIGN KEY (`idTipoMoneda`) REFERENCES `tipomoneda` (`idTipoMoneda`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `norma`
+--
+ALTER TABLE `norma`
+  ADD CONSTRAINT `FK_Norma_SeccReg` FOREIGN KEY (`SecRegFK`) REFERENCES `seccionreglamento` (`idSecRegPK`);
+
+--
+-- Filtros para la tabla `participantegrupal`
+--
+ALTER TABLE `participantegrupal`
+  ADD CONSTRAINT `FK_partGrupal_Equipo1` FOREIGN KEY (`idEquipo1FK`) REFERENCES `equipo` (`idEquipo`),
+  ADD CONSTRAINT `FK_partGrupal_Equipo2` FOREIGN KEY (`idEquipo2FK`) REFERENCES `equipo` (`idEquipo`),
+  ADD CONSTRAINT `Fk_partGrupal_eventos` FOREIGN KEY (`idEventoFK`) REFERENCES `eventos` (`idEvento`);
+
+--
+-- Filtros para la tabla `participanteindividual`
+--
+ALTER TABLE `participanteindividual`
+  ADD CONSTRAINT `FK_Partiindividual_Pais` FOREIGN KEY (`idPaisFK`) REFERENCES `pais` (`idPais`),
+  ADD CONSTRAINT `FK_partIndividual_deportistas` FOREIGN KEY (`idDeportistasFK`) REFERENCES `deportistas` (`idDeportistas`),
+  ADD CONSTRAINT `FK_partiipanteIndividual_Eventos` FOREIGN KEY (`idEventoFK`) REFERENCES `eventos` (`idEvento`);
 
 --
 -- Filtros para la tabla `preguntasfrecuentes`
@@ -1652,10 +2627,28 @@ ALTER TABLE `reporteentrada`
   ADD CONSTRAINT `FK_ReporteEntrada_Deportes` FOREIGN KEY (`idDeporte`) REFERENCES `deportes` (`idDeporte`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `resultadogrupal`
+--
+ALTER TABLE `resultadogrupal`
+  ADD CONSTRAINT `FK_resGrupal_partGrupal` FOREIGN KEY (`idPartGrupalFK`) REFERENCES `participantegrupal` (`idPartGrupal`);
+
+--
+-- Filtros para la tabla `resultadoindividual`
+--
+ALTER TABLE `resultadoindividual`
+  ADD CONSTRAINT `ResIndividual_partIndividual_FK` FOREIGN KEY (`idPartIndividualFK`) REFERENCES `participanteindividual` (`idPartIndividual`);
+
+--
 -- Filtros para la tabla `sedes`
 --
 ALTER TABLE `sedes`
   ADD CONSTRAINT `FK_Sedes_TipoSedes` FOREIGN KEY (`idTipoSede`) REFERENCES `tiposedes` (`idTipoSede`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `subnorma`
+--
+ALTER TABLE `subnorma`
+  ADD CONSTRAINT `FK_SubNorma_Norma` FOREIGN KEY (`normaFK`) REFERENCES `norma` (`idNormaPK`);
 
 --
 -- Filtros para la tabla `thistoria`
@@ -1676,12 +2669,18 @@ ALTER TABLE `tiposedes`
   ADD CONSTRAINT `FK_TipoSedes_Deportes` FOREIGN KEY (`idDeporte`) REFERENCES `deportes` (`idDeporte`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `unidadorganizacional`
+--
+ALTER TABLE `unidadorganizacional`
+  ADD CONSTRAINT `unidadorganizacional_ibfk_1` FOREIGN KEY (`idSecUniOrgFK`) REFERENCES `oficinasorganigrama` (`idSecretaria`);
+
+--
 -- Filtros para la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD CONSTRAINT `FK_Usuarios_EstadoUsuario` FOREIGN KEY (`idEstadoUsuario`) REFERENCES `estadousuario` (`idestadoUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_Usuarios_Galeria` FOREIGN KEY (`idGaleria`) REFERENCES `galeria` (`idGaleria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_Usuarios_TipoUsuario` FOREIGN KEY (`idTipoUsuario`) REFERENCES `tipousuario` (`idTipoUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_Usuarios_EstadoUsuario` FOREIGN KEY (`activacion`) REFERENCES `estadousuario` (`idestadoUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_Usuarios_Galeria` FOREIGN KEY (`last_session`) REFERENCES `galeria` (`idGaleria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_Usuarios_TipoUsuario` FOREIGN KEY (`correo`) REFERENCES `tipousuario` (`idTipoUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

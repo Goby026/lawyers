@@ -96,7 +96,9 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="?c=listapaises&a=index">Lista de paises</a>
                                 <a class="dropdown-item" href="?c=medallero&a=index">Medallero</a>
-                                <a class="dropdown-item" href="#">Vivo</a>
+                                <a class="dropdown-item" href="?c=foto&a=index">Fotos</a>
+                                <a class="dropdown-item" href="?c=video&a=index">Video</a>
+                                <a class="dropdown-item" href="?c=documentos&a=index">Documentos</a>
                                 <a class="dropdown-item" href="#">Voluntariado</a>
                                 <a class="dropdown-item" href="#">Marco legal</a>
 <!--                                <div class="dropdown-divider"></div>-->
