@@ -78,7 +78,7 @@
                                 Organización
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" dark>Comite Organizador</a>
+                                <a class="dropdown-item" href="?c=comiteorganizador&a=index">Comite Organizador</a>
                                 <a class="dropdown-item" href="#">Organigrama</a>
                             </div>
                         </li>
@@ -98,7 +98,7 @@
                                 <a class="dropdown-item" href="?c=medallero&a=index">Medallero</a>
                                 <a class="dropdown-item" href="#">Vivo</a>
                                 <a class="dropdown-item" href="#">Voluntariado</a>
-                                <a class="dropdown-item" href="#">Marco legal</a>
+                                <a class="dropdown-item" href="?c=marcoLegal&a=index">Marco legal</a>
 <!--                                <div class="dropdown-divider"></div>-->
 <!--                                <a class="dropdown-item" href="#">Something else here</a>-->
                             </div>
