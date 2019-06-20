@@ -17,92 +17,32 @@
         </div>
     </div>
 
+    <?php
+    //var_dump($decretos);
+    ?>
+
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+                <h4 class="text-danger">NORMAS DE CREACIÓN</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
 
-                <div class="card">
-                    <div class="card-header">
-                        D.L. N° 1335
+                <?php
+                foreach($decretos as $row):
+                    ?>
+                    <div class="card">
+                        <div class="card-header">
+                            <?php echo $row->titulo ?>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text"><?php echo $row->descripcion ?></p>
+                            <button class="btn btn-primary manual" onclick="ver('<?php echo $row->rutaPdf ?>')"><i class="far fa-file-pdf"></i></button>
+                        </div>
                     </div>
-                    <div class="card-body">
-<!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        D.L. N° 1335
-                    </div>
-                    <div class="card-body">
-                        <!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        D.L. N° 1335
-                    </div>
-                    <div class="card-body">
-                        <!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        D.L. N° 1335
-                    </div>
-                    <div class="card-body">
-                        <!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        D.L. N° 1335
-                    </div>
-                    <div class="card-body">
-                        <!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        D.L. N° 1335
-                    </div>
-                    <div class="card-body">
-                        <!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        D.L. N° 1335
-                    </div>
-                    <div class="card-body">
-                        <!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        <b>D.L. N° 1335</b>
-                    </div>
-                    <div class="card-body">
-                        <!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header">
-                        D.L. N° 1335
-                    </div>
-                    <div class="card-body">
-                        <!--                        <h5 class="card-title">Special title treatment</h5>-->
-                        <p class="card-text">Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.</p>
-                    </div>
-                </div>
+                <?php endforeach; ?>
 
 
             </div>
@@ -110,3 +50,11 @@
     </div>
 
 </main>
+
+<script>
+    function ver(archivo){
+        window.open(archivo, '_blank');
+        //console.log(archivo);
+    }
+</script>
+

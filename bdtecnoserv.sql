@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-06-2019 a las 21:58:37
+-- Tiempo de generación: 20-06-2019 a las 22:12:07
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -26,6 +26,321 @@ DELIMITER $$
 --
 -- Procedimientos
 --
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_AsientosxIdCategoria` (`_idCategAsiento` INT(11))  BEGIN
+	SELECT `idAsiento`, `numero`, `IdEstado` FROM `asientos` WHERE idCategAsiento = _idCategAsiento;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_AsientosxIdCategoriaXIdSede` (`_idCategAsiento` INT(11), `_IdSede` INT(11))  BEGIN
+	SELECT `idAsiento`, `numero`, `IdEstado`, `precio` FROM `asientos` WHERE idCategAsiento = _idCategAsiento AND IdSede = _IdSede;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_CategoriaAsiento` ()  BEGIN
+	SELECT idCategoriaAsiento, NombreCategoriaA FROM categoriaasiento;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_CategoriaAsientoxidCategoriaAsiento` (`_idCategoriaAsiento` INT(11))  BEGIN
+	SELECT NombreCategoriaA FROM categoriaasiento WHERE idCategoriaAsiento = _idCategoriaAsiento;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Sedes` ()  BEGIN
+	SELECT `idSede`, `imgSede`, `DireccionSede` FROM `sedes`;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_SedexIdSede` (`_idSede` INT(11))  BEGIN
+	SELECT `DireccionSede` FROM `sedes` WHERE idSede = _idSede;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_foto` ()  NO SQL
+select * from foto$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `list_video` ()  NO SQL
+select* From video$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_conocenos_sp` ()  BEGIN
+SELECT co_desc AS descripcion, co_imagen AS rutaImagen FROM vision WHERE co_fecha = fechaActual;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_delete_medalleroHistorico_SP` (`idmed` INT)  BEGIN
+DELETE FROM medallerohistorico
+WHERE idmedHis_PK = idmed;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_confSedeDeporte_SP` (`sede` INT, `deporte` INT)  BEGIN
+INSERT INTO config_sede_deporte(idSedeFK, idDeporteFK)
+VALUES(sede, deporte);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_Equipo_SP` (`codigoPais` INT, `numeroIntegrantes` INT)  BEGIN
+INSERT INTO equipo(idPaisFK,totalIntegrantes)
+VALUES(codigoPais, numeroIntegrantes);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_eventos_SP` (`sede` INT, `horario` INT, `dir` VARCHAR(100), `depFK` INT, `confSedeDeporte` INT)  BEGIN
+INSERT INTO eventos(idSede, idHorarioEventos, direccion, idDeportesFK, idConfig_Sede_DeporteFK)
+VALUES(sede, horario, dir, depFK, confSedeDeporte);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_integrantes_SP` (`equifk` INT, `depFK` INT)  BEGIN
+INSERT INTO eventos(idEquipoFK, idDeportistasFK)
+VALUES(equifk, depFK);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_medalleroHistorico_SP` (`puesto` INT, `pais` INT, `oro` INT, `plata` INT, `bronce` INT, `total` INT)  BEGIN
+INSERT INTO medallerohistorico(medHisPue, pai_FK, medHisOro, medHisPla, medHisBro, medHisTot)
+VALUES(puesto, pais, oro, plata, bronce, total);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_participanteGrupal_SP` (`idEve` INT, `idEq1` INT, `idEq2` INT)  BEGIN
+INSERT INTO participantegrupal(idEventoFK, idEquipo1FK, idEquipo2FK)
+VALUES(idEve, idEq1, idEq2);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_participanteIndividual_SP` (`idDepIndividual` INT, `idPaFK` INT, `idEvFK` INT)  BEGIN
+INSERT INTO participanteindividual(idDeportistasFK, idPaisFk, idEventoFK)
+VALUES(idDepIndividual, idPaFK, idEvFK);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_reglamento_SP` (`numSeccion` INT, `tituloSecc` VARCHAR(255), `norma` INT, `subnorma` INT)  BEGIN
+INSERT INTO seccionreglamento(numSec, titsec, normaFK, subNorFK)
+VALUES(numSeccion, tituloSecc, norma, subnorma);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_resultadoGrupal_SP` (`idParticipanteGrupal` INT, `resultadoPuesto` VARCHAR(25))  BEGIN
+INSERT INTO resultadogrupal(idPartGrupalFK, res_gr_puesto)
+VALUES (idParticipanteGrupal, resultadoPuesto);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_insertar_resultadoIndividual_SP` (`idparticipanteIndividual` INT, `resultadoPuesto` VARCHAR(25))  BEGIN
+INSERT INTO resultadoindividual(idPartIndividualFK,fechaResultado,res_in_puesto)
+VALUES (idparticipanteIndividual,NOW(),resultadoPuesto);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarNorma_SP` (`id` INT)  SELECT
+N.idNormaPK AS codigo,
+N.numNor AS numeroNorma,
+N.contNor AS contenido
+FROM
+norma AS N
+WHERE
+N.SecRegFK = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarPais_SP` ()  BEGIN
+SELECT
+P.idPais AS codigo,
+P.NombrePais AS pais
+FROM
+pais AS P;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarPregFrecAreas_SP` ()  BEGIN
+SELECT
+PFA.idareaPreFrePK AS codigo,
+PFA.nomAre AS area
+FROM
+pregfrecareas AS PFA;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarpregunta_SP` (`id` INT)  BEGIN
+SELECT
+PF.idPreguntasFrecuentes AS codigo,
+PF.pregunta AS pregunta
+FROM
+preguntasfrecuentes AS PF
+WHERE
+PF.idPregFrecAreaFK = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarRespuesta_SP` (`id` INT)  BEGIN
+SELECT
+RPF.idrespPregFrec AS codigo,
+RPF.respuesta AS respuesta
+FROM
+respuestapreguntafrec AS RPF
+WHERE
+RPF.idPregFrecuentes = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarSeccion_SP` ()  BEGIN
+SELECT
+SR.TitSec AS seccion,
+SR.idSecRegPK codigo
+FROM
+seccionreglamento AS SR;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_listarSubnorma_SP` (`id` INT)  SELECT
+SN.idSubNor AS codigo,
+SN.numSubNor AS numeroSubnorma,
+SN.contSubNor AS contenido
+FROM
+subnorma AS SN
+WHERE
+SN.normaFK = id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarConocenos_sp` ()  BEGIN
+SELECT
+C.co_desc AS descripcion,
+C.co_imagen AS rutaImagen
+FROM
+conocenos AS C
+WHERE
+C.bEstPri = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarMedalleroPorId_SP` (`id` INT)  BEGIN
+SELECT
+MH.idmedHis_PK AS codigo,
+MH.medHisPue AS puesto,
+MH.pai_FK AS pais,
+MH.medHisOro AS oro,
+MH.medHisPla AS plata,
+MH.medHisBro AS bronce,
+MH.medHisTot AS total
+FROM
+medallerohistorico AS MH
+WHERE MH.idmedHis_PK = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarMision_sp` ()  BEGIN
+SELECT
+M.mi_desc AS descripcion,
+M.mi_imagen AS rutaImagen
+FROM
+mision AS M
+WHERE
+M.bEstPri = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarOficinasOrganigrama_sp` ()  BEGIN
+	SELECT
+		OO.idSecretaria AS codigo,
+		OO.se_nombre AS oficina,
+		OO.se_tipo AS tipo
+	FROM
+		oficinasorganigrama AS OO;
+	END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarParticipantesEvento_SP` (`idEvento` INT)  SELECT
+PI.idPartIndividual AS codigo,
+D.Nombre_Deportista AS nombreDeportista,
+DE.NombDeporte AS deporte
+FROM
+participanteindividual AS PI
+INNER JOIN deportistas AS D ON PI.idDeportistasFK = D.idDeportistas
+INNER JOIN deportes AS DE ON D.idDeporte = DE.idDeporte
+WHERE
+PI.idEventoFK = idEvento$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarSedeEvento_SP` ()  SELECT
+E.idEvento AS codigo,
+CONCAT(DE.NombDeporte , '-' , S.NombreSede) AS evento
+FROM
+eventos AS E
+INNER JOIN deportes AS DE ON E.idDeportesFK = DE.idDeporte
+INNER JOIN sedes AS S ON E.idSede = S.idSede$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarTrabajaConNosotros_sp` ()  BEGIN
+SELECT
+T.tra_desc AS descripcion,
+T.tra_imagen AS rutaImagen
+FROM
+trabajaconnosotros AS T
+WHERE
+T.bEstPri = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarUnidadesOrganigrama_sp` (IN `CODIGOOFICINA` INT)  BEGIN
+	SELECT
+		OO.se_tipo AS tipo,
+		UO.U_nombre AS unidad
+	FROM
+		oficinasorganigrama AS OO
+	INNER JOIN unidadorganizacional AS UO ON UO.idSecUniOrgFK = OO.idSecretaria
+	WHERE
+		OO.idSecretaria = CODIGOOFICINA;
+	END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrarVision_sp` ()  BEGIN
+SELECT
+V.vi_desc AS descripcion,
+V.vi_imagen AS rutaImagen
+FROM
+vision AS V
+WHERE
+V.bEstPri = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrar_medalleroHistorico_SP` ()  SELECT
+MH.medHisPue AS puesto,
+MH.medHisOro AS medallaOro,
+MH.medHisPla AS medallaPlata,
+MH.medHisBro AS medallaBronce,
+MH.medHisTot AS medallaTotal,
+P.bandera AS bandera,
+P.NombrePais AS pais,
+MH.idmedHis_PK AS codigo
+FROM
+medallerohistorico AS MH
+INNER JOIN pais AS P ON MH.pai_FK = P.idPais$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_mostrar_Reglamento_SP` ()  BEGIN
+SELECT
+SR.TitSec AS tituloSeccion,
+N.contNor AS contenidoNorma,
+SN.contSubNor AS subContenidoNorma
+FROM
+seccionreglamento AS SR
+INNER JOIN norma AS N ON N.SecRegFK = SR.idSecRegPK
+INNER JOIN subnorma AS SN ON SN.normaFK = N.idNormaPK;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_preguntasFrecuentes_SP` (`id` INT)  BEGIN
+SELECT
+PF.idPreguntasFrecuentes AS codigo,
+PF.pregunta  AS pregunta
+FROM
+preguntasfrecuentes AS PF
+WHERE PF.idPregFrecAreaFK  = id;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_registrarMision_sp` (IN `descripcion` TEXT(400), `imagen` NVARCHAR(50))  BEGIN
+insert into mision (mi_desc,mi_imagen,mi_fecha) values(descripcion,imagen,NOW());
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_trabajaConNosotros_sp` (IN `fechaActual` DATE)  BEGIN
+SELECT tra_desc AS descripcion, tra_imagen AS rutaImagen FROM vision WHERE tra_fecha = fechaActual;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `mgc_update_medalleroHistorico_SP` (`idmed` INT, `puesto` INT, `pais` INT, `oro` INT, `plata` INT, `bronce` INT, `total` INT)  BEGIN
+UPDATE medallerohistorico
+SET  medHisPue = puesto, pai_FK = pais, medHisOro = oro, medHisPla = plata, medHisBro = bronce, medHisTot = total
+WHERE idmedHis_PK = idmed;
+END$$
+
+CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `set_CompraEntrada` (IN `_idUsuario` INT(11), IN `_idSede` INT(11), IN `_idHorarioEvento` INT(11), IN `_idMoneda` INT(11), IN `_idReporteEntrada` INT(11), IN `_idAsiento` INT(11), IN `_NumTarjeta` VARCHAR(30))  INSERT INTO `compra_entrada` VALUES (null, _idUsuario, _idSede, _idHorarioEvento, _idMoneda, _idReporteEntrada, _idAsiento, _NumTarjeta)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizarf_datos` (IN `nombreF` VARCHAR(40), IN `fotoF` VARCHAR(200), IN `codigoF` INT)  NO SQL
+BEGIN
+	update foto set nombre=nombreF,
+						foto=fotoF
+				where codigo=codigoF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizarv_datos` (IN `nombreV` VARCHAR(200))  NO SQL
+BEGIN
+	update video set nombre=nombreV,
+						video=videoV
+				where codigo=codigoV;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_actualizar_datos` (IN `disciplinaU` VARCHAR(150), IN `sedeU` VARCHAR(200), IN `direccionU` VARCHAR(200), IN `idjuegoU` INT)  NO SQL
+BEGIN
+	update disciplinas set disciplina=disciplinaU,
+						sedeU=sedeU,
+						direccion=direccionU
+				where id_juego=idJuegoU;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_AUSPICIADORES` ()  BEGIN
 	SELECT ta.NomAuspiciador, a.descripcionAus, a.imagenE FROM tipoauspiciadores ta 
 	inner join auspiciadores a on ta.idTipoAuspiciador = a.idTipoAuspiciador;
@@ -50,12 +365,77 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_COMITE` ()  BEGIN
 	INNER JOIN tiporepresentante tr on c.idTipoRepresentante = tr.idTipoRepresentante;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminarf_datos` (IN `codigoF` INT)  NO SQL
+BEGIN
+delete from foto
+where codigo=codigoF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminarV_datos` (IN `codigoV` INT)  NO SQL
+BEGIN
+delete from video
+where codigo=codigoV;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminar_datos` (IN `idjuegoD` INT)  NO SQL
+BEGIN
+	delete from disciplinas 
+    where id_juego=idJuegoD;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDECRETO` ()  BEGIN
+	SELECT * FROM bdtecnoserv.decreto;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFIXTURE` ()  BEGIN
+	SELECT * FROM fixture f
+	INNER JOIN deportes d ON f.idDeporte = d.idDeporte;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarf_datos` (IN `nombre_f` VARCHAR(40), IN `foto_f` VARCHAR(200))  NO SQL
+insert into foto (nombre,foto) VALUES (nombre_f,foto_f)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarv_datos` (IN `nombre_V` VARCHAR(40), IN `video_V` VARCHAR(200))  NO SQL
+insert into video (nombre,video) VALUES (nombre_V,video_V)$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertar_datos` (IN `disciplinaI` VARCHAR(150), IN `sedeI` VARCHAR(200), IN `direccionI` VARCHAR(200))  NO SQL
+BEGIN
+	insert into disciplinas (disciplina,
+							sede,
+							direccion)
+			values (disciplinaI,sedeI,direccionI);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_LOGIN` (`usuario` VARCHAR(100), `pass` VARCHAR(100))  BEGIN
-	SELECT * FROM usuarios WHERE emailU= usuario and passwordU= pass;
+	SELECT * FROM usuarios WHERE usuario= usuario and pass= pass;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_MEDALLERO` ()  BEGIN
 	SELECT p.NombrePais, m.oro, m.plata, m.bronce, (m.oro + m.plata + m.bronce) as 'total' FROM medallero m inner join pais p on m.idPais = p.idPais;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_mostrar_datos` ()  NO SQL
+BEGIN
+	select id_juego,
+			disciplina,
+			sede,
+			direccion 
+	from disciplinas;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtenerF_regjuego` (IN `codigoF` INT)  NO SQL
+BEGIN
+	select * from foto where codigo=codigoF;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtenerV_regJuego` (IN `codigoV` INT)  NO SQL
+BEGIN
+	select * from video where codigo=codigoV;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_obtener_regJuego` (IN `idjuegoO` INT)  NO SQL
+BEGIN
+	select * from disciplinas where id_juego=idJuegoO;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_PAIS` ()  BEGIN
@@ -81,11 +461,11 @@ DELIMITER ;
 
 CREATE TABLE `asientos` (
   `idAsiento` int(11) NOT NULL,
-  `fila` int(11) DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
-  `estado` int(11) DEFAULT NULL,
+  `IdEstado` int(11) DEFAULT NULL,
   `idCategAsiento` int(11) DEFAULT NULL,
-  `idStockAsiento` int(11) DEFAULT NULL
+  `Precio` decimal(10,0) NOT NULL,
+  `IdSede` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -130,6 +510,17 @@ CREATE TABLE `categoriaasiento` (
   `DescripCategoriaA` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `categoriaasiento`
+--
+
+INSERT INTO `categoriaasiento` (`idCategoriaAsiento`, `NombreCategoriaA`, `DescripCategoriaA`) VALUES
+(1, 'CategorÃ­a 1', NULL),
+(2, 'CategorÃ­a 2', NULL),
+(3, 'CategorÃ­a 3', NULL),
+(4, 'CategorÃ­a 4', NULL),
+(5, 'Palco', NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -148,7 +539,7 @@ CREATE TABLE `ceremonias` (
 --
 
 INSERT INTO `ceremonias` (`idCeremonias`, `titulo`, `DescripcionC`, `imagenC`) VALUES
-(2, 'CEREMONIAS', 'La historia deportiva comienza y finaliza <br> con espectáctulos que jamás podrás olvidar.', './assets/images/ceremonias-lima-2019.jpg'),
+(2, 'CEREMONIAS', 'ESTAMOS PROBANDO', './assets/images/ceremonias-lima-2019.jpg'),
 (3, 'INAUGURACIÓN', 'La cuenta regresiva agota su último grano de arena.<br> ¡Conoce a los campeones!', './assets/images/inauguracion/inauguracion-panamericanos-lima-2019.jpg'),
 (4, 'CLAUSURA', 'La primera etapa de nuestros juegos llega a su fin. <br> ¡Celebra con nosotros!', './assets/images/clausura/clausura-panamericanos-lima-2019.jpg');
 
@@ -217,6 +608,72 @@ CREATE TABLE `comprobantepago` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `config_sede_deporte`
+--
+
+CREATE TABLE `config_sede_deporte` (
+  `idConfigSedeDeporte` int(11) NOT NULL,
+  `idSedeFK` int(11) NOT NULL,
+  `idDeporteFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `config_sede_deporte`
+--
+
+INSERT INTO `config_sede_deporte` (`idConfigSedeDeporte`, `idSedeFK`, `idDeporteFK`) VALUES
+(1, 1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `conocenos`
+--
+
+CREATE TABLE `conocenos` (
+  `idconocenos` int(11) NOT NULL,
+  `co_desc` text NOT NULL,
+  `co_imagen` varchar(50) NOT NULL,
+  `co_fecha` date NOT NULL,
+  `bEstPri` bit(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `conocenos`
+--
+
+INSERT INTO `conocenos` (`idconocenos`, `co_desc`, `co_imagen`, `co_fecha`, `bEstPri`) VALUES
+(1, 'CONOCEMOS: Estamos preparando el camino a los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos.', 'vista/mgc/img/conocenos.jpg', '0000-00-00', b'1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `decreto`
+--
+
+CREATE TABLE `decreto` (
+  `idDecreto` int(11) NOT NULL,
+  `titulo` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `descripcion` text COLLATE utf8_spanish2_ci,
+  `estado` tinyint(4) DEFAULT NULL,
+  `rutaPdf` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `decreto`
+--
+
+INSERT INTO `decreto` (`idDecreto`, `titulo`, `descripcion`, `estado`, `rutaPdf`, `fechaSistema`) VALUES
+(1, 'D.L. N° 1335', 'Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.', 1, './assets/docs/dl1335-1.pdf', '2019-06-20 20:08:36'),
+(2, 'D.L. N° 1248', 'Dicta medidas para agilizar el proceso de inversión y otras actividades en el marco de la preparación y desarrollo de los XVIII Juegos Panamericanos del 2019 y Sextos Juegos Parapanamericanos del 2019.', 1, './assets/docs/dl1248.pdf', '2019-06-20 20:10:41'),
+(3, 'D.S. N° 017-2018-MTC', 'Se modifican los artículos 2, 5 y 6 del Decreto Supremo N° 002-2015-MINEDU que crea el Proyecto Especial para la preparación y desarrollo de los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019 en el ámbito del Ministerio de Transportes y Comunicaciones.', 1, './assets/docs/ds0172018mtc.pdf', '2019-06-20 20:10:41'),
+(4, 'D.S. N° 009-2015-MINEDU', 'Se modifica el D.S. N° 002-2015-MINEDU y se incluye el objeto de programar y ejecutar las acciones necesarias para el desarrollo de los Sextos Juegos Parapanamericanos del 2019.', 1, './assets/docs/ds0092015minedu.pdf', '2019-06-20 20:10:41'),
+(5, 'D.S. N° 002-2015-MINEDU', 'Se creó el Proyecto Especial para la Preparación y Desarrollo de los XVIII Juegos Panamericanos del 2019 – PEJP.', 1, './assets/docs/ds0022015minedu.pdf', '2019-06-20 20:10:41');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `deportedestacado`
 --
 
@@ -234,10 +691,78 @@ CREATE TABLE `deportedestacado` (
 
 CREATE TABLE `deportes` (
   `idDeporte` int(11) NOT NULL,
-  `NombDeporte` varchar(50) DEFAULT NULL,
+  `NombDeporte` varchar(150) DEFAULT NULL,
   `idDetalleDeporte` int(11) DEFAULT NULL,
   `idReglamento` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `deportes`
+--
+
+INSERT INTO `deportes` (`idDeporte`, `NombDeporte`, `idDetalleDeporte`, `idReglamento`) VALUES
+(1, 'Futbol', 1, 1),
+(2, 'Atletismo', 1, 1),
+(3, 'BÃ¡dminton', 1, 1),
+(4, 'Baloncesto', 1, 1),
+(5, 'Boxeo', 1, 1),
+(6, 'Ciclismo de Pista', 1, 1),
+(7, 'Ciclismo de Ruta', 1, 1),
+(8, 'Gimnasia Ritmica', 1, 1),
+(9, 'Golf', 1, 1),
+(10, 'Judo', 1, 1),
+(11, 'Lucha-Grecorromana', 1, 1),
+(12, 'Lucha-Libre', 1, 1),
+(13, 'Raquetbol', 1, 1),
+(14, 'Taekwondo-Kyorugi', 1, 1),
+(15, 'Taekwondo-Poomasae', 1, 1),
+(16, 'Voleibol', 1, 1),
+(17, 'Ciclismo-BMX', 1, 1),
+(18, 'Ciclismo-BMX Freestyle', 1, 1),
+(19, 'Patinaje-velocidad', 1, 1),
+(20, 'Voleibol-Play', 1, 1),
+(21, 'Acuatico-Natacion', 1, 1),
+(22, 'Acuatico-Clavadas', 1, 1),
+(23, 'Acuatico-Natacion Artistica', 1, 1),
+(24, 'Balonmano', 1, 1),
+(25, 'Bowling', 1, 1),
+(26, 'Patinaje-Artistico', 1, 1),
+(27, 'Squash', 1, 1),
+(28, 'Tenis de Mesa', 1, 1),
+(29, 'Baloncesto 3X3', 1, 1),
+(30, 'Ecuestre-Adiestramiento', 1, 1),
+(31, 'Ecuestre-Salto', 1, 1),
+(32, 'Atlestismo-Maraton', 1, 1),
+(33, 'Atletismo-Marcha', 1, 1),
+(34, 'Acuatico-Polo Acuatico', 1, 1),
+(35, 'Beisbol', 1, 1),
+(36, 'Hockey', 1, 1),
+(37, 'Pelota Vasca', 1, 1),
+(38, 'Rugby', 1, 1),
+(39, 'Softbol', 1, 1),
+(40, 'Tiro con Arco', 1, 1),
+(41, 'Ciclismo-Montaña', 1, 1),
+(42, 'Fisicoculturismo', 1, 1),
+(43, 'Levantamiento de Pesas', 1, 1),
+(44, 'Pentatlon Moderno', 1, 1),
+(45, 'Triatlon', 1, 1),
+(46, 'Tiro-Escopeta', 1, 1),
+(47, 'Tiro-Pistola', 1, 1),
+(48, 'Tiro-Rifle', 1, 1),
+(49, 'Gimnasia-Artistica', 1, 1),
+(50, 'Gimanasi-Trampolin', 1, 1),
+(51, 'Karate-Kata', 1, 1),
+(52, 'Karate-Kumite', 1, 1),
+(53, 'Tenis', 1, 1),
+(54, 'Suff', 1, 1),
+(55, 'Acuatico-Natacion Aguas Abiertas', 1, 1),
+(56, 'Esqui Acuatico', 1, 1),
+(57, 'Canotaje-Extreme Slalom', 1, 1),
+(58, 'Canotaje-Slalom', 1, 1),
+(59, 'Vela', 1, 1),
+(60, 'Canotaje-Velacidad', 1, 1),
+(61, 'Esgrima', 1, 1),
+(62, 'Pentatlon Moderno', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -269,6 +794,28 @@ CREATE TABLE `deportistas` (
   `talla` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `deportistas`
+--
+
+INSERT INTO `deportistas` (`idDeportistas`, `idDeporte`, `descripcion`, `idPais`, `nombres`, `apellidos`, `peso`, `talla`) VALUES
+(1, 3, 'badminton deporte de a dos', 1, 'harold Ferrer', 'ga', '50', '90'),
+(2, 3, 'deporte de a dos', 9, 'jonathan Franco', 'ga', '50', '90'),
+(3, 2, 'deporte base', 4, 'frank', 'ga', '50', '90'),
+(4, 2, 'deporte base', 18, 'Ines Melchor', 'ga', '50', '90'),
+(5, 2, 'deporte base', 18, 'Gladys Tejeda', 'ga', '50', '90'),
+(6, 2, 'deporte base', 18, 'Kimberly Garcia', 'ga', '50', '90'),
+(7, 2, 'deporte base', 18, 'Raul Pacheco', 'ga', '50', '90'),
+(8, 3, 'raqueta y una plumilla', 18, 'Fernanda Saponara', 'ga', '50', '90'),
+(9, 3, 'raqueta y una plumilla', 18, 'Mario Cuba Rodriguez', 'ga', '50', '90'),
+(10, 3, 'raqueta y una plumilla', 18, 'Katherine Winder Cochella', 'ga', '50', '90'),
+(11, 3, 'raqueta y una plumilla', 18, 'Paula La torre Regal', 'ga', '50', '90'),
+(12, 3, 'raqueta y una plumilla', 18, 'Diego MiniCuadros', 'ga', '50', '90'),
+(13, 3, 'raqueta y una plumilla', 18, 'Ines Castillo Salazar', 'ga', '50', '90'),
+(14, 3, 'raqueta y una plumilla', 18, 'Daniela Macias Brandes', 'ga', '50', '90'),
+(15, 3, 'raqueta y una plumilla', 18, 'Danica Nishimura Higa', 'ga', '50', '90'),
+(16, 3, 'raqueta y una plumilla', 18, 'Daniel La torre Regal', 'ga', '50', '90');
+
 -- --------------------------------------------------------
 
 --
@@ -279,6 +826,73 @@ CREATE TABLE `detalledeporte` (
   `idDetalleDeporte` int(11) NOT NULL,
   `descripcionDeporte` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalledeporte`
+--
+
+INSERT INTO `detalledeporte` (`idDetalleDeporte`, `descripcionDeporte`) VALUES
+(1, 'Boxeo'),
+(2, 'Lucha-Grecorromana'),
+(3, 'Lucha-Libre'),
+(4, 'Raquetbol'),
+(5, 'Taekwondo-Kyorugi'),
+(6, 'Taekwondo-Poomasae'),
+(7, 'Voleibol'),
+(8, 'Ciclismo-BMX'),
+(9, 'Ciclismo-BMX Freestyle'),
+(10, 'Ciclismo-Ruta'),
+(11, 'Patinaje-velocidad'),
+(12, 'Voleibol-Play'),
+(13, 'Atlestismo-atletismo'),
+(14, 'Acuatico-Natacion'),
+(15, 'Acuatico-Clavadas'),
+(16, 'Acuatico-Natacion Artistica'),
+(17, 'Badminton'),
+(18, 'Balonmano'),
+(19, 'Bowling'),
+(20, 'Ciclismo-Pista'),
+(21, 'Judo'),
+(22, 'Patinaje-Artistico'),
+(23, 'Squash'),
+(24, 'Tenis de Mesa'),
+(25, 'Baloncesto'),
+(26, 'Baloncesto 3X3'),
+(27, 'Ecuestre-Adiestramiento'),
+(28, 'Ecuestre-Salto'),
+(29, 'Atlestismo-Maraton'),
+(30, 'Atletismo-Marcha'),
+(31, 'Acuatico-Polo Acuatico'),
+(32, 'Beisbol'),
+(33, 'Hockey'),
+(34, 'Pelota Vasca'),
+(35, 'Rugby'),
+(36, 'Softbol'),
+(37, 'Tiro con Arco'),
+(38, 'Ciclismo-Montaña'),
+(39, 'Fisicoculturismo'),
+(40, 'Levantamiento de Pesas'),
+(41, 'Pentatlon Moderno'),
+(42, 'Triatlon'),
+(43, 'Tiro-Escopeta'),
+(44, 'Tiro-Pistola'),
+(45, 'Tiro-Rifle'),
+(46, 'Gimnasia-Artistica'),
+(47, 'Gimnasia-Ritmica'),
+(48, 'Gimanasi-Trampolin'),
+(49, 'Karate-Kata'),
+(50, 'Karate-Kumite'),
+(51, 'Golf'),
+(52, 'Tenis'),
+(53, 'Suff'),
+(54, 'Acuatico-Natacion Aguas Abiertas'),
+(55, 'Esqui Acuatico'),
+(56, 'Canotaje-Extreme Slalom'),
+(57, 'Canotaje-Slalom'),
+(58, 'Vela'),
+(59, 'Canotaje-Velacidad'),
+(60, 'Esgrima'),
+(61, 'Pentatlon Moderno');
 
 -- --------------------------------------------------------
 
@@ -299,11 +913,35 @@ CREATE TABLE `detalleeventos` (
 --
 
 CREATE TABLE `disciplina` (
-  `iddisciplina` int(11) NOT NULL,
-  `idDeporte` int(11) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
-  `descripcion` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
+  `id_juego` int(11) NOT NULL,
+  `disciplina` int(11) NOT NULL,
+  `sede` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `direccion` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `documentos`
+--
+
+CREATE TABLE `documentos` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `documentos` varchar(150) COLLATE utf8_spanish2_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `equipo`
+--
+
+CREATE TABLE `equipo` (
+  `idEquipo` int(11) NOT NULL,
+  `idPaisFK` int(11) NOT NULL,
+  `totalIntegrantes` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -345,8 +983,18 @@ CREATE TABLE `eventos` (
   `idEvento` int(11) NOT NULL,
   `idSede` int(11) DEFAULT NULL,
   `idHorarioEventos` int(11) DEFAULT NULL,
-  `direccion` varchar(100) DEFAULT NULL
+  `direccion` varchar(100) DEFAULT NULL,
+  `idDeportes` varchar(45) DEFAULT NULL,
+  `idConfig_Sede_Deporte` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `eventos`
+--
+
+INSERT INTO `eventos` (`idEvento`, `idSede`, `idHorarioEventos`, `direccion`, `idDeportes`, `idConfig_Sede_Deporte`) VALUES
+(1, 1, 1, 'av. probando', '3', '1'),
+(3, 4, 1, 'av. seg prueba', '6', '1');
 
 -- --------------------------------------------------------
 
@@ -357,8 +1005,103 @@ CREATE TABLE `eventos` (
 CREATE TABLE `fechaevento` (
   `idFechaEvento` int(11) NOT NULL,
   `idHora` int(11) DEFAULT NULL,
-  `fecha` date DEFAULT NULL
+  `fecha` date DEFAULT NULL,
+  `idDeporte` int(11) DEFAULT NULL,
+  `fecha_inicio` date DEFAULT NULL,
+  `fecha_final` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `fechaevento`
+--
+
+INSERT INTO `fechaevento` (`idFechaEvento`, `idHora`, `fecha`, `idDeporte`, `fecha_inicio`, `fecha_final`) VALUES
+(1, 1, '0000-00-00', 1, '2019-06-24', '2019-06-26');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `fixture`
+--
+
+CREATE TABLE `fixture` (
+  `idfixture` int(11) NOT NULL,
+  `idDeporte` int(11) DEFAULT NULL,
+  `fechaInicio` date DEFAULT NULL,
+  `fechaFinal` date DEFAULT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `fixture`
+--
+
+INSERT INTO `fixture` (`idfixture`, `idDeporte`, `fechaInicio`, `fechaFinal`, `fechaSistema`) VALUES
+(1, 5, '2019-06-24', '2019-06-26', '2019-06-20 05:00:00'),
+(2, 11, '2019-06-25', '2019-06-27', '2019-06-20 05:00:00'),
+(3, 12, '2019-06-26', '2019-06-28', '2019-06-20 05:00:00'),
+(4, 13, '2019-06-27', '2019-06-29', '2019-06-20 05:00:00'),
+(5, 14, '2019-06-28', '2019-06-30', '2019-06-20 05:00:00'),
+(6, 15, '2019-06-29', '2019-07-01', '2019-06-20 05:00:00'),
+(7, 16, '2019-06-30', '2019-07-02', '2019-06-20 05:00:00'),
+(8, 17, '2019-07-01', '2019-07-03', '2019-06-20 05:00:00'),
+(9, 18, '2019-07-02', '2019-07-04', '2019-06-20 05:00:00'),
+(10, 19, '2019-07-04', '2019-07-06', '2019-06-20 05:00:00'),
+(11, 20, '2019-07-05', '2019-07-07', '2019-06-20 05:00:00'),
+(12, 21, '2019-07-07', '2019-07-09', '2019-06-20 05:00:00'),
+(13, 22, '2019-07-08', '2019-07-10', '2019-06-20 05:00:00'),
+(14, 23, '2019-07-09', '2019-07-11', '2019-06-20 05:00:00'),
+(15, 24, '2019-07-11', '2019-07-13', '2019-06-20 05:00:00'),
+(16, 25, '2019-07-12', '2019-07-14', '2019-06-20 05:00:00'),
+(17, 26, '2019-07-15', '2019-07-17', '2019-06-20 05:00:00'),
+(18, 27, '2019-07-16', '2019-07-18', '2019-06-20 05:00:00'),
+(19, 28, '2019-07-17', '2019-07-19', '2019-06-20 05:00:00'),
+(20, 29, '2019-07-19', '2019-07-21', '2019-06-20 05:00:00'),
+(21, 30, '2019-07-20', '2019-07-22', '2019-06-20 05:00:00'),
+(22, 31, '2019-07-21', '2019-07-23', '2019-06-20 05:00:00'),
+(23, 32, '2019-07-22', '2019-07-24', '2019-06-20 05:00:00'),
+(24, 33, '2019-07-23', '2019-07-25', '2019-06-20 05:00:00'),
+(25, 34, '2019-07-24', '2019-07-26', '2019-06-20 05:00:00'),
+(26, 35, '2019-07-25', '2019-07-27', '2019-06-20 05:00:00'),
+(27, 36, '2019-07-26', '2019-07-28', '2019-06-20 05:00:00'),
+(28, 37, '2019-07-27', '2019-07-29', '2019-06-20 05:00:00'),
+(29, 38, '2019-07-28', '2019-07-30', '2019-06-20 05:00:00'),
+(30, 39, '2019-07-29', '2019-07-31', '2019-06-20 05:00:00'),
+(31, 40, '2019-07-30', '2019-08-01', '2019-06-20 05:00:00'),
+(32, 41, '2019-07-31', '2019-08-02', '2019-06-20 05:00:00'),
+(33, 42, '2019-08-01', '2019-08-03', '2019-06-20 05:00:00'),
+(34, 43, '2019-08-02', '2019-08-04', '2019-06-20 05:00:00'),
+(35, 44, '2019-08-03', '2019-08-05', '2019-06-20 05:00:00'),
+(36, 45, '2019-08-04', '2019-08-06', '2019-06-20 05:00:00'),
+(37, 46, '2019-08-05', '2019-08-07', '2019-06-20 05:00:00'),
+(38, 47, '2019-08-06', '2019-08-08', '2019-06-20 05:00:00'),
+(39, 48, '2019-08-07', '2019-08-09', '2019-06-20 05:00:00'),
+(40, 49, '2019-08-08', '2019-08-10', '2019-06-20 05:00:00'),
+(41, 50, '2019-08-10', '2019-08-12', '2019-06-20 05:00:00'),
+(42, 51, '2019-08-11', '2019-08-13', '2019-06-20 05:00:00'),
+(43, 52, '2019-08-12', '2019-08-14', '2019-06-20 05:00:00'),
+(44, 53, '2019-08-14', '2019-08-16', '2019-06-20 05:00:00'),
+(45, 54, '2019-08-15', '2019-08-17', '2019-06-20 05:00:00'),
+(46, 55, '2019-08-16', '2019-08-18', '2019-06-20 05:00:00'),
+(47, 56, '2019-08-17', '2019-08-19', '2019-06-20 05:00:00'),
+(48, 57, '2019-08-18', '2019-08-20', '2019-06-20 05:00:00'),
+(49, 58, '2019-08-19', '2019-08-21', '2019-06-20 05:00:00'),
+(50, 59, '2019-08-20', '2019-08-22', '2019-06-20 05:00:00'),
+(51, 60, '2019-08-21', '2019-08-23', '2019-06-20 05:00:00'),
+(52, 61, '2019-08-22', '2019-08-24', '2019-06-20 05:00:00'),
+(53, 62, '2019-08-23', '2019-08-25', '2019-06-20 05:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `foto`
+--
+
+CREATE TABLE `foto` (
+  `codigo` int(11) NOT NULL,
+  `nombre` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `foto` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -392,6 +1135,13 @@ CREATE TABLE `hora` (
   `horafin` varchar(10) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `hora`
+--
+
+INSERT INTO `hora` (`idHora`, `horainicio`, `horafin`) VALUES
+(1, '8', '9');
+
 -- --------------------------------------------------------
 
 --
@@ -403,6 +1153,13 @@ CREATE TABLE `horarioeventos` (
   `idDeporte` int(11) DEFAULT NULL,
   `idFechaEvento` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `horarioeventos`
+--
+
+INSERT INTO `horarioeventos` (`idHorarioEventos`, `idDeporte`, `idFechaEvento`) VALUES
+(1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -426,6 +1183,18 @@ INSERT INTO `institucional` (`idInstitucional`, `descripInstitucional`, `imagenI
 (2, 'Excelente organización de los XVIII Juegos Panamericanos y Juegos Parapanamericanos del 2019, contribuyendo con el desarrollo del deporte nacional y el posicionamiento internacional de la ciudad de Lima.', './assets/images/institucional/vision.jpg', 2),
 (3, 'Estamos preparando el camino a los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos.', './assets/images/institucional/conocenos.jpg', 3),
 (4, 'Las personas que cumplan con los requisitos especificados en las bases de la Convocatoria, deberán enviar la documentación de acuerdo a las indicaciones brindadas en el cronograma de los Procesos de Selección, publicados por la Oficina de Personal de los Juegos.', './assets/images/institucional/trabaja.jpg', 4);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `integrantes`
+--
+
+CREATE TABLE `integrantes` (
+  `idIntegrante` int(11) NOT NULL,
+  `idEquipoFK` int(11) NOT NULL,
+  `idDeportistasFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -480,6 +1249,70 @@ INSERT INTO `medallero` (`idmedallero`, `idPais`, `oro`, `plata`, `bronce`) VALU
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `medallerohistorico`
+--
+
+CREATE TABLE `medallerohistorico` (
+  `idmedHis_PK` int(11) NOT NULL,
+  `medHisPue` int(11) NOT NULL,
+  `pai_FK` int(11) NOT NULL,
+  `medHisOro` int(11) NOT NULL,
+  `medHisPla` int(11) NOT NULL,
+  `medHisBro` int(11) NOT NULL,
+  `medHisTot` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `medallerohistorico`
+--
+
+INSERT INTO `medallerohistorico` (`idmedHis_PK`, `medHisPue`, `pai_FK`, `medHisOro`, `medHisPla`, `medHisBro`, `medHisTot`) VALUES
+(1, 1, 1, 1948, 1455, 1027, 1200),
+(2, 2, 2, 875, 593, 558, 2026),
+(3, 3, 3, 456, 656, 801, 1913),
+(4, 4, 4, 328, 359, 520, 1207),
+(5, 5, 5, 294, 331, 435, 1060),
+(6, 6, 6, 220, 289, 502, 1019),
+(7, 7, 7, 108, 148, 277, 574),
+(8, 8, 8, 92, 205, 277, 574),
+(9, 9, 9, 44, 91, 151, 286),
+(10, 10, 10, 29, 63, 112, 204),
+(11, 11, 11, 28, 81, 134, 243),
+(12, 12, 12, 28, 30, 61, 119),
+(13, 13, 13, 25, 46, 60, 131),
+(14, 14, 14, 20, 15, 40, 75),
+(15, 15, 15, 12, 25, 46, 83),
+(16, 16, 16, 11, 23, 29, 63),
+(17, 17, 17, 9, 15, 13, 37),
+(18, 18, 18, 8, 33, 69, 110),
+(19, 19, 19, 5, 9, 17, 31),
+(20, 20, 20, 5, 6, 11, 22),
+(21, 21, 21, 3, 19, 26, 48),
+(22, 22, 22, 3, 2, 5, 10),
+(23, 23, 23, 2, 4, 12, 18),
+(24, 24, 24, 1, 8, 13, 22),
+(25, 25, 25, 1, 4, 4, 9),
+(26, 26, 26, 1, 4, 1, 6),
+(27, 27, 27, 1, 0, 2, 3),
+(28, 28, 28, 1, 0, 2, 3),
+(29, 29, 29, 0, 4, 7, 11),
+(30, 30, 30, 0, 4, 6, 10),
+(31, 31, 31, 0, 4, 11, 15),
+(32, 32, 32, 0, 2, 5, 7),
+(33, 33, 33, 0, 2, 1, 3),
+(34, 34, 34, 0, 2, 1, 3),
+(35, 35, 35, 0, 2, 8, 10),
+(36, 36, 36, 0, 2, 6, 8),
+(37, 37, 37, 0, 2, 4, 6),
+(38, 38, 38, 0, 2, 2, 4),
+(39, 39, 39, 0, 0, 2, 2),
+(40, 40, 40, 0, 0, 2, 2),
+(41, 41, 41, 0, 0, 0, 0),
+(42, 42, 42, 0, 0, 0, 0);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `menuprincipal`
 --
 
@@ -496,6 +1329,30 @@ CREATE TABLE `menuprincipal` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `mision`
+--
+
+CREATE TABLE `mision` (
+  `idmision` int(11) NOT NULL,
+  `mi_desc` text NOT NULL,
+  `mi_imagen` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `mi_fecha` date NOT NULL,
+  `bEstPri` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `mision`
+--
+
+INSERT INTO `mision` (`idmision`, `mi_desc`, `mi_imagen`, `mi_fecha`, `bEstPri`) VALUES
+(1, 'patatas', 'ruta3.jpg', '0000-00-00', 0),
+(2, 'patatas', 'ruta3.jpg', '0000-00-00', 0),
+(3, 'patatas', 'ruta3.jpg', '0000-00-00', 0),
+(4, 'MISION: Ejecutar con eficacia las acciones necesarias para el desarrollo de los XVIII Juegos Panamericanos y Juegos Parapanamericanos del 2019, de manera planificada y coordinada con los actores involucrados.', 'vista/mgc/img/mision.jpg', '0000-00-00', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `moneda`
 --
 
@@ -503,6 +1360,90 @@ CREATE TABLE `moneda` (
   `idMoneda` int(11) NOT NULL,
   `idTipoMoneda` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `norma`
+--
+
+CREATE TABLE `norma` (
+  `idNormaPK` int(11) NOT NULL,
+  `numNor` int(11) NOT NULL,
+  `contNor` text NOT NULL,
+  `SecRegFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `norma`
+--
+
+INSERT INTO `norma` (`idNormaPK`, `numNor`, `contNor`, `SecRegFK`) VALUES
+(1, 1, '1.  Establecer las reglas a travez de las cuales se cumpla, estrictamente, todo lo relativo a la organizacion de los Juegos Panamericanos.', 1),
+(2, 2, '2.  Definir los aspectos organizativos, tecnicos y de logistica general que debe cumplirse, tanto en la etapa preparatoria como durante el desarrollo de los Juegos Panamericanos.', 1),
+(3, 3, '3.  Controlar y asegurar que el Comite Organizador cumpla sus obligaciones y garantice las condiciones adecuadas, desde el punto de vista material, organizativo y teccnico, para que los Juegos Panamericanos se desarrollen exitosamente, en beneficio de los atletas y	de los Miembros de la Odepa.', 1),
+(4, 4, '4.  Establecer un marco adecuado para la coordinacion entre todos los factores que participan en la organizacion de los Juegos,	definiendo y armonizando las responsabilidades de cada una de las partes,	en  inter y	enbeneficio de los propios Juegos, de los atletas y demas participantes.', 1),
+(5, 5, '5.  Respetar los principios generales establecidos por el Comite Olimpico Internacional para la organizacion de los Juegos Olimpicos y adoptar su aplicacion, cuando resulte conveniente, en el ambito de los Juegos Panamericanos, particularmente	lo	que	se	refiere	al	concepto	organizativo,	las	reglas	tÃ©cnicas	para cada deporte, la lucha contra el dopaje, el juego limpio, el espÃ­ritu humanista y solidario, el respeto al medio ambiente y la promociÃ³n de la imagen olÃ­mpica que debe caracterizar a los Juegos Panamericanos, reconociendo, en todo momento, que la OrganizaciÃ³n Deportiva Panamericana es la mÃ¡xima autoridad sobre cualquier cuestiÃ³n relativa a los Juegos Panamericanos.', 1),
+(6, 6, '6.  Asegurar que el Reglamento sea respetado por los Miembros de la Odepa, sus atletas y oficiales representantes y por el Comite Organizador; asi como, por las Federaciones Internacionales y/o Confederaciones Deportivas Panamericanas u organizaciones deportivas con similares funciones y cualquier otro participante debidamente acreditado en los Juegos Panamericanos. ', 1),
+(7, 1, '2.  Una vez que la Odepa haya elegido la ciudad que organizarÃ¡ los Juegos, la Comision Tecnica de la Odepa tendra la responsabilidad de presentar una propuesta al Comite Ejecutivo de la Odepa sobre los deportes, disciplinas y eventos que se recomienda incluir en el Programa de los Juegos Panamericanos. Dicha propuesta sera elaborada en coordinacioncon el Comite Organizador, el Miembro de la Odepa sede de los Juegos y las Confederaciones Deportivas Panamericanas y/o Federaciones Internacionales. La Comision Tecnica sometera el Proyecto del Programa de los Juegos Panamericanos al Comite Ejecutivo de la Odepa para su aprobacion.', 2),
+(8, 2, '5.  Para que un deporte no olimpico sea elegible para formar parte del Programa de los Juegos Panamericanos, su Federacion Internacional debe ser reconocida por la Odepa; al menos veinte (20) Miembros de la Odepa deberan reconocer a su correspondiente Federacion Nacional y el Estatuto de la Confederacion Deportiva Panamericana y la Federacion Internacional deben presentarse a la Comision Tecnica de la Odepa, junto con una descripcion detallada de las actividades de su deporte en America. La Comision Tecnica de la Odepa revisara estos documentos y hara una recomendacion al Comite Ejecutivo de la Odepa.', 2),
+(9, 3, '1.  Para participar en los Juegos Panamericanos, un competidor es elegible si esta dispuesto a observar, acatar y cumplir el Estatuto de la Odepa y el Reglamento de los Juegos Panamericanos; asi como, los reglamentos de su Comite Olimpico Nacional y de la Federacion Internacional y/o ConfederaciÃ³n Deportiva Panamericana del deporte que representa.', 2),
+(10, 4, '3.  El Estatuto de la Odepa en su Articulo XXII, acapites 4 y 5, sobre la nacionalidad de los atletas participantes en los Juegos Panamericanos, establece que: (4) Todo competidor que posea simultalneamente la nacionalidad de dos o mas paises podra representar a uno de ellos de su eleccion. Sin embargo, despues de haber representado a un pais en los Juegos Panamericanos, en campeonatos mundiales o regionales reconocidos por una Confederacion Deportiva Panamericana competente, no podra representar a otro pais, a menos que satisfaga las condiciones previstas en el parrafo 5 mas abajo, aplicables a las personas que hayan cambiado de nacionalidad o adquirido una nueva.', 2),
+(11, 5, '5.  Para que un deporte no olimpico sea elegible para formar parte del Programa de los Juegos Panamericanos, su Federacion Internacional debe ser reconocida por la Odepa; al menos veinte (20) Miembros de la Odepa deberan reconocer a su correspondiente Federacion Nacional y el Estatuto de la Confederacion Deportiva Panamericana y la Federacion Internacional deben presentarse a la Comision Tecnica de la Odepa, junto con una descripcion detallada de las actividades de su deporte en America. La Comision Tecnica de la Odepa revisara estos documentos y harÃ¡ una recomendacion al Comite Ejecutivo de la Odepa.', 2),
+(12, 1, '\"1.  Las competencias deportivas de los Juegos Panamericanos seran consideradas oficiales siempre que, al menos noventa (90) dias ante del comienzo de los Juegos Panamericanos, las inscripciones numericas finales hayan sido hechas y se cumplan las siguientes condiciones:\"', 3),
+(13, 2, '\"2.  Si las condiciones minimas establecidas en el numeral (1) no han sido cumplidas	al momento en que las inscripciones finales sean requeridas por nombre (de 15 a 21 dias antes de la inauguracion de los Juegos), el deporte, la disciplina o la prueba no se realizara y el Comite Organizador, previa consulta con la Odepa, notificara	la decision a los CON inscritos, dentro de las 4 horas posteriores a la toma de la decision\"', 3),
+(14, 1, '1.  Para participar en los Juegos Panamericanos, un competidor es elegible si esta dispuesto a observar, acatar y cumplir el Estatuto de la Odepa y el Reglamento de los Juegos Panamericanos; asi como, los reglamentos de su Comite Olimpico Nacional y de la Federacion Internacional y/o Confederacion Deportiva Panamericana del deporte que representa.', 4),
+(15, 2, '\"2.  No existen limites de edad para los competidores en los Juegos Panamericanos, excepto cuando haya sido previamente aprobado y notificado a la  Odepa por la Federacion Internacional y/o Confederacion Panamericana que gobierna un deporte especifico.\"', 4),
+(16, 3, '3.  El Estatuto de la Odepa en su Articulo XXII, acapites 4 y 5, sobre la nacionalidad de los atletas participantes en los Juegos Panamericanos, establece que: (4) Todo competidor que posea simultaneamente la nacionalidad de dos o mas paÃ­ses podra representar a uno de ellos de su eleccion. Sin embargo, despues de haber representado a un pais en los Juegos Panamericanos, en campeonatos mundiales o regionales reconocidos por una Confederacion Deportiva Panamericana competente, no podra representar a otro pais, a menos que satisfaga las condiciones previstas en el parrafo 5 mas abajo, aplicables a las personas que hayan cambiado de nacionalidad o adquirido una nueva.', 4),
+(17, 1, '\"1.  Sobre la inscripcion de los atletas en los Juegos Panamericanos el Estatuto de la Odepa, en su Articulo XXII, acapites 6, 7 y 8, establece lo siguiente: (6) â€œSolo los Miembros de la Odepa podrÃ¡n inscribir competidores en los Juegos Panamericanos.	El derecho de aceptar definitivamente las inscripciones corresponde al Comite Ejecutivo de la Odepa (7) â€œLos miembros de la Odepa solo ejercerÃ¡n este derecho sobre la base de las recomendaciones de inscripciÃ³n formuladas por sus federaciones nacionales. Si el Miembro de la Odepa las aprueba, transmitirÃ¡ estas inscripciones al ComitÃ© Organizador, que tendrÃ¡ la obligaciÃ³n de acusar recibo. Cada Miembro de la Odepa deberÃ¡ investigar la validez de las inscripciones propuestas por las federaciones nacionales y asegurarse de que ningÃºn candidato ha sido rechazado por razones raciales, religiosas o polÃ­ticas o como consecuencia de cualquier otra forma de discriminaciÃ³n.â€ (8) â€œLa participaciÃ³n en los Juegos Panamericanos implica para todo competidor, el compromiso de respetar las disposiciones contenidas en el Estatuto de la Odepa, el Reglamento de los Juegos Panamericanos y los Reglamentos TÃ©cnicos de cada deporte. El Miembro de la Odepa que inscribe a un competidor asegura, bajo su responsabilidad, que dicho competidor tiene plena conciencia de su compromiso de respetar el Estatuto de la Odepa, el Reglamento de los Juegos Panamericanos y el Codigo Mundial Antidopaje.\"', 5),
+(18, 2, '\"2.  El Comite Organizador de los Juegos Panamericanos enviara los formularios oficiales de inscripcion, a	los Miembros de la Odepa, como minimo	seis (6) meses antes de la fecha de inauguracion de los Juegos Panamericanos. Los formularios de inscripciÃ³n deberÃ¡n especificar todas las disciplinas y prueba de cada deporte que han sido incluidas en el Programa de los Juegos Panamericanos.\"', 5),
+(19, 1, '1.  Las protestas o reclamaciones relacionadas con la elegibilidad de un competidor, deberan ser presentadas, por su Jefe de Mision o el representante de este, junto con un deposito de $100.00 USD (cien dolares), al Comite Ejecutivo de la Odepa, el que decidira sobre el asunto. El Comite Ejecutivo de la Odepa podra actuar con la presencia de un minimo de tres de sus miembros. El analisis de los casos tendra en cuenta lo siguiente:', 6),
+(20, 2, '2.  Las protestas sobre asuntos tecnicos realizadas, de acuerdo a las Reglas de las Federaciones Internacionales, seran dirigidas a la autoridad actuante, Juez o arbitro, de acuerdo a la nomenclatura utilizada en cada deporte, quien, en coordinacion con la Federacion Internacional y/o Confederacion Deportiva Panamericana, decidira en primera instancia. La decision puede ser recurrida ante el Jurado de Apelaciones, actuante en el deporte en cuestion, de acuerdo a las reglas del deporte correspondiente.', 6),
+(21, 1, '1.  Solo los competidores, asi como el personal medico y paramedico y oficiales de equipo, de acuerdo a las cuotas aprobadas y que realicen servicios esenciales para los competidores, inscritos por su correspondiente CON, seran alojados en la Villa Panamericana.', 7),
+(22, 2, '2.  Las cuotas para oficiales de equipo alojados en la Villa Panamericana, para cada Miembro de la Odepa, son fijadas por el ComitÃ© Ejecutivo de la Odepa y no podran exceder el cuarenta por ciento (40%) del nÃºmero de competidores inscritos por cada Miembro de la Odepa.', 7),
+(25, 3, '\"3.  Los oficiales de competencia (arbitros,	jueces, cronometristas, inspectores y otro personal tecnico reglamentario) deberan ser designados por la Federacion Internacional y/o Confederacion Deportiva Panamericana respectiva, segun sus reglamentos y de acuerdo con la retroalimentacion y transporte local durante los Juegos Panamericanos y, en el caso que esta establecido, honorarios para dichos oficiales de competencia, son responsabilidad del Comite Organizador.\"', 7),
+(26, 1, '1.  Villa Panamericana:', 8),
+(27, 1, '\"1.  El Estatuto de la Odepa, en su ArtÃ­culo XVIII (4)(a)(iv), define que para otorgar la sede de los Juegos Panamericanos la ciudad candidata presentarÃ¡ una Carta	firmada	por	los	niveles	mÃ¡s	altos	de	la	autoridad	gubernamental	del	paÃ­s, mediante la cual, se asegure a la Odepa que se respetarÃ¡ el Estatuto y el Reglamento de los Juegos Panamericanos y se ofrecerÃ¡n garantÃ­as para el acceso	y	salida	del	paÃ­s	de	los	atletas, dirigentes,	oficiales,	jueces,	representantes	de los medios y otros participantes, debidamente acreditados.\"', 9),
+(28, 2, '2.  Los Ãºnicos facultados para solicitar acreditaciÃ³n en los Juegos Panamericanos son:', 9),
+(29, 3, '\"3.  El ComitÃ© Organizador, previa aprobaciÃ³n del ComitÃ© Ejecutivo de la Odepa, emitirÃ¡ la Credencial de Identidad Panamericana a todas las personas que asistan	a	los	Juegos	Panamericanos	en	calidad	de	participante	oficial.	Dicha	Credencial registrarÃ¡ el nombre y apellidos, la fecha y lugar de nacimiento, el sexo, la nacionalidad y la funciÃ³n del titular en los Juegos Panamericanos.	La	Credencial	de	Identidad	Panamericana	tendrÃ¡	la	firma	y	fotografÃ­a	del	titular	y	deberÃ¡	estar	contrafirmada,	en	cada	caso,	por	el	Presidente	o	en	ausencia	de este por el Secretario General del ComitÃ© OlÃ­mpico Nacional y el Presidente de la Odepa o del ComitÃ© Organizador, segÃºn el nivel de autoridad establecido.\"', 9),
+(30, 4, '4.  El ComitÃ© Organizador elaborarÃ¡ y propondrÃ¡ al ComitÃ© Ejecutivo de la Odepa para su aprobaciÃ³n, al menos un aÃ±o antes de su inauguraciÃ³n, el Manual de AcreditaciÃ³n que se aplicarÃ¡ durante los Juegos Panamericanos. De', 9),
+(31, 5, '5.  El Sistema de AcreditaciÃ³n se pondrÃ¡ en prÃ¡ctica a partir de la aprobaciÃ³n del ComitÃ© Ejecutivo de la Odepa, como mÃ­nimo, un (1) aÃ±o antes de la fecha de inauguraciÃ³n de los Juegos Panamericanos. Los formularios de solicitud de acreditaciÃ³n serÃ¡n enviados, como mÃ­nimo, seis (6) meses antes del inicio de los Juegos Panamericanos a todos los Miembros de la Odepa, a las Federaciones Internacionales y/o Confederaciones Deportivas Panamericanas, a la Odepa y a otros organismos deportivos que deban recibirlos, de acuerdo con el sistema de acreditaciÃ³n aprobado.', 9),
+(32, 6, '6.		El	ComitÃ©	Organizador,	en	virtud	del	Acuerdo	de	Responsabilidades	firmado entre las partes y de conformidad con lo establecido en el Estatuto de la Odepa, harÃ¡ los arreglos convenientes con el Gobierno de su paÃ­s, para que la Credencial de Identidad Panamericana constituya el documento de viaje (visa), acompaÃ±ada de un pasaporte con vigencia, como mÃ­nimo, hasta los seis meses posteriores a la conclusiÃ³n de los Juegos Panamericanos.', 9),
+(33, 7, '7.  La Credencial de Identidad Panamericana deberÃ¡ tener ubicado, en lugar preponderante, los logotipos de la Odepa y de los Juegos Panamericanos. La propaganda o anuncio comercial en dicha Credencial deberÃ¡ ajustarse a lo que al respecto haya aprobado el ComitÃ© Ejecutivo de la Odepa.', 9),
+(34, 8, '8.  Cada participante y el Miembro de la Odepa que lo inscribe son conjuntamente responsables de la veracidad de los datos ofrecidos y del cuidado, protecciÃ³n y uso de la acreditaciÃ³n entregada. El participante estÃ¡ en la obligaciÃ³n de	notificar	de	inmediato	al	ComitÃ©	Organizador,	a	travÃ©s	de	su	ComitÃ©	OlÃ­mpico, cualquier caso de robo, deterioro Ã³ pÃ©rdida de la Credencial de Identidad Panamericana.', 9),
+(35, 1, '1.  El ComitÃ© Organizador efectuarÃ¡ una ReuniÃ³n de Jefes de MisiÃ³n, por lo menos seis (6) meses antes de los Juegos, en la ciudad sede. La informaciÃ³n que proporcione el ComitÃ© Organizador a los Miembros de la Odepa, deberÃ¡ incluir, entre otros, los siguientes aspectos:', 10);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `oficinasorganigrama`
+--
+
+CREATE TABLE `oficinasorganigrama` (
+  `idSecretaria` int(11) NOT NULL,
+  `se_nombre` varchar(60) NOT NULL,
+  `se_tipo` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `oficinasorganigrama`
+--
+
+INSERT INTO `oficinasorganigrama` (`idSecretaria`, `se_nombre`, `se_tipo`) VALUES
+(1, 'Secreteria Ejecutiva', 1),
+(2, 'Oficina de Administracion', 1),
+(3, 'Oficina de Recursos Humanos', 1),
+(4, 'Oficina de Voluntariado', 1),
+(5, 'Oficina de Acreditacion', 1),
+(6, 'Oficina de Asesoria Juridica', 1),
+(7, 'Oficina de Planeamiento, Presupuesto y Modernizacion', 1),
+(8, 'Oficina de Coordinacion de Riesgos y Legado', 1),
+(10, 'Direccion Ejecutiva', 0),
+(11, 'Direccion de Integracion', 0),
+(12, 'Direccion de Proyectos e Infraestructura Definitiva', 0),
+(13, 'Direccion de Operaciones', 0),
+(14, 'Direccion de Desarrollo Tecnologico y Transmisiones', 0),
+(15, 'Direccion de Comunicaciones', 0);
 
 -- --------------------------------------------------------
 
@@ -561,7 +1502,76 @@ INSERT INTO `pais` (`idPais`, `NombrePais`, `bandera`) VALUES
 (38, 'Surinam Surinam (SUR)', 'some_flag'),
 (39, 'Trinidad y Tobago Trinidad y Tobago (TTO', 'some_flag'),
 (40, 'Uruguay.svg Uruguay (URU)', 'some_flag'),
-(41, 'Venezuela Venezuela (VEN)', 'some_flag');
+(41, 'Venezuela Venezuela (VEN)', 'some_flag'),
+(42, 'f', NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `participantegrupal`
+--
+
+CREATE TABLE `participantegrupal` (
+  `idPartGrupal` int(11) NOT NULL,
+  `idEventoFK` int(11) NOT NULL,
+  `idEquipo1FK` int(11) NOT NULL,
+  `idEquipo2FK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `participanteindividual`
+--
+
+CREATE TABLE `participanteindividual` (
+  `idPartIndividual` int(11) NOT NULL,
+  `idDeportistasFK` int(11) NOT NULL,
+  `idPaisFK` int(11) NOT NULL,
+  `idEventoFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `participanteindividual`
+--
+
+INSERT INTO `participanteindividual` (`idPartIndividual`, `idDeportistasFK`, `idPaisFK`, `idEventoFK`) VALUES
+(1, 1, 1, 1),
+(2, 2, 9, 1),
+(8, 8, 18, 1),
+(9, 9, 18, 1),
+(10, 10, 18, 1),
+(11, 11, 18, 1),
+(12, 12, 18, 1),
+(13, 13, 18, 1),
+(14, 14, 18, 1),
+(15, 15, 18, 1),
+(16, 16, 18, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pregfrecareas`
+--
+
+CREATE TABLE `pregfrecareas` (
+  `idareaPreFrePK` int(11) NOT NULL,
+  `nomAre` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `pregfrecareas`
+--
+
+INSERT INTO `pregfrecareas` (`idareaPreFrePK`, `nomAre`) VALUES
+(1, 'JUEGOS PANAMERICANOS'),
+(2, 'VOLUNTARIADO'),
+(3, 'CONVOCATORIAS'),
+(4, 'SEDES'),
+(5, 'COMPETENCIAS'),
+(6, 'TICKETS'),
+(7, 'PROVEEDORES'),
+(8, 'CONTACTO');
 
 -- --------------------------------------------------------
 
@@ -571,9 +1581,39 @@ INSERT INTO `pais` (`idPais`, `NombrePais`, `bandera`) VALUES
 
 CREATE TABLE `preguntasfrecuentes` (
   `idPreguntasFrecuentes` int(11) NOT NULL,
-  `descripcion` varchar(50) DEFAULT NULL,
-  `idTipoPreguntasFrecuentes` int(11) DEFAULT NULL
+  `pregunta` varchar(250) NOT NULL,
+  `idPregFrecAreaFK` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `preguntasfrecuentes`
+--
+
+INSERT INTO `preguntasfrecuentes` (`idPreguntasFrecuentes`, `pregunta`, `idPregFrecAreaFK`) VALUES
+(1, '1. ¿Cuándo se llevarán a cabo los Juegos Panamericanos?', 1),
+(2, '2. ¿Cuántos deportes y disciplinas tendrán los Juegos Panamericanos?', 1),
+(3, '3. ¿Cuántos deportistas participarán en los Juegos Parapanamericanos?', 1),
+(4, '4. ¿Cuántas delegaciones participarán en los Juegos Panamericanos?', 1),
+(5, '1. ¿Cuántos voluntarios podrán participar en los Juegos Panamericanos y Parapanamericanos Lima 2019?', 2),
+(6, '2. ¿Hay un límite de edad?', 2),
+(7, '3. ¿Las personas con discapacidad pueden participar en el programa de Voluntariado?', 2),
+(8, '4. Si soy extranjero, ¿también puedo ser voluntario o voluntaria de los Juegos Panamericanos Lima 2019?', 2),
+(9, '1. ¿Cómo puedo postular a las convocatorias de Lima2019?', 3),
+(10, '2. ¿Cómo me puedo contactar con el área de selección de personal?', 3),
+(11, '3. He postulado a una convocatoria y tengo dudas sobre el proceso ¿Cómo puedo contactarlos?', 3),
+(12, '4. Si soy extranjero, ¿puedo postular a una convocatoria?', 3),
+(13, '1. ¿Cuál es el número de obras listas para los Juegos Lima 2019?', 4),
+(14, '2. ¿Cuándo estarán listas las demás obras?', 4),
+(15, '3. ¿Cuál es la sede de inauguración y clausura de los Juegos Lima 2019?', 4),
+(16, '4. ¿Cuántas sedes de competencia tiene Lima 2019?', 4),
+(17, '1. ¿Está lista la programación de las competencias?', 5),
+(18, '2. ¿Cómo puedo competir en los Juegos Panamericanos?', 5),
+(19, '3. ¿Cómo puedo saber el sistema de clasificación a Lima 2019?', 5),
+(20, '4. ¿Cuántas delegaciones participarán en los Juegos Panamericanos?', 5),
+(21, '1. ¿Cuándo inicia la venta de tickets?', 6),
+(22, '1. ¿Cómo puedo ser proveedor de los Juegos?', 7),
+(23, '1. ¿A qué teléfono me puedo comunicar?', 8),
+(24, '2. Quisiéramos compartir una nota de prensa con ustedes, ¿a qué correo la podemos compartir?', 8);
 
 -- --------------------------------------------------------
 
@@ -598,6 +1638,29 @@ CREATE TABLE `reglamento` (
   `idReglamento` int(11) NOT NULL,
   `descripReglamento` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `reglamento`
+--
+
+INSERT INTO `reglamento` (`idReglamento`, `descripReglamento`) VALUES
+(1, 'ga'),
+(2, 'ga'),
+(3, 'ga'),
+(4, 'ga'),
+(5, 'ga'),
+(6, 'ga'),
+(7, 'ga'),
+(8, 'ga'),
+(9, 'ga'),
+(10, 'ga'),
+(11, 'ga'),
+(12, 'ga'),
+(13, 'ga'),
+(14, 'ga'),
+(15, 'ga'),
+(16, 'ga'),
+(17, 'ga');
 
 -- --------------------------------------------------------
 
@@ -640,15 +1703,151 @@ INSERT INTO `representantes` (`IdRepresentateORG`, `DescripcionR`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `respuestapreguntafrec`
+--
+
+CREATE TABLE `respuestapreguntafrec` (
+  `idrespPregFrec` int(11) NOT NULL,
+  `respuesta` varchar(255) COLLATE utf8_spanish2_ci NOT NULL,
+  `idPregFrecuentes` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `respuestapreguntafrec`
+--
+
+INSERT INTO `respuestapreguntafrec` (`idrespPregFrec`, `respuesta`, `idPregFrecuentes`) VALUES
+(1, 'Los Juegos se llevarán a cabo desde el 26 de julio al 11 de agosto. ', 1),
+(2, 'Los Juegos Panamericanos contarán con 39 deportes y 61 disciplinas. ', 2),
+(3, 'En los Juegos Panamericanos participarán 6680 deportistas. ', 3),
+(4, 'Participarán 41 delegaciones en los Juegos Panamericanos. ', 4),
+(5, 'Necesitamos 12 mil voluntarios y voluntarias para los XVIII Juegos Panamericanos y 7 mil voluntarios y voluntarias para los Juegos Parapanamericanos. La convocatoria de voluntarios y voluntarias estará abierta a nivel nacional e internacional. ', 5),
+(6, 'Los límites los pones tú. Solo debes ser mayor de 16 años al 01 de abril de 2019, día en el cual se da inicio a las actividades previas de los Juegos Panamericanos. ', 6),
+(7, '¡Te necesitamos! Esperamos que las personas con discapacidad participen en los Juegos Panamericanos y/o en los Juegos Parapanamericanos. ', 7),
+(8, '¡Por supuesto! Las inscripciones del Programa de Voluntariado se lanzarán a nivel nacional como internacional. ', 8),
+(9, 'Puedes conocer las convocatorias laborales en la sección Trabaja con Nosotros ', 9),
+(10, 'Si tienes una consulta sobre un proceso puedes escribir a consultascas@lima2019.pe ', 10),
+(11, 'Puedes escribir a convocatorias@lima2019.pe ', 11),
+(12, 'Todos pueden postular siempre y cuando cumplan con los requisitos y la correcta presentación de los formatos y/o anexos según lo indican las bases. ', 12),
+(13, 'Actualmente contamos con 10 sedes entregadas para la realización de los juegos Lima 2019. ', 13),
+(14, 'La infraestructura en construcción estará lista en marzo de 2019, fecha en la que estará ejecutada el 100% de las obras. ', 14),
+(15, 'La inauguración y clausura de los Juegos Lima 2019 será en el Estadio Nacional. ', 15),
+(16, 'Contamos con 19 sedes de competencia para la realización de los Juegos Panamericanos y Parapanamericanos. ', 16),
+(17, 'La programación final está lista, los detalles los puedes ver a través de nuestros canales oficiales. ', 17),
+(18, 'Para participar en los Juegos Panamericanos debes ser un atleta de alto rendimiento y ser seleccionado por la federación nacional de tu deporte. ', 18),
+(19, 'Puedes conocer el manual de clasificación a nuestros juegos aquí http://www.panamsports.org/downloads/pdf/manual-de-sistemas-de-clasificacion-lima-2019.pdf ', 19),
+(20, 'Participarán 41 delegaciones en los Juegos Panamericanos. ', 20),
+(21, 'La venta de tickets iniciará el 27 de mayo. Estaremos informando todos los detalles a través de nuestros canales oficiales. ', 21),
+(22, 'Puedes conocer los procesos de contrataciones que se llevaron o se están llevando en la sección de Contrataciones. ', 22),
+(23, 'El número de nuestra central telefónica es 4105500. Si estás fuera de Perú deberás anteponerle el código (511). ', 23),
+(24, 'Puedes escribir a prensa@lima2019.pe para compartir tu información. ', 24);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `resultadogrupal`
+--
+
+CREATE TABLE `resultadogrupal` (
+  `idResGrupal` int(11) NOT NULL,
+  `idPartGrupalFK` int(11) NOT NULL,
+  `fechaResultadoGr` date NOT NULL,
+  `res_gr_puesto` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `resultadoindividual`
+--
+
+CREATE TABLE `resultadoindividual` (
+  `idResIndividual` int(11) NOT NULL,
+  `idPartIndividualFK` int(11) NOT NULL,
+  `fechaResultado` date NOT NULL,
+  `res_in_puesto` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `resultadoindividual`
+--
+
+INSERT INTO `resultadoindividual` (`idResIndividual`, `idPartIndividualFK`, `fechaResultado`, `res_in_puesto`) VALUES
+(1, 1, '0000-00-00', '1'),
+(9, 1, '0000-00-00', '16'),
+(10, 1, '0000-00-00', '23'),
+(11, 16, '0000-00-00', '12'),
+(12, 9, '0000-00-00', '1'),
+(13, 10, '0000-00-00', '1'),
+(14, 1, '0000-00-00', '4');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `seccionreglamento`
+--
+
+CREATE TABLE `seccionreglamento` (
+  `idSecRegPK` int(11) NOT NULL,
+  `numSec` int(11) NOT NULL,
+  `TitSec` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `seccionreglamento`
+--
+
+INSERT INTO `seccionreglamento` (`idSecRegPK`, `numSec`, `TitSec`) VALUES
+(1, 1, 'SECCION I OBJETIVOS'),
+(2, 2, 'SECCION II PROGRAMA DE LOS JUEGOS PANAMERICANOS'),
+(3, 3, 'SECCION III COMPETENCIAS DE LOS JUEGOS PANAMERICANOS'),
+(4, 4, 'SECCION IV ELEGIBILIDAD DE LOS ATLETAS PARA PARTICIPAR EN LOS JUEGOS PANAMERICANOS'),
+(5, 5, 'SECCION V INSCRIPCIONES DE LOS PARTICIPANTES EN LOS JUEGOS PANAMERICANOS'),
+(6, 6, 'SECCION VI PROTESTAS Y RECLAMACIONES DURANTE LOS JUEGOS PANAMERICANOS'),
+(7, 7, 'SECCION VII OFICIALES, PERSONAL MÃ‰DICO Y PARAMEDICO, OFICIALES TECNICOS, JUECES Y ARBITROS QUE ACTUARAN EN LOS JUEGOS PANAMERICANOS'),
+(8, 8, 'SECCION VIII ALOJAMIENTO DE LOS PARTICIPANTES EN LOS JUEGOS PANAMERICANOS'),
+(9, 9, 'SECCION IX ACREDITACION DE LOS PARTICIPANTES EN LOS JUEGOS PANAMERICANOS'),
+(10, 10, 'SECCION X REUNION DE JEFES DE MISION');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `sedes`
 --
 
 CREATE TABLE `sedes` (
   `idSede` int(11) NOT NULL,
   `idTipoSede` int(11) DEFAULT NULL,
-  `imgSede` longblob,
+  `imgSede` text,
   `DireccionSede` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `sedes`
+--
+
+INSERT INTO `sedes` (`idSede`, `idTipoSede`, `imgSede`, `DireccionSede`) VALUES
+(1, 19, '1', 'Villa Deportiva Regional del Callao'),
+(2, 19, '2', 'Estadio San Marcos'),
+(3, 19, '3', 'Costa Verde San Miguel'),
+(4, 19, '4', 'Villa Deportiva Nacional - VIDENA'),
+(5, 19, '5', 'Coliseo Eduardo Dibos'),
+(6, 20, '6', 'Escuela de Equitacion del Ejercito'),
+(7, 20, '7', 'Parque Kennedy'),
+(8, 20, '8', 'Complejo Deportivo Villa Maria del Trinfo'),
+(9, 20, '9', 'Morro Solar - Chorrillos'),
+(10, 20, '10', 'Escuela Militar de Chorrillos'),
+(11, 21, '11', 'Playa Chorrillos'),
+(12, 21, '12', 'Base Aerea La Palmas'),
+(13, 21, '13', 'Polideportivo Villa El Salvador'),
+(14, 21, '14', 'Lima Golf Club'),
+(15, 21, '15', 'Club Lawn Tennis'),
+(16, 21, '16', 'Punta Rocas'),
+(17, 22, '17', 'Laguna Bujama'),
+(18, 22, '18', 'Rio Cañete-Lunahuana'),
+(19, 22, '19', 'Bahia  de Paracas'),
+(20, 22, '20', 'Albufera Medio Mundo - Huacho'),
+(21, 22, '21', 'Lima Convention Center');
 
 -- --------------------------------------------------------
 
@@ -660,6 +1859,54 @@ CREATE TABLE `stockasientos` (
   `idStockAsiento` int(11) NOT NULL,
   `CantiDisponible` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `subnorma`
+--
+
+CREATE TABLE `subnorma` (
+  `idSubNor` int(11) NOT NULL,
+  `numSubNor` char(255) NOT NULL,
+  `contSubNor` text NOT NULL,
+  `normaFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `subnorma`
+--
+
+INSERT INTO `subnorma` (`idSubNor`, `numSubNor`, `contSubNor`, `normaFK`) VALUES
+(1, '3.1', '3.1  La totalidad de deportes, disciplinas y pruebas incluidos en el Programa de los siguientes Juegos OlÃ­mpicos.', 3),
+(2, '3.2', '\"3.2  Los deportes que consideran los Juegos Panamericanos como evento de calificaciÃ³n	olÃ­mpica.	El	ComitÃ©	Ejecutivo	de	la	Odepa,	en	coordinaciÃ³n	con	la FederaciÃ³n Internacional y/o ConfederaciÃ³n Deportiva Panamericana correspondiente, podrÃ¡ establecer otras alternativas, a travÃ©s de las cuales se vinculen los resultados de los atletas y equipos en los Juegos Panamericanos con su participaciÃ³n en los siguientes Juegos OlÃ­mpicos.\"', 3),
+(3, '3.3', '3.3  Aquellos deportes, disciplinas y pruebas cuya FederaciÃ³n Internacional y/o ConfederaciÃ³n Deportiva Panamericana hayan alcanzado un nivel adecuado en el desarrollo de sus actividades en AmÃ©rica.', 3),
+(4, '3.4', '3.4  Los deportes y eventos con mayor participaciÃ³n y popularidad en AmÃ©rica', 3),
+(5, '3.5', '3.5  Los deportes en que participen hombres y mujeres.', 3),
+(6, '4.1', '\"4.1  Deportes del Programa OlÃ­mpico (28 deportes): ATLETISMO Masculino y Femenino, - BÃDMINTON Masculino y	Femenino - BALONMANO Masculino y Femenino - BALONCESTO Masculino y Femenino - BÃ‰ISBOL Masculino - BOXEO Masculino - CANOTAJE Masculino y Femenino -	CICLISMO	Masculino y Femenino - ECUESTRE Masculino y Femenino - ESGRIMA Masculino y Femenino -	FÃšTBOL Masculino y Femenino - GIMNASIA Masculino y Femenino - HOCKEY SOBRE CÃ‰SPED Masculino	y Femenino - JUDO Masculino	y Femenino - LEVANTAMIENTO DE PESAS	Masculino	y Femenino - LUCHA Masculino y Femenino - NATACIÃ“N Masculino y Femenino - PENTATLÃ“N MODERNO Masculino y Femenino - REMO Masculino y Femenino - SOFTBOL Femenino - TAE KWON DO Masculino y Femenino - TENIS Masculino y Femenino - TENIS	DE MESA Masculino	y Femenino - TIRO Masculino y	Femenino - TIRO CON ARCO Masculino y	Femenino - TRIATLÃ“N Masculino y Femenino - VELA Masculino y Femenino - VOLEIBOL Masculino y Femenino.\"', 10),
+(7, '4.2', '4.2 Las disciplinas y pruebas de cada deporte olÃ­mpico serÃ¡n, sin excepciÃ³n, las aprobadas por el ComitÃ© OlÃ­mpico Internacional para los Juegos OlÃ­mpicos inmediatamente posteriores a los Juegos Panamericanos.', 10),
+(8, '4.3', '\"4.3 Los deportes, disciplinas y pruebas pueden ser modificados	por el ComitÃ© OlÃ­mpico Internacional. Si este fuera el caso, la lista de deportes seÃ±alada en el AcÃ¡pite 4.1 precedente, se ajustarÃ¡ a lo establecido por el COI.\"', 10),
+(9, '1.1', '1.1 Para deportes individuales, un mÃ­nimo de ocho (8) comitÃ©s olÃ­mpicos nacionales (CON) deben haber presentado inscripciones.', 12),
+(10, '1.2', '1.2  Para deportes de equipo, hombres o mujeres, un mÃ­nimo de cinco (5) CON deben haber presentado inscripciones.', 12),
+(11, '1.3', '1.3  Para deportes individuales, en los que hay mÃ¡s de una prueba, individual y por equipos, un mÃ­nimo de cinco (5) CON deben haber presentado inscripciones.', 12),
+(12, '1.1', '1.1  Si una protesta o reclamaciÃ³n es presentada antes del inicio de los Juegos Panamericanos y la decisiÃ³n es adversa para el atleta involucrado, este no podrÃ¡ participar en los Juegos.', 19),
+(13, '1.2', '1.2  Si una decisiÃ³n adversa es adoptada despuÃ©s del inicio de los Juegos Panamericanos, el atleta deberÃ¡ ser descalificado de los Juegos Panamericanos.', 19),
+(14, '1.3', '1.3  En las competencias de deporte de equipo, el retiro del atleta o los atletas afectados por la decisiÃ³n adversa, puede resultar en la pÃ©rdida del partido o los partidos en los que haya o hayan participado dichos atletas.', 19),
+(15, '1.1', '1.1  Todos los competidores en los Juegos Panamericanos serÃ¡n alojados en la Villa Panamericana, a menos que otra decisiÃ³n haya sido tomada por el ComitÃ© Ejecutivo de la Odepa.', 26),
+(16, '1.2', '1.2  La Villa estarÃ¡ abierta al menos diez (10) dÃ­as antes de la ceremonia de inauguraciÃ³n y permanecerÃ¡ abierta al menos durante tres (3) dÃ­as posteriores a la ceremonia de clausura de los Juegos Panamericanos. La Villa Panamericana debe satisfacer las exigencias mÃ­nimas, similares a las establecidas por el COI para la organizaciÃ³n de la Villa de los atletas en unos Juegos OlÃ­mpicos.', 26),
+(17, '2.1', '\"2.1  Los ComitÃ©s OlÃ­mpicos Nacionales, en	cuanto a la delegaciÃ³n oficial y el personal del paÃ­s que, de acuerdo con el presente Reglamento, tienen el derecho de asistir a los Juegos Panamericanos;\"', 28),
+(18, '2.2', '2.2  El ComitÃ© Organizador, en lo referente al personal que trabajarÃ¡ en la organizaciÃ³n de los Juegos.', 28),
+(19, '2.3', '\"2.3  La Odepa, para el ComitÃ© Ejecutivo y su propio personal; para los representantes de las Federaciones Internacionales, de las Confederaciones Deportivas	Panamericanas	y	los	oficiales	tÃ©cnicos,	jueces	internacionales	y personalidades invitadas al evento.\"', 28),
+(20, '1.1', '1.1  Esquema general sobre la organizaciÃ³n de los Juegos;', 35),
+(21, '1.2', '1.2  DescripciÃ³n completa de la Villa Panamericana y otros alojamientos; sistema de transporte, incluyendo los vehÃ­culos asignados a cada delegaciÃ³n;', 35),
+(22, '1.3', '1.3  Instalaciones de competencia y entrenamiento;', 35),
+(23, '1.4', '1.4  Sistema de AcreditaciÃ³n;', 35),
+(24, '1.5', '1.5  Calendario con las fechas mÃ¡s importantes que deben cumplirse;', 35),
+(25, '1.6', '1.6  Regulaciones de la aduana del paÃ­s sede con respecto al equipamiento, medicina, vestuario y otros medios importados, con carÃ¡cter temporal, para uso durante los Juegos Panamericanos;', 35),
+(26, '1.7', '1.7  Servicios equinos, incluyendo normas sanitarias, cuarentena, tarifas para la alimentaciÃ³n de los caballos, servicios veterinarios, recepciÃ³n en el aeropuerto y entrega desde y hacia la instalaciÃ³n ecuestre;', 35),
+(27, '1.8', '1.8  Procedimientos generales de seguridad;', 35),
+(28, '1.9', '1.9  Procedimientos para el envÃ­o, recepciÃ³n y distribuciÃ³n de la carga;', 35),
+(29, '1.10', '1.10 Tarifas de costo por los diferentes servicios que se ofrecerÃ¡n; aaaaaa', 35);
 
 -- --------------------------------------------------------
 
@@ -801,19 +2048,6 @@ CREATE TABLE `tipomoneda` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `tipopregunta`
---
-
-CREATE TABLE `tipopregunta` (
-  `idTipoPreguntas` int(11) NOT NULL,
-  `NombreTipoPregunta` varchar(40) DEFAULT NULL,
-  `Pregunta` varchar(100) DEFAULT NULL,
-  `Respuesta` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `tiporepresentante`
 --
 
@@ -845,6 +2079,16 @@ CREATE TABLE `tiposedes` (
   `NombreSede` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `tiposedes`
+--
+
+INSERT INTO `tiposedes` (`idTipoSede`, `idDeporte`, `NombreSede`) VALUES
+(19, 1, 'LIMA NORTE'),
+(20, 1, 'LIMA CENTRO'),
+(21, 1, 'LIMA SUR'),
+(22, 1, 'AL SUR DE LIMA');
+
 -- --------------------------------------------------------
 
 --
@@ -869,28 +2113,124 @@ INSERT INTO `tipousuario` (`idTipoUsuario`, `nombreTipoU`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `trabajaconnosotros`
+--
+
+CREATE TABLE `trabajaconnosotros` (
+  `idtrabajaConNosotros` int(11) NOT NULL,
+  `tra_desc` text NOT NULL,
+  `tra_imagen` varchar(50) NOT NULL,
+  `tra_fecha` date NOT NULL,
+  `bEstPri` bit(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `trabajaconnosotros`
+--
+
+INSERT INTO `trabajaconnosotros` (`idtrabajaConNosotros`, `tra_desc`, `tra_imagen`, `tra_fecha`, `bEstPri`) VALUES
+(1, 'TRABAJA CON NOSOTROS: Las personas que cumplan con los requisitos especificados en las bases de la Convocatoria, deberan enviar la documentacion de acuerdo a las indicaciones brindadas en el cronograma de los Procesos de Seleccion, publicados por la Oficina de Personal de los Juegos.', 'vista/mgc/img/trabaja.jpg', '0000-00-00', b'1');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `unidadorganizacional`
+--
+
+CREATE TABLE `unidadorganizacional` (
+  `idUnidadOrganizacional` int(11) NOT NULL,
+  `U_nombre` varchar(100) NOT NULL,
+  `idSecUniOrgFK` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `unidadorganizacional`
+--
+
+INSERT INTO `unidadorganizacional` (`idUnidadOrganizacional`, `U_nombre`, `idSecUniOrgFK`) VALUES
+(1, 'Unidad de Enlace y Coordinacion del Soporte Internacional', 1),
+(2, 'Unidad Logistica', 2),
+(3, 'Unidad Tesoreria', 2),
+(4, 'Unidad de Presupuesto', 7),
+(5, 'Unidad de Planeamiento y modernizacion', 7),
+(6, 'Subdireccion de Implementacion Temporal para la Entrega de Sedes', 11),
+(7, 'Subdireccion de Integracion operativa', 11),
+(8, 'Subdireccion de obras', 12),
+(9, 'Subdireccion de Recepcion, Liquidacion y Transferencias de Obras', 12),
+(10, 'Subdireccion de Deportes', 13),
+(11, 'Subdireccion de Gestion de Sedes', 13),
+(12, 'Subdireccion de Relaciones Internacionales y Protocolo Deportivo', 13),
+(13, 'Subdireccion de Gestion de Villas', 13),
+(14, 'Subdireccion de Transporte y Seguridad', 13),
+(15, 'Subdireccion de Servicios a los Juegos y Servicios Medicos', 13),
+(16, 'Subdireccion de Desarrollo Tecnologico', 14),
+(17, 'Subdireccion de Transmisiones', 14),
+(18, 'Subdireccion de Comunicaciones, Prensa y Ceremonias', 15),
+(19, 'Subdireccion de Comercializacion y Mercadotecnia', 15);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuarios`
 --
 
 CREATE TABLE `usuarios` (
-  `idUsuario` int(11) NOT NULL,
-  `NombreU` varchar(50) DEFAULT NULL,
-  `ApellidoU` varchar(50) DEFAULT NULL,
-  `emailU` varchar(50) DEFAULT NULL,
-  `telefonoU` varchar(20) DEFAULT NULL,
-  `passwordU` varchar(40) DEFAULT NULL,
-  `DocIdentidad` varchar(20) DEFAULT NULL,
-  `idTipoUsuario` int(11) DEFAULT NULL,
-  `idGaleria` int(11) DEFAULT NULL,
-  `idEstadoUsuario` int(11) DEFAULT NULL
+  `id` int(11) NOT NULL,
+  `usuario` varchar(30) DEFAULT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `ApellidoU` varchar(50) NOT NULL,
+  `telefonoU` varchar(20) NOT NULL,
+  `DocIdentidad` varchar(20) NOT NULL,
+  `correo` varchar(80) NOT NULL,
+  `password` varchar(130) NOT NULL,
+  `last_session` datetime NOT NULL,
+  `activacion` int(11) DEFAULT NULL,
+  `token` varchar(40) DEFAULT NULL,
+  `token_password` varchar(100) NOT NULL,
+  `password_request` int(11) DEFAULT NULL,
+  `id_tipo` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`idUsuario`, `NombreU`, `ApellidoU`, `emailU`, `telefonoU`, `passwordU`, `DocIdentidad`, `idTipoUsuario`, `idGaleria`, `idEstadoUsuario`) VALUES
-(1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '123', '45068903', 1, 1, 1);
+INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `ApellidoU`, `telefonoU`, `DocIdentidad`, `correo`, `password`, `last_session`, `activacion`, `token`, `token_password`, `password_request`, `id_tipo`) VALUES
+(1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '45068903', '1', '123', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
+(2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', '1', '1234', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `video`
+--
+
+CREATE TABLE `video` (
+  `codigo` int(11) NOT NULL,
+  `nombre` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `video` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `vision`
+--
+
+CREATE TABLE `vision` (
+  `idVision` int(11) NOT NULL,
+  `vi_desc` text NOT NULL,
+  `vi_imagen` varchar(50) NOT NULL,
+  `vi_fecha` date NOT NULL,
+  `bEstPri` bit(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `vision`
+--
+
+INSERT INTO `vision` (`idVision`, `vi_desc`, `vi_imagen`, `vi_fecha`, `bEstPri`) VALUES
+(1, 'VISIÓN: Excelente organización de los XVIII Juegos Panamericanos y Juegos Parapanamericanos del 2019, contribuyendo con el desarrollo del deporte nacional y el posicionamiento internacional de la ciudad de Lima.', 'vista/mgc/img/vision.jpg', '0000-00-00', b'1');
 
 --
 -- Índices para tablas volcadas
@@ -902,8 +2242,8 @@ INSERT INTO `usuarios` (`idUsuario`, `NombreU`, `ApellidoU`, `emailU`, `telefono
 ALTER TABLE `asientos`
   ADD PRIMARY KEY (`idAsiento`),
   ADD KEY `FK_Asientos_CategoriaAsiento` (`idCategAsiento`),
-  ADD KEY `FK_Asientos_EstadoAsiento` (`estado`),
-  ADD KEY `FK_Asientos_StockAsientos` (`idStockAsiento`);
+  ADD KEY `FK_Asientos_EstadoAsiento` (`Precio`),
+  ADD KEY `FK_Asientos_StockAsientos` (`IdSede`);
 
 --
 -- Indices de la tabla `auspiciadores`
@@ -949,6 +2289,26 @@ ALTER TABLE `compra_entrada`
 ALTER TABLE `comprobantepago`
   ADD PRIMARY KEY (`idPagosEntrada`),
   ADD KEY `FK_ComprobantePago_Compra_Entrada` (`idCompraEntrada`);
+
+--
+-- Indices de la tabla `config_sede_deporte`
+--
+ALTER TABLE `config_sede_deporte`
+  ADD PRIMARY KEY (`idConfigSedeDeporte`,`idSedeFK`,`idDeporteFK`),
+  ADD KEY `idSedeFK` (`idSedeFK`),
+  ADD KEY `idDeporteFK` (`idDeporteFK`);
+
+--
+-- Indices de la tabla `conocenos`
+--
+ALTER TABLE `conocenos`
+  ADD PRIMARY KEY (`idconocenos`);
+
+--
+-- Indices de la tabla `decreto`
+--
+ALTER TABLE `decreto`
+  ADD PRIMARY KEY (`idDecreto`);
 
 --
 -- Indices de la tabla `deportedestacado`
@@ -1000,7 +2360,20 @@ ALTER TABLE `detalleeventos`
 -- Indices de la tabla `disciplina`
 --
 ALTER TABLE `disciplina`
-  ADD PRIMARY KEY (`iddisciplina`);
+  ADD PRIMARY KEY (`id_juego`);
+
+--
+-- Indices de la tabla `documentos`
+--
+ALTER TABLE `documentos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  ADD PRIMARY KEY (`idEquipo`),
+  ADD KEY `FK_equipo_pais` (`idPaisFK`);
 
 --
 -- Indices de la tabla `estadoasiento`
@@ -1027,7 +2400,21 @@ ALTER TABLE `eventos`
 --
 ALTER TABLE `fechaevento`
   ADD PRIMARY KEY (`idFechaEvento`),
-  ADD KEY `FK_FechaEvento_Hora` (`idHora`);
+  ADD KEY `FK_FechaEvento_Hora` (`idHora`),
+  ADD KEY `FK_deporte_fecha_idx` (`idDeporte`);
+
+--
+-- Indices de la tabla `fixture`
+--
+ALTER TABLE `fixture`
+  ADD PRIMARY KEY (`idfixture`),
+  ADD KEY `fixture.deportes_idx` (`idDeporte`);
+
+--
+-- Indices de la tabla `foto`
+--
+ALTER TABLE `foto`
+  ADD PRIMARY KEY (`codigo`);
 
 --
 -- Indices de la tabla `galeria`
@@ -1056,6 +2443,14 @@ ALTER TABLE `institucional`
   ADD KEY `FK_Institucional_TipoInstitucional` (`idTipoInstitucional`);
 
 --
+-- Indices de la tabla `integrantes`
+--
+ALTER TABLE `integrantes`
+  ADD PRIMARY KEY (`idIntegrante`),
+  ADD KEY `FK_integrantes_equipo` (`idEquipoFK`),
+  ADD KEY `FK_integrnates_deportistas` (`idDeportistasFK`);
+
+--
 -- Indices de la tabla `medallas`
 --
 ALTER TABLE `medallas`
@@ -1070,6 +2465,13 @@ ALTER TABLE `medallero`
   ADD KEY `medallero.pais_idx` (`idPais`);
 
 --
+-- Indices de la tabla `medallerohistorico`
+--
+ALTER TABLE `medallerohistorico`
+  ADD PRIMARY KEY (`idmedHis_PK`),
+  ADD KEY `FK_medHist_Pais` (`pai_FK`);
+
+--
 -- Indices de la tabla `menuprincipal`
 --
 ALTER TABLE `menuprincipal`
@@ -1082,11 +2484,31 @@ ALTER TABLE `menuprincipal`
   ADD KEY `FK_MenuPrincipal_PreguntasFrecuentes` (`idPreguntasFrecuentes`);
 
 --
+-- Indices de la tabla `mision`
+--
+ALTER TABLE `mision`
+  ADD PRIMARY KEY (`idmision`);
+
+--
 -- Indices de la tabla `moneda`
 --
 ALTER TABLE `moneda`
   ADD PRIMARY KEY (`idMoneda`),
   ADD KEY `FK_Moneda_TipoMoneda` (`idTipoMoneda`);
+
+--
+-- Indices de la tabla `norma`
+--
+ALTER TABLE `norma`
+  ADD PRIMARY KEY (`idNormaPK`),
+  ADD KEY `FK_Norma_SeccReg` (`SecRegFK`);
+
+--
+-- Indices de la tabla `oficinasorganigrama`
+--
+ALTER TABLE `oficinasorganigrama`
+  ADD PRIMARY KEY (`idSecretaria`),
+  ADD KEY `idSecretaria` (`idSecretaria`);
 
 --
 -- Indices de la tabla `pais`
@@ -1095,11 +2517,35 @@ ALTER TABLE `pais`
   ADD PRIMARY KEY (`idPais`);
 
 --
+-- Indices de la tabla `participantegrupal`
+--
+ALTER TABLE `participantegrupal`
+  ADD PRIMARY KEY (`idPartGrupal`),
+  ADD KEY `FK_partGrupal_Equipo1` (`idEquipo1FK`),
+  ADD KEY `FK_partGrupal_Equipo2` (`idEquipo2FK`),
+  ADD KEY `Fk_partGrupal_eventos` (`idEventoFK`);
+
+--
+-- Indices de la tabla `participanteindividual`
+--
+ALTER TABLE `participanteindividual`
+  ADD PRIMARY KEY (`idPartIndividual`),
+  ADD KEY `FK_partiipanteIndividual_Eventos` (`idEventoFK`),
+  ADD KEY `FK_partIndividual_deportistas` (`idDeportistasFK`),
+  ADD KEY `FK_Partiindividual_Pais` (`idPaisFK`);
+
+--
+-- Indices de la tabla `pregfrecareas`
+--
+ALTER TABLE `pregfrecareas`
+  ADD PRIMARY KEY (`idareaPreFrePK`);
+
+--
 -- Indices de la tabla `preguntasfrecuentes`
 --
 ALTER TABLE `preguntasfrecuentes`
   ADD PRIMARY KEY (`idPreguntasFrecuentes`),
-  ADD KEY `FK_PreguntasFrecuentes_TipoPregunta` (`idTipoPreguntasFrecuentes`);
+  ADD KEY `FK_preguntasfrecuentes_PregFrecAreas` (`idPregFrecAreaFK`);
 
 --
 -- Indices de la tabla `ranking`
@@ -1130,6 +2576,33 @@ ALTER TABLE `representantes`
   ADD PRIMARY KEY (`IdRepresentateORG`);
 
 --
+-- Indices de la tabla `respuestapreguntafrec`
+--
+ALTER TABLE `respuestapreguntafrec`
+  ADD PRIMARY KEY (`idrespPregFrec`),
+  ADD KEY `FK_respuestapreguntafrec_PreguntasFrec` (`idPregFrecuentes`);
+
+--
+-- Indices de la tabla `resultadogrupal`
+--
+ALTER TABLE `resultadogrupal`
+  ADD PRIMARY KEY (`idResGrupal`),
+  ADD KEY `FK_resGrupal_partGrupal` (`idPartGrupalFK`);
+
+--
+-- Indices de la tabla `resultadoindividual`
+--
+ALTER TABLE `resultadoindividual`
+  ADD PRIMARY KEY (`idResIndividual`),
+  ADD KEY `ResIndividual_partIndividual_FK` (`idPartIndividualFK`);
+
+--
+-- Indices de la tabla `seccionreglamento`
+--
+ALTER TABLE `seccionreglamento`
+  ADD PRIMARY KEY (`idSecRegPK`);
+
+--
 -- Indices de la tabla `sedes`
 --
 ALTER TABLE `sedes`
@@ -1141,6 +2614,13 @@ ALTER TABLE `sedes`
 --
 ALTER TABLE `stockasientos`
   ADD PRIMARY KEY (`idStockAsiento`);
+
+--
+-- Indices de la tabla `subnorma`
+--
+ALTER TABLE `subnorma`
+  ADD PRIMARY KEY (`idSubNor`),
+  ADD KEY `FK_SubNorma_Norma` (`normaFK`);
 
 --
 -- Indices de la tabla `sysdiagrams`
@@ -1188,12 +2668,6 @@ ALTER TABLE `tipomoneda`
   ADD PRIMARY KEY (`idTipoMoneda`);
 
 --
--- Indices de la tabla `tipopregunta`
---
-ALTER TABLE `tipopregunta`
-  ADD PRIMARY KEY (`idTipoPreguntas`);
-
---
 -- Indices de la tabla `tiporepresentante`
 --
 ALTER TABLE `tiporepresentante`
@@ -1213,13 +2687,38 @@ ALTER TABLE `tipousuario`
   ADD PRIMARY KEY (`idTipoUsuario`);
 
 --
+-- Indices de la tabla `trabajaconnosotros`
+--
+ALTER TABLE `trabajaconnosotros`
+  ADD PRIMARY KEY (`idtrabajaConNosotros`);
+
+--
+-- Indices de la tabla `unidadorganizacional`
+--
+ALTER TABLE `unidadorganizacional`
+  ADD PRIMARY KEY (`idUnidadOrganizacional`),
+  ADD KEY `idSecUniOrgFK` (`idSecUniOrgFK`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`idUsuario`),
-  ADD KEY `FK_Usuarios_EstadoUsuario` (`idEstadoUsuario`),
-  ADD KEY `FK_Usuarios_Galeria` (`idGaleria`),
-  ADD KEY `FK_Usuarios_TipoUsuario` (`idTipoUsuario`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_Usuarios_EstadoUsuario` (`activacion`),
+  ADD KEY `FK_Usuarios_Galeria` (`last_session`),
+  ADD KEY `FK_Usuarios_TipoUsuario` (`correo`);
+
+--
+-- Indices de la tabla `video`
+--
+ALTER TABLE `video`
+  ADD PRIMARY KEY (`codigo`);
+
+--
+-- Indices de la tabla `vision`
+--
+ALTER TABLE `vision`
+  ADD PRIMARY KEY (`idVision`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -1241,7 +2740,7 @@ ALTER TABLE `auspiciadores`
 -- AUTO_INCREMENT de la tabla `categoriaasiento`
 --
 ALTER TABLE `categoriaasiento`
-  MODIFY `idCategoriaAsiento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idCategoriaAsiento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `ceremonias`
@@ -1268,6 +2767,24 @@ ALTER TABLE `comprobantepago`
   MODIFY `idPagosEntrada` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `config_sede_deporte`
+--
+ALTER TABLE `config_sede_deporte`
+  MODIFY `idConfigSedeDeporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `conocenos`
+--
+ALTER TABLE `conocenos`
+  MODIFY `idconocenos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `decreto`
+--
+ALTER TABLE `decreto`
+  MODIFY `idDecreto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `deportedestacado`
 --
 ALTER TABLE `deportedestacado`
@@ -1277,7 +2794,7 @@ ALTER TABLE `deportedestacado`
 -- AUTO_INCREMENT de la tabla `deportes`
 --
 ALTER TABLE `deportes`
-  MODIFY `idDeporte` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idDeporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT de la tabla `deportistadisciplina`
@@ -1289,13 +2806,13 @@ ALTER TABLE `deportistadisciplina`
 -- AUTO_INCREMENT de la tabla `deportistas`
 --
 ALTER TABLE `deportistas`
-  MODIFY `idDeportistas` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idDeportistas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `detalledeporte`
 --
 ALTER TABLE `detalledeporte`
-  MODIFY `idDetalleDeporte` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idDetalleDeporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT de la tabla `detalleeventos`
@@ -1307,7 +2824,13 @@ ALTER TABLE `detalleeventos`
 -- AUTO_INCREMENT de la tabla `disciplina`
 --
 ALTER TABLE `disciplina`
-  MODIFY `iddisciplina` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  MODIFY `idEquipo` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `estadoasiento`
@@ -1325,13 +2848,19 @@ ALTER TABLE `estadousuario`
 -- AUTO_INCREMENT de la tabla `eventos`
 --
 ALTER TABLE `eventos`
-  MODIFY `idEvento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `fechaevento`
 --
 ALTER TABLE `fechaevento`
-  MODIFY `idFechaEvento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idFechaEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `fixture`
+--
+ALTER TABLE `fixture`
+  MODIFY `idfixture` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
 
 --
 -- AUTO_INCREMENT de la tabla `galeria`
@@ -1343,19 +2872,25 @@ ALTER TABLE `galeria`
 -- AUTO_INCREMENT de la tabla `hora`
 --
 ALTER TABLE `hora`
-  MODIFY `idHora` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idHora` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `horarioeventos`
 --
 ALTER TABLE `horarioeventos`
-  MODIFY `idHorarioEventos` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idHorarioEventos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `institucional`
 --
 ALTER TABLE `institucional`
   MODIFY `idInstitucional` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de la tabla `integrantes`
+--
+ALTER TABLE `integrantes`
+  MODIFY `idIntegrante` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `medallas`
@@ -1370,10 +2905,22 @@ ALTER TABLE `medallero`
   MODIFY `idmedallero` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
+-- AUTO_INCREMENT de la tabla `medallerohistorico`
+--
+ALTER TABLE `medallerohistorico`
+  MODIFY `idmedHis_PK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
 -- AUTO_INCREMENT de la tabla `menuprincipal`
 --
 ALTER TABLE `menuprincipal`
   MODIFY `idMenuPrincipal` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `mision`
+--
+ALTER TABLE `mision`
+  MODIFY `idmision` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `moneda`
@@ -1382,16 +2929,46 @@ ALTER TABLE `moneda`
   MODIFY `idMoneda` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `norma`
+--
+ALTER TABLE `norma`
+  MODIFY `idNormaPK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+
+--
+-- AUTO_INCREMENT de la tabla `oficinasorganigrama`
+--
+ALTER TABLE `oficinasorganigrama`
+  MODIFY `idSecretaria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
 -- AUTO_INCREMENT de la tabla `pais`
 --
 ALTER TABLE `pais`
-  MODIFY `idPais` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `idPais` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+
+--
+-- AUTO_INCREMENT de la tabla `participantegrupal`
+--
+ALTER TABLE `participantegrupal`
+  MODIFY `idPartGrupal` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `participanteindividual`
+--
+ALTER TABLE `participanteindividual`
+  MODIFY `idPartIndividual` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT de la tabla `pregfrecareas`
+--
+ALTER TABLE `pregfrecareas`
+  MODIFY `idareaPreFrePK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `preguntasfrecuentes`
 --
 ALTER TABLE `preguntasfrecuentes`
-  MODIFY `idPreguntasFrecuentes` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idPreguntasFrecuentes` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `ranking`
@@ -1403,7 +2980,7 @@ ALTER TABLE `ranking`
 -- AUTO_INCREMENT de la tabla `reglamento`
 --
 ALTER TABLE `reglamento`
-  MODIFY `idReglamento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idReglamento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `reporteentrada`
@@ -1418,16 +2995,46 @@ ALTER TABLE `representantes`
   MODIFY `IdRepresentateORG` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
+-- AUTO_INCREMENT de la tabla `respuestapreguntafrec`
+--
+ALTER TABLE `respuestapreguntafrec`
+  MODIFY `idrespPregFrec` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT de la tabla `resultadogrupal`
+--
+ALTER TABLE `resultadogrupal`
+  MODIFY `idResGrupal` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `resultadoindividual`
+--
+ALTER TABLE `resultadoindividual`
+  MODIFY `idResIndividual` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT de la tabla `seccionreglamento`
+--
+ALTER TABLE `seccionreglamento`
+  MODIFY `idSecRegPK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
 -- AUTO_INCREMENT de la tabla `sedes`
 --
 ALTER TABLE `sedes`
-  MODIFY `idSede` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idSede` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT de la tabla `stockasientos`
 --
 ALTER TABLE `stockasientos`
   MODIFY `idStockAsiento` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `subnorma`
+--
+ALTER TABLE `subnorma`
+  MODIFY `idSubNor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT de la tabla `sysdiagrams`
@@ -1472,12 +3079,6 @@ ALTER TABLE `tipomoneda`
   MODIFY `idTipoMoneda` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `tipopregunta`
---
-ALTER TABLE `tipopregunta`
-  MODIFY `idTipoPreguntas` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT de la tabla `tiporepresentante`
 --
 ALTER TABLE `tiporepresentante`
@@ -1487,7 +3088,7 @@ ALTER TABLE `tiporepresentante`
 -- AUTO_INCREMENT de la tabla `tiposedes`
 --
 ALTER TABLE `tiposedes`
-  MODIFY `idTipoSede` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idTipoSede` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `tipousuario`
@@ -1496,10 +3097,34 @@ ALTER TABLE `tipousuario`
   MODIFY `idTipoUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `trabajaconnosotros`
+--
+ALTER TABLE `trabajaconnosotros`
+  MODIFY `idtrabajaConNosotros` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `unidadorganizacional`
+--
+ALTER TABLE `unidadorganizacional`
+  MODIFY `idUnidadOrganizacional` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `video`
+--
+ALTER TABLE `video`
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `vision`
+--
+ALTER TABLE `vision`
+  MODIFY `idVision` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Restricciones para tablas volcadas
@@ -1509,15 +3134,7 @@ ALTER TABLE `usuarios`
 -- Filtros para la tabla `asientos`
 --
 ALTER TABLE `asientos`
-  ADD CONSTRAINT `FK_Asientos_CategoriaAsiento` FOREIGN KEY (`idCategAsiento`) REFERENCES `categoriaasiento` (`idCategoriaAsiento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_Asientos_EstadoAsiento` FOREIGN KEY (`estado`) REFERENCES `estadoasiento` (`idEstadoA`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_Asientos_StockAsientos` FOREIGN KEY (`idStockAsiento`) REFERENCES `stockasientos` (`idStockAsiento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
-
---
--- Filtros para la tabla `auspiciadores`
---
-ALTER TABLE `auspiciadores`
-  ADD CONSTRAINT `FK_Auspiciadores_TipoAuspiciadores` FOREIGN KEY (`idTipoAuspiciador`) REFERENCES `tipoauspiciadores` (`idTipoAuspiciador`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_Asientos_CategoriaAsiento` FOREIGN KEY (`idCategAsiento`) REFERENCES `categoriaasiento` (`idCategoriaAsiento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `comiteorganizador`
@@ -1543,6 +3160,13 @@ ALTER TABLE `comprobantepago`
   ADD CONSTRAINT `FK_ComprobantePago_Compra_Entrada` FOREIGN KEY (`idCompraEntrada`) REFERENCES `compra_entrada` (`idCompraEntrada`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `config_sede_deporte`
+--
+ALTER TABLE `config_sede_deporte`
+  ADD CONSTRAINT `config_sede_deporte_ibfk_1` FOREIGN KEY (`idSedeFK`) REFERENCES `sedes` (`idSede`),
+  ADD CONSTRAINT `config_sede_deporte_ibfk_2` FOREIGN KEY (`idDeporteFK`) REFERENCES `deportes` (`idDeporte`);
+
+--
 -- Filtros para la tabla `deportedestacado`
 --
 ALTER TABLE `deportedestacado`
@@ -1560,7 +3184,7 @@ ALTER TABLE `deportes`
 -- Filtros para la tabla `deportistadisciplina`
 --
 ALTER TABLE `deportistadisciplina`
-  ADD CONSTRAINT `ddisciplina` FOREIGN KEY (`iddisciplina`) REFERENCES `disciplina` (`iddisciplina`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `ddisciplina` FOREIGN KEY (`iddisciplina`) REFERENCES `disciplina` (`id_juego`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `deportistadd` FOREIGN KEY (`idDeportistas`) REFERENCES `deportistas` (`idDeportistas`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
@@ -1578,6 +3202,12 @@ ALTER TABLE `detalleeventos`
   ADD CONSTRAINT `FK_DetalleEventos_Eventos` FOREIGN KEY (`idEvento`) REFERENCES `eventos` (`idEvento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `equipo`
+--
+ALTER TABLE `equipo`
+  ADD CONSTRAINT `FK_equipo_pais` FOREIGN KEY (`idPaisFK`) REFERENCES `pais` (`idPais`);
+
+--
 -- Filtros para la tabla `eventos`
 --
 ALTER TABLE `eventos`
@@ -1588,7 +3218,14 @@ ALTER TABLE `eventos`
 -- Filtros para la tabla `fechaevento`
 --
 ALTER TABLE `fechaevento`
-  ADD CONSTRAINT `FK_FechaEvento_Hora` FOREIGN KEY (`idHora`) REFERENCES `hora` (`idHora`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_FechaEvento_Hora` FOREIGN KEY (`idHora`) REFERENCES `hora` (`idHora`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `FK_deporte_fecha` FOREIGN KEY (`idDeporte`) REFERENCES `deportes` (`idDeporte`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `fixture`
+--
+ALTER TABLE `fixture`
+  ADD CONSTRAINT `fixture.deportes` FOREIGN KEY (`idDeporte`) REFERENCES `deportes` (`idDeporte`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `horarioeventos`
@@ -1603,6 +3240,13 @@ ALTER TABLE `institucional`
   ADD CONSTRAINT `FK_Institucional_TipoInstitucional` FOREIGN KEY (`idTipoInstitucional`) REFERENCES `tipoinstitucional` (`idTipoInstitucional`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `integrantes`
+--
+ALTER TABLE `integrantes`
+  ADD CONSTRAINT `FK_integrantes_equipo` FOREIGN KEY (`idEquipoFK`) REFERENCES `equipo` (`idEquipo`),
+  ADD CONSTRAINT `FK_integrnates_deportistas` FOREIGN KEY (`idDeportistasFK`) REFERENCES `deportistas` (`idDeportistas`);
+
+--
 -- Filtros para la tabla `medallas`
 --
 ALTER TABLE `medallas`
@@ -1613,6 +3257,12 @@ ALTER TABLE `medallas`
 --
 ALTER TABLE `medallero`
   ADD CONSTRAINT `medallero.pais` FOREIGN KEY (`idPais`) REFERENCES `pais` (`idPais`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `medallerohistorico`
+--
+ALTER TABLE `medallerohistorico`
+  ADD CONSTRAINT `FK_medHist_Pais` FOREIGN KEY (`pai_FK`) REFERENCES `pais` (`idPais`);
 
 --
 -- Filtros para la tabla `menuprincipal`
@@ -1632,10 +3282,32 @@ ALTER TABLE `moneda`
   ADD CONSTRAINT `FK_Moneda_TipoMoneda` FOREIGN KEY (`idTipoMoneda`) REFERENCES `tipomoneda` (`idTipoMoneda`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `norma`
+--
+ALTER TABLE `norma`
+  ADD CONSTRAINT `FK_Norma_SeccReg` FOREIGN KEY (`SecRegFK`) REFERENCES `seccionreglamento` (`idSecRegPK`);
+
+--
+-- Filtros para la tabla `participantegrupal`
+--
+ALTER TABLE `participantegrupal`
+  ADD CONSTRAINT `FK_partGrupal_Equipo1` FOREIGN KEY (`idEquipo1FK`) REFERENCES `equipo` (`idEquipo`),
+  ADD CONSTRAINT `FK_partGrupal_Equipo2` FOREIGN KEY (`idEquipo2FK`) REFERENCES `equipo` (`idEquipo`),
+  ADD CONSTRAINT `Fk_partGrupal_eventos` FOREIGN KEY (`idEventoFK`) REFERENCES `eventos` (`idEvento`);
+
+--
+-- Filtros para la tabla `participanteindividual`
+--
+ALTER TABLE `participanteindividual`
+  ADD CONSTRAINT `FK_Partiindividual_Pais` FOREIGN KEY (`idPaisFK`) REFERENCES `pais` (`idPais`),
+  ADD CONSTRAINT `FK_partIndividual_deportistas` FOREIGN KEY (`idDeportistasFK`) REFERENCES `deportistas` (`idDeportistas`),
+  ADD CONSTRAINT `FK_partiipanteIndividual_Eventos` FOREIGN KEY (`idEventoFK`) REFERENCES `eventos` (`idEvento`);
+
+--
 -- Filtros para la tabla `preguntasfrecuentes`
 --
 ALTER TABLE `preguntasfrecuentes`
-  ADD CONSTRAINT `FK_PreguntasFrecuentes_TipoPregunta` FOREIGN KEY (`idTipoPreguntasFrecuentes`) REFERENCES `tipopregunta` (`idTipoPreguntas`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `FK_preguntasfrecuentes_PregFrecAreas` FOREIGN KEY (`idPregFrecAreaFK`) REFERENCES `pregfrecareas` (`idareaPreFrePK`);
 
 --
 -- Filtros para la tabla `ranking`
@@ -1652,10 +3324,34 @@ ALTER TABLE `reporteentrada`
   ADD CONSTRAINT `FK_ReporteEntrada_Deportes` FOREIGN KEY (`idDeporte`) REFERENCES `deportes` (`idDeporte`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
+-- Filtros para la tabla `respuestapreguntafrec`
+--
+ALTER TABLE `respuestapreguntafrec`
+  ADD CONSTRAINT `FK_respuestapreguntafrec_PreguntasFrec` FOREIGN KEY (`idPregFrecuentes`) REFERENCES `preguntasfrecuentes` (`idPreguntasFrecuentes`);
+
+--
+-- Filtros para la tabla `resultadogrupal`
+--
+ALTER TABLE `resultadogrupal`
+  ADD CONSTRAINT `FK_resGrupal_partGrupal` FOREIGN KEY (`idPartGrupalFK`) REFERENCES `participantegrupal` (`idPartGrupal`);
+
+--
+-- Filtros para la tabla `resultadoindividual`
+--
+ALTER TABLE `resultadoindividual`
+  ADD CONSTRAINT `ResIndividual_partIndividual_FK` FOREIGN KEY (`idPartIndividualFK`) REFERENCES `participanteindividual` (`idPartIndividual`);
+
+--
 -- Filtros para la tabla `sedes`
 --
 ALTER TABLE `sedes`
   ADD CONSTRAINT `FK_Sedes_TipoSedes` FOREIGN KEY (`idTipoSede`) REFERENCES `tiposedes` (`idTipoSede`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `subnorma`
+--
+ALTER TABLE `subnorma`
+  ADD CONSTRAINT `FK_SubNorma_Norma` FOREIGN KEY (`normaFK`) REFERENCES `norma` (`idNormaPK`);
 
 --
 -- Filtros para la tabla `thistoria`
@@ -1676,12 +3372,10 @@ ALTER TABLE `tiposedes`
   ADD CONSTRAINT `FK_TipoSedes_Deportes` FOREIGN KEY (`idDeporte`) REFERENCES `deportes` (`idDeporte`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `usuarios`
+-- Filtros para la tabla `unidadorganizacional`
 --
-ALTER TABLE `usuarios`
-  ADD CONSTRAINT `FK_Usuarios_EstadoUsuario` FOREIGN KEY (`idEstadoUsuario`) REFERENCES `estadousuario` (`idestadoUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_Usuarios_Galeria` FOREIGN KEY (`idGaleria`) REFERENCES `galeria` (`idGaleria`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `FK_Usuarios_TipoUsuario` FOREIGN KEY (`idTipoUsuario`) REFERENCES `tipousuario` (`idTipoUsuario`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `unidadorganizacional`
+  ADD CONSTRAINT `unidadorganizacional_ibfk_1` FOREIGN KEY (`idSecUniOrgFK`) REFERENCES `oficinasorganigrama` (`idSecretaria`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

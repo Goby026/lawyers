@@ -96,9 +96,10 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="?c=listapaises&a=index">Lista de paises</a>
                                 <a class="dropdown-item" href="?c=medallero&a=index">Medallero</a>
+                                <a class="dropdown-item" href="?c=fixture&a=index">Fixture</a>
                                 <a class="dropdown-item" href="#">Vivo</a>
                                 <a class="dropdown-item" href="#">Voluntariado</a>
-                                <a class="dropdown-item" href="?c=marcoLegal&a=index">Marco legal</a>
+                                <a class="dropdown-item" href="?c=decreto&a=index">Marco legal</a>
 <!--                                <div class="dropdown-divider"></div>-->
 <!--                                <a class="dropdown-item" href="#">Something else here</a>-->
                             </div>
