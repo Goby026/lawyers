@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 20-06-2019 a las 02:12:40
--- Versión del servidor: 10.1.38-MariaDB
--- Versión de PHP: 7.1.28
+-- Tiempo de generación: 21-06-2019 a las 07:04:54
+-- Versión del servidor: 10.1.34-MariaDB
+-- Versión de PHP: 7.2.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,24 +19,36 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `db_tecnoserv`
+-- Base de datos: `bdtecnoserv`
 --
 
 DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_AsientosxIdCategoria` (IN `_idCategAsiento` INT(11))  SELECT `idAsiento`, `numero`, `IdEstado` FROM `asientos` WHERE idCategAsiento = _idCategAsiento$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_AsientosxIdCategoria` (`_idCategAsiento` INT(11))  BEGIN
+	SELECT `idAsiento`, `numero`, `IdEstado` FROM `asientos` WHERE idCategAsiento = _idCategAsiento;
+END$$
 
-CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_AsientosxIdCategoriaXIdSede` (IN `_idCategAsiento` INT(11), IN `_IdSede` INT(11))  SELECT `idAsiento`, `numero`, `IdEstado`, `precio` FROM `asientos` WHERE idCategAsiento = _idCategAsiento AND IdSede = _IdSede$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_AsientosxIdCategoriaXIdSede` (`_idCategAsiento` INT(11), `_IdSede` INT(11))  BEGIN
+	SELECT `idAsiento`, `numero`, `IdEstado`, `precio` FROM `asientos` WHERE idCategAsiento = _idCategAsiento AND IdSede = _IdSede;
+END$$
 
-CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_CategoriaAsiento` ()  SELECT idCategoriaAsiento, NombreCategoriaA FROM categoriaasiento$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_CategoriaAsiento` ()  BEGIN
+	SELECT idCategoriaAsiento, NombreCategoriaA FROM categoriaasiento;
+END$$
 
-CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_CategoriaAsientoxidCategoriaAsiento` (IN `_idCategoriaAsiento` INT(11))  SELECT NombreCategoriaA FROM categoriaasiento WHERE idCategoriaAsiento = _idCategoriaAsiento$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_CategoriaAsientoxidCategoriaAsiento` (`_idCategoriaAsiento` INT(11))  BEGIN
+	SELECT NombreCategoriaA FROM categoriaasiento WHERE idCategoriaAsiento = _idCategoriaAsiento;
+END$$
 
-CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_Sedes` ()  SELECT `idSede`, `imgSede`, `DireccionSede` FROM `sedes`$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_Sedes` ()  BEGIN
+	SELECT `idSede`, `imgSede`, `DireccionSede` FROM `sedes`;
+END$$
 
-CREATE DEFINER=`id9947750_usuario`@`%` PROCEDURE `get_SedexIdSede` (IN `_idSede` INT(11))  SELECT `DireccionSede` FROM `sedes` WHERE idSede = _idSede$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `get_SedexIdSede` (`_idSede` INT(11))  BEGIN
+	SELECT `DireccionSede` FROM `sedes` WHERE idSede = _idSede;
+END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `list_foto` ()  NO SQL
 select * from foto$$
@@ -371,6 +383,35 @@ BEGIN
     where id_juego=idJuegoD;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDECRETO` ()  BEGIN
+	SELECT * FROM bdtecnoserv.decreto;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDISCIPLINA` ()  BEGIN
+SELECT * FROM `disciplina` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDOCUMENTOS` ()  BEGIN
+SELECT * FROM `documentos` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFIXTURE` ()  BEGIN
+	SELECT * FROM fixture f
+	INNER JOIN deportes d ON f.idDeporte = d.idDeporte;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFOTOS` ()  BEGIN
+	SELECT * FROM `foto` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETPARTICIPANTES` ()  BEGIN
+SELECT * FROM `participantes` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETVIDEOS` ()  BEGIN
+select * from video where 1;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_insertarf_datos` (IN `nombre_f` VARCHAR(40), IN `foto_f` VARCHAR(200))  NO SQL
 insert into foto (nombre,foto) VALUES (nombre_f,foto_f)$$
 
@@ -419,6 +460,26 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_PAIS` ()  BEGIN
 	SELECT * FROM pais;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGDISCIPLINA` (`_dis` VARCHAR(200), `_sed` VARCHAR(200), `_direcc` VARCHAR(200))  BEGIN
+INSERT INTO disciplina (disciplina,sede, direccion) VALUES (_dis, _sed,_direcc);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGDOCUMENTOS` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
+INSERT INTO documentos (nombre, documentos) VALUES (_name, _picture);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGFOTO` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
+	INSERT INTO foto (nombre, foto) VALUES (_name, _picture);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGPARTICIPANTES` (`_name` VARCHAR(200), `_picture` VARCHAR(200), `_from` VARCHAR(200), `_apeM` VARCHAR(200), `_ApeP` VARCHAR(200))  BEGIN
+INSERT INTO participantes (Nombre, Foto, Pais, ApellidoM, ApellidoP) VALUES (_name, _picture,_from,_apeM,_apeP);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGVIDEO` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
+INSERT INTO video (nombre, video) VALUES (_name, _picture);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_TIPOCEREMONIAS` (`id` INT)  BEGIN
@@ -627,6 +688,32 @@ INSERT INTO `conocenos` (`idconocenos`, `co_desc`, `co_imagen`, `co_fecha`, `bEs
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `decreto`
+--
+
+CREATE TABLE `decreto` (
+  `idDecreto` int(11) NOT NULL,
+  `titulo` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `descripcion` text COLLATE utf8_spanish2_ci,
+  `estado` tinyint(4) DEFAULT NULL,
+  `rutaPdf` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `decreto`
+--
+
+INSERT INTO `decreto` (`idDecreto`, `titulo`, `descripcion`, `estado`, `rutaPdf`, `fechaSistema`) VALUES
+(1, 'D.L. N° 1335', 'Se dispone la transferencia al Ministerio de Transportes y Comunicaciones del desarrollo de la infraestructura, equipamiento y las operaciones para los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019.', 1, './assets/docs/dl1335-1.pdf', '2019-06-20 20:08:36'),
+(2, 'D.L. N° 1248', 'Dicta medidas para agilizar el proceso de inversión y otras actividades en el marco de la preparación y desarrollo de los XVIII Juegos Panamericanos del 2019 y Sextos Juegos Parapanamericanos del 2019.', 1, './assets/docs/dl1248.pdf', '2019-06-20 20:10:41'),
+(3, 'D.S. N° 017-2018-MTC', 'Se modifican los artículos 2, 5 y 6 del Decreto Supremo N° 002-2015-MINEDU que crea el Proyecto Especial para la preparación y desarrollo de los XVIII Juegos Panamericanos y Sextos Juegos Parapanamericanos del 2019 en el ámbito del Ministerio de Transportes y Comunicaciones.', 1, './assets/docs/ds0172018mtc.pdf', '2019-06-20 20:10:41'),
+(4, 'D.S. N° 009-2015-MINEDU', 'Se modifica el D.S. N° 002-2015-MINEDU y se incluye el objeto de programar y ejecutar las acciones necesarias para el desarrollo de los Sextos Juegos Parapanamericanos del 2019.', 1, './assets/docs/ds0092015minedu.pdf', '2019-06-20 20:10:41'),
+(5, 'D.S. N° 002-2015-MINEDU', 'Se creó el Proyecto Especial para la Preparación y Desarrollo de los XVIII Juegos Panamericanos del 2019 – PEJP.', 1, './assets/docs/ds0022015minedu.pdf', '2019-06-20 20:10:41');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `deportedestacado`
 --
 
@@ -654,16 +741,16 @@ CREATE TABLE `deportes` (
 --
 
 INSERT INTO `deportes` (`idDeporte`, `NombDeporte`, `idDetalleDeporte`, `idReglamento`) VALUES
-(1, 'Futbol', NULL, NULL),
-(2, 'Atletismo', NULL, NULL),
-(3, 'BÃ¡dminton', NULL, NULL),
-(4, 'Baloncesto', NULL, NULL),
-(5, 'Boxeo', NULL, NULL),
-(6, 'Ciclismo de Pista', NULL, NULL),
-(7, 'Ciclismo de Ruta', NULL, NULL),
-(8, 'Gimnasia Ritmica', NULL, NULL),
-(9, 'Golf', NULL, NULL),
-(10, 'Judo', NULL, NULL),
+(1, 'Futbol', 1, 1),
+(2, 'Atletismo', 1, 1),
+(3, 'BÃ¡dminton', 1, 1),
+(4, 'Baloncesto', 1, 1),
+(5, 'Boxeo', 1, 1),
+(6, 'Ciclismo de Pista', 1, 1),
+(7, 'Ciclismo de Ruta', 1, 1),
+(8, 'Gimnasia Ritmica', 1, 1),
+(9, 'Golf', 1, 1),
+(10, 'Judo', 1, 1),
 (11, 'Lucha-Grecorromana', 1, 1),
 (12, 'Lucha-Libre', 1, 1),
 (13, 'Raquetbol', 1, 1),
@@ -867,7 +954,7 @@ CREATE TABLE `detalleeventos` (
 
 CREATE TABLE `disciplina` (
   `id_juego` int(11) NOT NULL,
-  `disciplina` int(11) NOT NULL,
+  `disciplina` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
   `sede` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
   `direccion` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
@@ -974,6 +1061,79 @@ INSERT INTO `fechaevento` (`idFechaEvento`, `idHora`, `fecha`, `idDeporte`, `fec
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `fixture`
+--
+
+CREATE TABLE `fixture` (
+  `idfixture` int(11) NOT NULL,
+  `idDeporte` int(11) DEFAULT NULL,
+  `fechaInicio` date DEFAULT NULL,
+  `fechaFinal` date DEFAULT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `fixture`
+--
+
+INSERT INTO `fixture` (`idfixture`, `idDeporte`, `fechaInicio`, `fechaFinal`, `fechaSistema`) VALUES
+(1, 5, '2019-06-24', '2019-06-26', '2019-06-20 05:00:00'),
+(2, 11, '2019-06-25', '2019-06-27', '2019-06-20 05:00:00'),
+(3, 12, '2019-06-26', '2019-06-28', '2019-06-20 05:00:00'),
+(4, 13, '2019-06-27', '2019-06-29', '2019-06-20 05:00:00'),
+(5, 14, '2019-06-28', '2019-06-30', '2019-06-20 05:00:00'),
+(6, 15, '2019-06-29', '2019-07-01', '2019-06-20 05:00:00'),
+(7, 16, '2019-06-30', '2019-07-02', '2019-06-20 05:00:00'),
+(8, 17, '2019-07-01', '2019-07-03', '2019-06-20 05:00:00'),
+(9, 18, '2019-07-02', '2019-07-04', '2019-06-20 05:00:00'),
+(10, 19, '2019-07-04', '2019-07-06', '2019-06-20 05:00:00'),
+(11, 20, '2019-07-05', '2019-07-07', '2019-06-20 05:00:00'),
+(12, 21, '2019-07-07', '2019-07-09', '2019-06-20 05:00:00'),
+(13, 22, '2019-07-08', '2019-07-10', '2019-06-20 05:00:00'),
+(14, 23, '2019-07-09', '2019-07-11', '2019-06-20 05:00:00'),
+(15, 24, '2019-07-11', '2019-07-13', '2019-06-20 05:00:00'),
+(16, 25, '2019-07-12', '2019-07-14', '2019-06-20 05:00:00'),
+(17, 26, '2019-07-15', '2019-07-17', '2019-06-20 05:00:00'),
+(18, 27, '2019-07-16', '2019-07-18', '2019-06-20 05:00:00'),
+(19, 28, '2019-07-17', '2019-07-19', '2019-06-20 05:00:00'),
+(20, 29, '2019-07-19', '2019-07-21', '2019-06-20 05:00:00'),
+(21, 30, '2019-07-20', '2019-07-22', '2019-06-20 05:00:00'),
+(22, 31, '2019-07-21', '2019-07-23', '2019-06-20 05:00:00'),
+(23, 32, '2019-07-22', '2019-07-24', '2019-06-20 05:00:00'),
+(24, 33, '2019-07-23', '2019-07-25', '2019-06-20 05:00:00'),
+(25, 34, '2019-07-24', '2019-07-26', '2019-06-20 05:00:00'),
+(26, 35, '2019-07-25', '2019-07-27', '2019-06-20 05:00:00'),
+(27, 36, '2019-07-26', '2019-07-28', '2019-06-20 05:00:00'),
+(28, 37, '2019-07-27', '2019-07-29', '2019-06-20 05:00:00'),
+(29, 38, '2019-07-28', '2019-07-30', '2019-06-20 05:00:00'),
+(30, 39, '2019-07-29', '2019-07-31', '2019-06-20 05:00:00'),
+(31, 40, '2019-07-30', '2019-08-01', '2019-06-20 05:00:00'),
+(32, 41, '2019-07-31', '2019-08-02', '2019-06-20 05:00:00'),
+(33, 42, '2019-08-01', '2019-08-03', '2019-06-20 05:00:00'),
+(34, 43, '2019-08-02', '2019-08-04', '2019-06-20 05:00:00'),
+(35, 44, '2019-08-03', '2019-08-05', '2019-06-20 05:00:00'),
+(36, 45, '2019-08-04', '2019-08-06', '2019-06-20 05:00:00'),
+(37, 46, '2019-08-05', '2019-08-07', '2019-06-20 05:00:00'),
+(38, 47, '2019-08-06', '2019-08-08', '2019-06-20 05:00:00'),
+(39, 48, '2019-08-07', '2019-08-09', '2019-06-20 05:00:00'),
+(40, 49, '2019-08-08', '2019-08-10', '2019-06-20 05:00:00'),
+(41, 50, '2019-08-10', '2019-08-12', '2019-06-20 05:00:00'),
+(42, 51, '2019-08-11', '2019-08-13', '2019-06-20 05:00:00'),
+(43, 52, '2019-08-12', '2019-08-14', '2019-06-20 05:00:00'),
+(44, 53, '2019-08-14', '2019-08-16', '2019-06-20 05:00:00'),
+(45, 54, '2019-08-15', '2019-08-17', '2019-06-20 05:00:00'),
+(46, 55, '2019-08-16', '2019-08-18', '2019-06-20 05:00:00'),
+(47, 56, '2019-08-17', '2019-08-19', '2019-06-20 05:00:00'),
+(48, 57, '2019-08-18', '2019-08-20', '2019-06-20 05:00:00'),
+(49, 58, '2019-08-19', '2019-08-21', '2019-06-20 05:00:00'),
+(50, 59, '2019-08-20', '2019-08-22', '2019-06-20 05:00:00'),
+(51, 60, '2019-08-21', '2019-08-23', '2019-06-20 05:00:00'),
+(52, 61, '2019-08-22', '2019-08-24', '2019-06-20 05:00:00'),
+(53, 62, '2019-08-23', '2019-08-25', '2019-06-20 05:00:00');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `foto`
 --
 
@@ -982,6 +1142,14 @@ CREATE TABLE `foto` (
   `nombre` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL,
   `foto` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `foto`
+--
+
+INSERT INTO `foto` (`codigo`, `nombre`, `foto`) VALUES
+(1, 'prueba', './assets/images/webModel.jpeg'),
+(2, 'prueba 2', './assets/images/atleta.jpg');
 
 -- --------------------------------------------------------
 
@@ -1427,6 +1595,21 @@ INSERT INTO `participanteindividual` (`idPartIndividual`, `idDeportistasFK`, `id
 (14, 14, 18, 1),
 (15, 15, 18, 1),
 (16, 16, 18, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `participantes`
+--
+
+CREATE TABLE `participantes` (
+  `id` int(11) NOT NULL,
+  `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `ApellidoP` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `ApellidoM` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Pais` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Foto` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -2087,8 +2270,8 @@ INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `ApellidoU`, `telefonoU`, `Do
 
 CREATE TABLE `video` (
   `codigo` int(11) NOT NULL,
-  `nombre` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL,
-  `video` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL
+  `nombre` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `video` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
@@ -2185,6 +2368,12 @@ ALTER TABLE `conocenos`
   ADD PRIMARY KEY (`idconocenos`);
 
 --
+-- Indices de la tabla `decreto`
+--
+ALTER TABLE `decreto`
+  ADD PRIMARY KEY (`idDecreto`);
+
+--
 -- Indices de la tabla `deportedestacado`
 --
 ALTER TABLE `deportedestacado`
@@ -2276,6 +2465,13 @@ ALTER TABLE `fechaevento`
   ADD PRIMARY KEY (`idFechaEvento`),
   ADD KEY `FK_FechaEvento_Hora` (`idHora`),
   ADD KEY `FK_deporte_fecha_idx` (`idDeporte`);
+
+--
+-- Indices de la tabla `fixture`
+--
+ALTER TABLE `fixture`
+  ADD PRIMARY KEY (`idfixture`),
+  ADD KEY `fixture.deportes_idx` (`idDeporte`);
 
 --
 -- Indices de la tabla `foto`
@@ -2400,6 +2596,12 @@ ALTER TABLE `participanteindividual`
   ADD KEY `FK_partiipanteIndividual_Eventos` (`idEventoFK`),
   ADD KEY `FK_partIndividual_deportistas` (`idDeportistasFK`),
   ADD KEY `FK_Partiindividual_Pais` (`idPaisFK`);
+
+--
+-- Indices de la tabla `participantes`
+--
+ALTER TABLE `participantes`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `pregfrecareas`
@@ -2646,6 +2848,12 @@ ALTER TABLE `conocenos`
   MODIFY `idconocenos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de la tabla `decreto`
+--
+ALTER TABLE `decreto`
+  MODIFY `idDecreto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `deportedestacado`
 --
 ALTER TABLE `deportedestacado`
@@ -2716,6 +2924,18 @@ ALTER TABLE `eventos`
 --
 ALTER TABLE `fechaevento`
   MODIFY `idFechaEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT de la tabla `fixture`
+--
+ALTER TABLE `fixture`
+  MODIFY `idfixture` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+
+--
+-- AUTO_INCREMENT de la tabla `foto`
+--
+ALTER TABLE `foto`
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `galeria`
@@ -2812,6 +3032,12 @@ ALTER TABLE `participantegrupal`
 --
 ALTER TABLE `participanteindividual`
   MODIFY `idPartIndividual` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+
+--
+-- AUTO_INCREMENT de la tabla `participantes`
+--
+ALTER TABLE `participantes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `pregfrecareas`
@@ -3075,6 +3301,12 @@ ALTER TABLE `eventos`
 ALTER TABLE `fechaevento`
   ADD CONSTRAINT `FK_FechaEvento_Hora` FOREIGN KEY (`idHora`) REFERENCES `hora` (`idHora`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   ADD CONSTRAINT `FK_deporte_fecha` FOREIGN KEY (`idDeporte`) REFERENCES `deportes` (`idDeporte`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `fixture`
+--
+ALTER TABLE `fixture`
+  ADD CONSTRAINT `fixture.deportes` FOREIGN KEY (`idDeporte`) REFERENCES `deportes` (`idDeporte`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `horarioeventos`
