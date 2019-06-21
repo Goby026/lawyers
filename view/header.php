@@ -82,7 +82,6 @@
                                 <a class="dropdown-item" href="?c=organigrama&a=index">Organigrama</a>
                                 <a class="dropdown-item" href="?c=reglamento&a=index">Reglamento</a>
                                 <a class="dropdown-item" href="?c=preguntasFrecuentes&a=index">Preguntas Frecuentes</a>
-                                <a class="dropdown-item" href="?c=decreto&a=index">Marco Legal</a>
                             </div>
                         </li>
                         <li class="nav-item">
