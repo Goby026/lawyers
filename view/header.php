@@ -53,7 +53,7 @@
             if (isset($_SESSION['auth'])){
                 ?>
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <a class="navbar-brand" href="#">Weplay</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -79,7 +79,10 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="?c=comiteorganizador&a=index">Comite Organizador</a>
-                                <a class="dropdown-item" href="#">Organigrama</a>
+                                <a class="dropdown-item" href="?c=organigrama&a=index">Organigrama</a>
+                                <a class="dropdown-item" href="?c=reglamento&a=index">Reglamento</a>
+                                <a class="dropdown-item" href="?c=preguntasFrecuentes&a=index">Preguntas Frecuentes</a>
+                                <a class="dropdown-item" href="?c=decreto&a=index">Marco Legal</a>
                             </div>
                         </li>
                         <li class="nav-item">
