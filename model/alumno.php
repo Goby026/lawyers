@@ -75,24 +75,10 @@ class Alumno
 	{
 		try 
 		{
-			$sql = "UPDATE alumnos SET 
-						Nombre          = ?, 
-						Apellido        = ?,
-                        Correo        = ?,
-						Sexo            = ?, 
-						FechaNacimiento = ?
-				    WHERE id = ?";
+			$sql = "UPDATE alumnos SET 	Nombre = ?, Apellido= ?, Correo = ?,Sexo  = ?, FechaNacimiento = ? WHERE id = ?";
 
-			$this->pdo->prepare($sql)
-			     ->execute(
-				    array(
-                        $data->Nombre, 
-                        $data->Correo,
-                        $data->Apellido,
-                        $data->Sexo,
-                        $data->FechaNacimiento,
-                        $data->id
-					)
+			$this->pdo->prepare($sql)->execute(
+				    array($data->Nombre, $data->Correo, $data->Apellido, $data->Sexo, $data->FechaNacimiento, $data->id)
 				);
 		} catch (Exception $e) 
 		{
