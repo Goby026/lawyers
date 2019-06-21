@@ -79,7 +79,9 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="?c=comiteorganizador&a=index">Comite Organizador</a>
-                                <a class="dropdown-item" href="#">Organigrama</a>
+                                <a class="dropdown-item" href="?c=organigrama&a=index">Organigrama</a>
+                                <a class="dropdown-item" href="?c=reglamento&a=index">Reglamento</a>
+                                <a class="dropdown-item" href="?c=preguntasFrecuentes&a=index">Preguntas Frecuentes</a>
                             </div>
                         </li>
                         <li class="nav-item">
