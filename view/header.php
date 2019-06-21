@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
     <link href="./assets/css/styles.css" rel="stylesheet" />
-
+    <link href="./assets/css/style.css" rel="stylesheet" />
     <!--    <link rel="stylesheet" href="./css/css.css" type="text/css">-->
 
     <!--    <link rel="icon" type="" href="./img/icon_inicio.png"/>-->
@@ -82,6 +82,7 @@
                                 <a class="dropdown-item" href="?c=organigrama&a=index">Organigrama</a>
                                 <a class="dropdown-item" href="?c=reglamento&a=index">Reglamento</a>
                                 <a class="dropdown-item" href="?c=preguntasFrecuentes&a=index">Preguntas Frecuentes</a>
+                                <a class="dropdown-item" href="?c=decreto&a=index">Marco legal</a>
                             </div>
                         </li>
                         <li class="nav-item">
@@ -100,8 +101,7 @@
                                 <a class="dropdown-item" href="?c=medallero&a=index">Medallero</a>
                                 <a class="dropdown-item" href="?c=fixture&a=index">Fixture</a>
                                 <a class="dropdown-item" href="#">Vivo</a>
-                                <a class="dropdown-item" href="#">Voluntariado</a>
-                                <a class="dropdown-item" href="?c=decreto&a=index">Marco legal</a>
+                                <a class="dropdown-item" href="#">Voluntariado</a>                               
 <!--                                <div class="dropdown-divider"></div>-->
 <!--                                <a class="dropdown-item" href="#">Something else here</a>-->
                             </div>
