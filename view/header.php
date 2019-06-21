@@ -102,6 +102,13 @@
                                 <a class="dropdown-item" href="?c=fixture&a=index">Fixture</a>
                                 <a class="dropdown-item" href="#">Vivo</a>
                                 <a class="dropdown-item" href="#">Voluntariado</a>                               
+                                <a class="dropdown-item" href="?c=foto&a=index">Fotos</a>
+                                <a class="dropdown-item" href="?c=video&a=index">Video</a>
+                                <a class="dropdown-item" href="?c=documentos&a=index">Documentos</a>
+                                <a class="dropdown-item" href="?c=disciplina&a=index">Disciplina</a>
+                                <a class="dropdown-item" href="?c=participantes&a=index">Participantes</a>
+                                <a class="dropdown-item" href="#">Voluntariado</a>
+                                <a class="dropdown-item" href="#">Marco legal</a>
 <!--                                <div class="dropdown-divider"></div>-->
 <!--                                <a class="dropdown-item" href="#">Something else here</a>-->
                             </div>
