@@ -1,9 +1,9 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.4
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-06-2019 a las 07:04:54
+-- Tiempo de generación: 22-06-2019 a las 02:10:32
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -959,6 +959,13 @@ CREATE TABLE `disciplina` (
   `direccion` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
+--
+-- Volcado de datos para la tabla `disciplina`
+--
+
+INSERT INTO `disciplina` (`id_juego`, `disciplina`, `sede`, `direccion`) VALUES
+(1, 'Disciplina prueba', 'HYO', 'HYO');
+
 -- --------------------------------------------------------
 
 --
@@ -970,25 +977,6 @@ CREATE TABLE `documentos` (
   `nombre` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
   `documentos` varchar(150) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
-
---
--- Volcado de datos para la tabla `documentos`
---
-
-INSERT INTO `documentos` (`id`, `nombre`, `documentos`) VALUES
-(1, 'archivo', NULL);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `equipo`
---
-
-CREATE TABLE `equipo` (
-  `idEquipo` int(11) NOT NULL,
-  `idPaisFK` int(11) NOT NULL,
-  `totalIntegrantes` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1168,33 +1156,8 @@ CREATE TABLE `foto` (
 
 INSERT INTO `foto` (`codigo`, `nombre`, `foto`) VALUES
 (1, 'prueba', './assets/images/webModel.jpeg'),
-(2, 'prueba 2', './assets/images/atleta.jpg');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `foto`
---
-
-CREATE TABLE `foto` (
-  `codigo` int(11) NOT NULL,
-  `nombre` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL,
-  `foto` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
-
---
--- Volcado de datos para la tabla `foto`
---
-
-INSERT INTO `foto` (`codigo`, `nombre`, `foto`) VALUES
-(1, 'cualquier cosa', './assets/images/4.jpg'),
-(2, 'cualquier cosa', '12045613_1129230253764312_4076110757615716063'),
-(3, 'otra foto', 'vcredist.bmp'),
-(4, 'mas fotos', './assets/images/atleta.jpg'),
-(5, 'otra foto', './assets/images/3.jpg'),
-(6, 'nuevo documento', './assets/images/'),
-(7, 'nuevo documento', './assets/images/'),
-(8, 'nuevo video', './assets/images/');
+(2, 'prueba 2', './assets/images/atleta.jpg'),
+(3, 'Nuevo documento', './assets/images/');
 
 -- --------------------------------------------------------
 
@@ -1656,6 +1619,13 @@ CREATE TABLE `participantes` (
   `Foto` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
+--
+-- Volcado de datos para la tabla `participantes`
+--
+
+INSERT INTO `participantes` (`id`, `Nombre`, `ApellidoP`, `ApellidoM`, `Pais`, `Foto`) VALUES
+(1, 'Pirata', './assets/images/Grupo 2.png', 'Peru', 'Arias', 'Rendich');
+
 -- --------------------------------------------------------
 
 --
@@ -1680,43 +1650,6 @@ INSERT INTO `pregfrecareas` (`idareaPreFrePK`, `nomAre`) VALUES
 (6, 'TICKETS'),
 (7, 'PROVEEDORES'),
 (8, 'CONTACTO');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `participantegrupal`
---
-
-CREATE TABLE `participantegrupal` (
-  `idPartGrupal` int(11) NOT NULL,
-  `idEventoFK` int(11) NOT NULL,
-  `idEquipo1FK` int(11) NOT NULL,
-  `idEquipo2FK` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `participanteindividual`
---
-
-CREATE TABLE `participanteindividual` (
-  `idPartIndividual` int(11) NOT NULL,
-  `idDeportistasFK` int(11) NOT NULL,
-  `idPaisFK` int(11) NOT NULL,
-  `idEventoFK` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pregfrecareas`
---
-
-CREATE TABLE `pregfrecareas` (
-  `idareaPreFrePK` int(11) NOT NULL,
-  `nomAre` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -2342,7 +2275,8 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `ApellidoU`, `telefonoU`, `DocIdentidad`, `correo`, `password`, `last_session`, `activacion`, `token`, `token_password`, `password_request`, `id_tipo`) VALUES
 (1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '45068903', '1', '123', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
-(2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', '1', '1234', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0);
+(2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', '1', '1234', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
+(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-06-21 19:02:41', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -2554,12 +2488,6 @@ ALTER TABLE `fechaevento`
 ALTER TABLE `fixture`
   ADD PRIMARY KEY (`idfixture`),
   ADD KEY `fixture.deportes_idx` (`idDeporte`);
-
---
--- Indices de la tabla `foto`
---
-ALTER TABLE `foto`
-  ADD PRIMARY KEY (`codigo`);
 
 --
 -- Indices de la tabla `foto`
@@ -2981,7 +2909,7 @@ ALTER TABLE `detalleeventos`
 -- AUTO_INCREMENT de la tabla `disciplina`
 --
 ALTER TABLE `disciplina`
-  MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `equipo`
@@ -3023,13 +2951,7 @@ ALTER TABLE `fixture`
 -- AUTO_INCREMENT de la tabla `foto`
 --
 ALTER TABLE `foto`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `foto`
---
-ALTER TABLE `foto`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `galeria`
@@ -3131,31 +3053,13 @@ ALTER TABLE `participanteindividual`
 -- AUTO_INCREMENT de la tabla `participantes`
 --
 ALTER TABLE `participantes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `pregfrecareas`
 --
 ALTER TABLE `pregfrecareas`
   MODIFY `idareaPreFrePK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
---
--- AUTO_INCREMENT de la tabla `participantegrupal`
---
-ALTER TABLE `participantegrupal`
-  MODIFY `idPartGrupal` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `participanteindividual`
---
-ALTER TABLE `participanteindividual`
-  MODIFY `idPartIndividual` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `pregfrecareas`
---
-ALTER TABLE `pregfrecareas`
-  MODIFY `idareaPreFrePK` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `preguntasfrecuentes`
@@ -3305,7 +3209,7 @@ ALTER TABLE `unidadorganizacional`
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `video`
