@@ -50,7 +50,7 @@
         <div class="col-md-12">
 
             <?php
-            if (isset($_SESSION['auth'])){
+            if (isset($_SESSION['id_usuario'])){
                 ?>
 
                 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">

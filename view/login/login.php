@@ -1,51 +1,42 @@
-<main>
-    <div class="container">
-    <body class="login">
-    <div>
-        <img src="./assets/images/panamericanos.png" class="img-responsive text-center" alt="">
-        <div class="login_wrapper">
-            <div class="animate form login_form">
-                <?php
-                if ( isset($_GET['error']) ){
-                    if ( $_GET['error'] == 'authFalse' ){
+<div class="jumbotron">
 
-                        ?>
-
-                        <div class="alert alert-danger" role="alert">
-                            No encontramos tus credenciales en nuestra base de datos.
-                        </div>
-
-                        <?php
-
-                    }
-                }
-                ?>
-                <section class="login_content">
-                    <form action="?c=Login&a=Acceder" method="post">
-                        <h1>Panamericanos</h1>
-                        <div>
-                            <input type="text" name="email" class="form-control" placeholder="Correo Electrónico" required />
-                        </div>
-                        <div>
-                            <input type="password" name="password" class="form-control" placeholder="Contraseña" required/>
-                        </div>
-                        <div>
-                            <button type="submit" name="token" value="Login" class="btn btn-default">Iniciar Sesion</button>
-                            <a class="reset_pass" href="#">Olvidaste Tu contraseña?</a>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="separator">
-                            <div class="clearfix"></div>
-                            <br />
-                            <div>
-                                <h1><i class="fa fa-ticket"></i> Lima 2019</h1>
-                            </div>
-                        </div>
-                    </form>
-                </section>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img src="./assets/images/usuario.jpg" alt="..." class="card-img-top">
+                <div class="card-body">
+                    <h2>Usuario</h2>
+                    <a href="?c=login&a=acceso" class="btn btn-primary" role="button">Iniciar Sesion</a>
+                    <a href="?c=usuario&a=Index" class="btn btn-default" role="button">Registrarse</a>
+                </div>
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img src="./assets/images/administrador.jpg" alt="..." class="card-img-top">
+                <div class="card-body">
+                    <h2>administrador</h2>
+                    <a href="?c=login&a=acceso" class="btn btn-primary" role="button">Iniciar Sesion</a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img src="./assets/images/sponsor.jpg" alt="..." class="card-img-top">
+                <div class="card-body">
+                    <h2>sponsor</h2>
+                    <a href="?c=login&a=acceso" class="btn btn-primary" role="button">Iniciar Sesion</a>
+                </div>
+            </div>
+
+        </div>
+
+
     </div>
-    </body>
+
 </div>
-</main>
+</div>
