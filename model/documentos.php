@@ -1,126 +1,92 @@
 <?php
+
 class Documentos
 {
-	private $pdo;
-    
+    private $pdo;
+
     public $id;
     public $nombre;
     public $documentos;
-    
 
-	public function __CONSTRUCT()
-	{
-		try
-		{
-			$this->pdo = Database::StartUp();     
-		}
-		catch(Exception $e)
-		{
-			die($e->getMessage());
-		}
-	}
 
-	public function Listar()
-	{
-		try
-		{
+    public function __CONSTRUCT()
+    {
+        try {
+            $this->pdo = Database::StartUp();
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function Listar()
+    {
+        try {
 
             $consulta = "CALL SP_GETDOCUMENTOS();";
 
-			$stm = $this->pdo->query($consulta);
+            $stm = $this->pdo->query($consulta);
 
-			return $stm->fetchAll(PDO::FETCH_OBJ);
-		}
-		catch(Exception $e)
-		{
-			die($e->getMessage());
-		}
-	}
+            return $stm->fetchAll(PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 
-	public function Obtener($id)
-	{
-		try 
-		{
-			$stm = $this->pdo
-			          ->prepare("SELECT * FROM alumnos WHERE id = ?");
-			          
+    public function Obtener($id)
+    {
+        try {
+            $consulta = "CALL SP_GETDOCUMENTO(" . $id . ")";
 
-			$stm->execute(array($id));
-			return $stm->fetch(PDO::FETCH_OBJ);
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
-	}
+            $stm = $this->pdo->query($consulta);
 
-	public function Eliminar($id)
-	{
-		try 
-		{
-			$stm = $this->pdo
-			            ->prepare("DELETE FROM alumnos WHERE id = ?");			          
+            //$stm->execute(array($id));
 
-			$stm->execute(array($id));
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
-	}
+            return $stm->fetch(PDO::FETCH_OBJ);
 
-	public function Actualizar($data)
-	{
-		try 
-		{
-			$sql = "UPDATE alumnos SET 
-						Nombre          = ?, 
-						Apellido        = ?,
-                        Correo        = ?,
-						Sexo            = ?, 
-						FechaNacimiento = ?
-				    WHERE id = ?";
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 
-			$this->pdo->prepare($sql)
-			     ->execute(
-				    array(
-                        $data->Nombre, 
-                        $data->Correo,
-                        $data->Apellido,
-                        $data->Sexo,
-                        $data->FechaNacimiento,
-                        $data->id
-					)
-				);
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
-	}
+    public function Eliminar($id)
+    {
+        try {
+            $consulta = "CALL SP_DELDOCUMENTO(" . $id . ")";
+            $stm = $this->pdo->query($consulta);
 
-	public function Registrar(Foto $data)
-	{
-		try 
-		{
+            if ($stm) {
+                return 1;
+            }
 
-			$consulta = "CALL SP_REGDOCUMENTOS('".$data->nombre."' ,'".$data->documentos."' )";
+            //$stm->execute(array($id));
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 
-			$this->pdo->query($consulta);
+    public function Actualizar(Documentos $data)
+    {
+        try {
+            $consulta = "CALL SP_UPDATEDOCUMENTO(" . $data->id . ", '$data->nombre', '$data->documentos')";
 
-		// $this->pdo->prepare($sql)
-		//      ->execute(
-		// 		array(
-        //             $data->Nombre,
-        //             $data->Correo, 
-        //             $data->Apellido, 
-        //             $data->Sexo,
-        //             $data->FechaNacimiento,
-        //             date('Y-m-d')
-        //         )
-		// 	);
+            if ($this->pdo->query($consulta)) {
+                return 1;
+            }
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 
-			return 1;
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
-	}
+    public function Registrar(Documentos $data)
+    {
+        try {
+
+            $consulta = "CALL SP_REGDOCUMENTOS('" . $data->nombre . "' ,'" . $data->documentos . "' )";
+
+            $this->pdo->query($consulta);
+            return 1;
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
 }

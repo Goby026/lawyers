@@ -13,8 +13,7 @@ class VideoController{
 
         session_start();
 
-        $listaEmpleados = $this->getVideos();
-        // $c=0;
+        $videos = $this->model->Listar();
 
         require_once 'view/header.php';
         require_once 'view/video/video.php';
@@ -22,22 +21,53 @@ class VideoController{
 
     }
 
-    public function getVideos(){
-        return $this->model->Listar();
+    //function para llamar la vista videos/crear.php
+    public function registrarVideo(){
+
+        session_start();
+
+        require_once 'view/header.php';
+        require_once "view/video/crear.php";
+        require_once 'view/footer.php';
     }
 
-    public function verDatos(){
-        $nombre = $_POST['txtnombre'];
-        $video = $_POST['txtvideo'];
+    public function Crud(){
 
-        $newvideo = new Video();
+        session_start();
 
-        $newvideo->nombre = $nombre;
-        $newVideo->video = "./assets/images/".$video;
+        $video = new Video();
 
-        $resp = $this->model->Registrar($newvideo);
+        if(isset($_REQUEST['id'])){
+            $video = $this->model->Obtener($_REQUEST['id']);
+        }
 
-        echo $resp;
+        require_once 'view/header.php';
+        require_once "view/video/editar.php";
+        require_once 'view/footer.php';
+    }
 
+    public function Guardar(){
+        $video = new Video();
+
+        $video->codigo = $_REQUEST['codigo'];
+
+        $video->nombre = $_REQUEST['nombre'];
+
+        $cadena = explode("?v=",$_REQUEST['video']);
+
+        $idVideo = end($cadena);
+
+        $video->video = $idVideo;
+
+        $video->codigo > 0
+            ? $this->model->Actualizar($video)
+            : $this->model->Registrar($video);
+
+        header('Location: ?c=video&a=index');
+    }
+
+    public function Eliminar(){
+        $this->model->Eliminar($_REQUEST['id']);
+        header('Location: ?c=video&a=index');
     }
 }

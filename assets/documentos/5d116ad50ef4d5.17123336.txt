@@ -1,0 +1,27 @@
+Cómo saber el Ping o Latencia...
+Ping, también conocido como "latencia" o latency".
+
+Hola, empezaré primero para los que no saben, que es el ping?
+El ping o latencia es el tiempo que tarda la información en viajar desde tu computadora hasta otra, y regresar.
+Un ping promedio es de 200 a 300 milisegundos, los que tienen internet satelital pueden tenerlo por arriba del segundo, que es mucho.
+Esto se asocia principalmente con los juegos por internet y para saberlo:
+
+Para los que tienen XP (intenten en otra versión de Windows), vayan a Inicio, Ejecutar y escriman cmd, enter.
+En la ventana de comandos que les aparece escriban:
+ping[espacio][pagina web o direccion IP]{ENTER}
+Por ejemplo, si quieren checar el ping a softonic.com, sería:
+ping www.softonic.com[enter]
+Y abajo les aparece el numero de paquetes enviados, el retraso de cada uno, y el promedio. Lo normal iría de los 200 a los 300, 
+menos de 200 es bueno, menos de 100 es excelente, mas de 300 es regular, mas de 400 ya es malo (para los jugadores)
+
+
+Los que tienen otro sistema operativo o que no les funcionó el método anterior:
+
+Vayan a SpeedTest.net, al estar ahí seleccionen el servidor (pirámide) mas cercano (el naranja). Den click y empezará la prueba 
+de velocidad de descarga/subida, chequeo de ping y direccion IP. Me encanta esta página, recuenrden que no es lo mismo kilobytes(KB) que kilobits(Kb).
+Un kilobit son 1024 bits de información
+1024Kilobits forman un KiloByte.
+
+Muchas veces los ISP (digamos que los dueños del servicio de internet que tienes contratado) usan el término Kilobit para que los 
+clientes lo vean más rápido, por ejemplo ellos anuncian una velocidad de conexión de 1Mega, sin que las personas sepan realmente que la 
+velocidad máxima de descarga será de aproximadamente 100KiloBytes por segundo. Muy buena forma de engañar 

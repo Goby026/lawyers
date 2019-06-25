@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-06-2019 a las 02:10:32
+-- Tiempo de generación: 25-06-2019 a las 02:27:36
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -365,6 +365,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_COMITE` ()  BEGIN
 	INNER JOIN tiporepresentante tr on c.idTipoRepresentante = tr.idTipoRepresentante;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELDOCUMENTO` (`_codigo` INT)  BEGIN
+	DELETE FROM `documentos` WHERE id = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELFOTO` (`_codigo` INT)  BEGIN
+	DELETE FROM foto WHERE codigo = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELVIDEO` (`_codigo` INT)  BEGIN
+	DELETE FROM `video` WHERE codigo = _codigo;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_eliminarf_datos` (IN `codigoF` INT)  NO SQL
 BEGIN
 delete from foto
@@ -391,6 +403,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDISCIPLINA` ()  BEGIN
 SELECT * FROM `disciplina` WHERE 1;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDOCUMENTO` (`_codigo` INT)  BEGIN
+	select * from documentos where id = _codigo;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDOCUMENTOS` ()  BEGIN
 SELECT * FROM `documentos` WHERE 1;
 END$$
@@ -400,12 +416,20 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFIXTURE` ()  BEGIN
 	INNER JOIN deportes d ON f.idDeporte = d.idDeporte;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFOTO` (`id` INT)  BEGIN
+	SELECT * FROM foto WHERE codigo = id;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFOTOS` ()  BEGIN
 	SELECT * FROM `foto` WHERE 1;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETPARTICIPANTES` ()  BEGIN
 SELECT * FROM `participantes` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETVIDEO` (`_codigo` INT)  BEGIN
+	SELECT * FROM video WHERE codigo = _codigo;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETVIDEOS` ()  BEGIN
@@ -467,7 +491,7 @@ INSERT INTO disciplina (disciplina,sede, direccion) VALUES (_dis, _sed,_direcc);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGDOCUMENTOS` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
-INSERT INTO documentos (nombre, documentos) VALUES (_name, _picture);
+	INSERT INTO documentos (nombre, documentos) VALUES (_name, _picture);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGFOTO` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
@@ -489,6 +513,18 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_TIPOINSTITUCIONAL` ()  BEGIN
 	SELECT ti.NombreInstitucional, i.descripInstitucional, i.imagenInstitucional FROM institucional i
 	INNER JOIN tipoinstitucional ti ON i.idTipoInstitucional = ti.idTipoInstitucional;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEDOCUMENTO` (`_codigo` INT, `_nombre` VARCHAR(200), `_documento` VARCHAR(200))  BEGIN
+	UPDATE `documentos` SET `nombre` = _nombre, `documentos` = documento WHERE `id` = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEFOTO` (`_codigo` INT, `_nombre` VARCHAR(100), `_foto` VARCHAR(200))  BEGIN
+UPDATE foto SET nombre = _nombre , foto = _foto WHERE codigo = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEVIDEO` (`_cogido` INT, `_nombre` VARCHAR(200), `_video` VARCHAR(200))  BEGIN
+	UPDATE `video` SET `nombre` = _nombre, `video` = _video WHERE `codigo` = _cogido;
 END$$
 
 DELIMITER ;
@@ -974,9 +1010,17 @@ INSERT INTO `disciplina` (`id_juego`, `disciplina`, `sede`, `direccion`) VALUES
 
 CREATE TABLE `documentos` (
   `id` int(11) NOT NULL,
-  `nombre` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
-  `documentos` varchar(150) COLLATE utf8_spanish2_ci DEFAULT NULL
+  `nombre` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `documentos` text COLLATE utf8_spanish2_ci,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `documentos`
+--
+
+INSERT INTO `documentos` (`id`, `nombre`, `documentos`, `fechaSistema`) VALUES
+(1, 'Estatuto - Colegio de Ingenieros', './assets/documentos/5d116451de05b6.92281592.pdf', '2019-06-25 00:25:27');
 
 -- --------------------------------------------------------
 
@@ -1146,8 +1190,8 @@ INSERT INTO `fixture` (`idfixture`, `idDeporte`, `fechaInicio`, `fechaFinal`, `f
 
 CREATE TABLE `foto` (
   `codigo` int(11) NOT NULL,
-  `nombre` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL,
-  `foto` varchar(45) COLLATE utf8_spanish2_ci DEFAULT NULL
+  `nombre` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `foto` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 --
@@ -1155,9 +1199,14 @@ CREATE TABLE `foto` (
 --
 
 INSERT INTO `foto` (`codigo`, `nombre`, `foto`) VALUES
-(1, 'prueba', './assets/images/webModel.jpeg'),
-(2, 'prueba 2', './assets/images/atleta.jpg'),
-(3, 'Nuevo documento', './assets/images/');
+(1, 'Superman', './assets/images/fotos/5d0e68bea03337.48005350.png'),
+(4, 'Hulk', './assets/images/fotos/5d0e682e91fee7.96808444.png'),
+(6, 'Batman', './assets/images/fotos/5d0e6874ed76c7.32666593.png'),
+(8, 'Daredevil', './assets/images/fotos/5d0e6fc634f510.40003850.png'),
+(9, 'Linterna verde', './assets/images/fotos/5d0e5f9e380697.92599322.png'),
+(12, 'Namor', './assets/images/fotos/5d0e75a735f6f9.97179006.png'),
+(14, 'Cap. America', './assets/images/fotos/5d0e7a8842bae7.40642071.png'),
+(15, 'Mujer invisible', './assets/images/fotos/5d0e7b65d92319.94351931.png');
 
 -- --------------------------------------------------------
 
@@ -2276,7 +2325,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `ApellidoU`, `telefonoU`, `DocIdentidad`, `correo`, `password`, `last_session`, `activacion`, `token`, `token_password`, `password_request`, `id_tipo`) VALUES
 (1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '45068903', '1', '123', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
 (2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', '1', '1234', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
-(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-06-21 19:02:41', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
+(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-06-24 16:51:40', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -2289,6 +2338,16 @@ CREATE TABLE `video` (
   `nombre` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
   `video` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `video`
+--
+
+INSERT INTO `video` (`codigo`, `nombre`, `video`) VALUES
+(6, 'Crazy Town - Butterfly (Official Video)', '6FEDrU85FLE'),
+(10, 'The Wallflowers - One Headlight (Official Video)', 'Zzyfcys1aLM'),
+(11, 'Dishwalla Angels Or Devils lyrics', '8tioia6duvE'),
+(12, 'Radiohead - Creep (Best Live Performance)', 'k3_RU30tEIE');
 
 -- --------------------------------------------------------
 
@@ -2912,6 +2971,12 @@ ALTER TABLE `disciplina`
   MODIFY `id_juego` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de la tabla `documentos`
+--
+ALTER TABLE `documentos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT de la tabla `equipo`
 --
 ALTER TABLE `equipo`
@@ -2951,7 +3016,7 @@ ALTER TABLE `fixture`
 -- AUTO_INCREMENT de la tabla `foto`
 --
 ALTER TABLE `foto`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT de la tabla `galeria`
@@ -3215,7 +3280,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `video`
 --
 ALTER TABLE `video`
-  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `codigo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `vision`

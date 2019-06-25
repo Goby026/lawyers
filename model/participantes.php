@@ -7,8 +7,8 @@ class Participantes
     public $nombre;
     public $apellidop;
     public $apellidom;
-    public $pais;
     public $foto;
+    public $pais;
     
 
 	public function __CONSTRUCT()
@@ -40,90 +40,70 @@ class Participantes
 		}
 	}
 
-	public function Obtener($id)
-	{
-		try 
-		{
-			$stm = $this->pdo
-			          ->prepare("SELECT * FROM alumnos WHERE id = ?");
-			          
+    public function Obtener($id)
+    {
+        try
+        {
+            $consulta = "CALL SP_GETPARTICIPANTE(".$id.")";
 
-			$stm->execute(array($id));
-			return $stm->fetch(PDO::FETCH_OBJ);
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
-	}
+            $stm = $this->pdo->query($consulta);
 
-	public function Eliminar($id)
-	{
-		try 
-		{
-			$stm = $this->pdo
-			            ->prepare("DELETE FROM alumnos WHERE id = ?");			          
+            //$stm->execute(array($id));
 
-			$stm->execute(array($id));
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
-	}
+            return $stm->fetch(PDO::FETCH_OBJ);
 
-	public function Actualizar($data)
-	{
-		try 
-		{
-			$sql = "UPDATE alumnos SET 
-						Nombre          = ?, 
-						Apellido        = ?,
-                        Correo        = ?,
-						Sexo            = ?, 
-						FechaNacimiento = ?
-				    WHERE id = ?";
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
 
-			$this->pdo->prepare($sql)
-			     ->execute(
-				    array(
-                        $data->Nombre, 
-                        $data->Correo,
-                        $data->Apellido,
-                        $data->Sexo,
-                        $data->FechaNacimiento,
-                        $data->id
-					)
-				);
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
-	}
+    public function Eliminar($id)
+    {
+        try
+        {
+            $consulta = "CALL SP_DELPARTICIPANTE(".$id.")";
+            $stm = $this->pdo->query($consulta);
 
-	public function Registrar(Participantes $data)
-	{
-		try 
-		{
+            if ($stm){
+                return 1;
+            }
 
-			$consulta = "CALL SP_REGPARTICIPANTES('".$data->nombre."' ,'".$data->apellidop."','".$data->apellidom."','".$data->pais."','".$data->foto."' )";
+            //$stm->execute(array($id));
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
 
-			$this->pdo->query($consulta);
+    public function Actualizar(Participantes $data)
+    {
+        try
+        {
+            $consulta = "CALL SP_UPDATEPARTICIPANTE(".$data->id.", '$data->nombre', '$data->apellidop', '$data->apellidom', '$data->pais', '$data->foto')";
 
-		// $this->pdo->prepare($sql)
-		//      ->execute(
-		// 		array(
-        //             $data->Nombre,
-        //             $data->Correo, 
-        //             $data->Apellido, 
-        //             $data->Sexo,
-        //             $data->FechaNacimiento,
-        //             date('Y-m-d')
-        //         )
-		// 	);
+            if ($this->pdo->query($consulta)){
+                return 1;
+            }
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
 
-			return 1;
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
-	}
+    public function Registrar(Participantes $data)
+    {
+        try
+        {
+
+            $consulta = "CALL SP_REGPARTICIPANTES('".$data->nombre."' ,'".$data->apellidop."','".$data->apellidom."','".$data->pais."','".$data->foto."' )";
+
+            $this->pdo->query($consulta);
+            return 1;
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
 }

@@ -39,88 +39,67 @@ class Video
 
 	public function Obtener($id)
 	{
-		try 
-		{
-			$stm = $this->pdo
-			          ->prepare("SELECT * FROM alumnos WHERE id = ?");
-			          
+        try
+        {
+            $consulta = "CALL SP_GETVIDEO(".$id.")";
 
-			$stm->execute(array($id));
-			return $stm->fetch(PDO::FETCH_OBJ);
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
+            $stm = $this->pdo->query($consulta);
+
+            //$stm->execute(array($id));
+
+            return $stm->fetch(PDO::FETCH_OBJ);
+
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
 	}
 
 	public function Eliminar($id)
 	{
-		try 
-		{
-			$stm = $this->pdo
-			            ->prepare("DELETE FROM alumnos WHERE id = ?");			          
+        try
+        {
+            $consulta = "CALL SP_DELVIDEO(".$id.")";
+            $stm = $this->pdo->query($consulta);
 
-			$stm->execute(array($id));
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
+            if ($stm){
+                return 1;
+            }
+
+            //$stm->execute(array($id));
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
 	}
 
-	public function Actualizar($data)
+	public function Actualizar(Video $data)
 	{
-		try 
-		{
-			$sql = "UPDATE alumnos SET 
-						Nombre          = ?, 
-						Apellido        = ?,
-                        Correo        = ?,
-						Sexo            = ?, 
-						FechaNacimiento = ?
-				    WHERE id = ?";
+        try
+        {
+            $consulta = "CALL SP_UPDATEVIDEO(".$data->codigo.", '$data->nombre', '$data->video')";
 
-			$this->pdo->prepare($sql)
-			     ->execute(
-				    array(
-                        $data->Nombre, 
-                        $data->Correo,
-                        $data->Apellido,
-                        $data->Sexo,
-                        $data->FechaNacimiento,
-                        $data->id
-					)
-				);
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
+            if ($this->pdo->query($consulta)){
+                return 1;
+            }
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
 	}
 
 	public function Registrar(Video $data)
 	{
-		try 
-		{
+        try
+        {
 
-			$consulta = "CALL SP_REGVIDEO('".$data->nombre."' ,'".$data->video."' )";
+            $consulta = "CALL SP_REGVIDEO('".$data->nombre."' ,'".$data->video."' )";
 
-			$this->pdo->query($consulta);
-
-		// $this->pdo->prepare($sql)
-		//      ->execute(
-		// 		array(
-        //             $data->Nombre,
-        //             $data->Correo, 
-        //             $data->Apellido, 
-        //             $data->Sexo,
-        //             $data->FechaNacimiento,
-        //             date('Y-m-d')
-        //         )
-		// 	);
-
-			return 1;
-		} catch (Exception $e) 
-		{
-			die($e->getMessage());
-		}
+            $this->pdo->query($consulta);
+            return 1;
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
 	}
 }

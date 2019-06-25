@@ -13,7 +13,7 @@ class DocumentosController{
 
         session_start();
 
-        $listaEmpleados = $this->getDocumentos();
+        $documentos = $this->model->Listar();
         // $c=0;
 
         require_once 'view/header.php';
@@ -22,22 +22,90 @@ class DocumentosController{
 
     }
 
-    public function getDocumentos(){
-        return $this->model->Listar();
+    //function para llamar la vista documentos/crear.php
+    public function registrarDocumento(){
+
+        session_start();
+
+        require_once 'view/header.php';
+        require_once "view/documentos/crear.php";
+        require_once 'view/footer.php';
     }
 
-    public function verDatos(){
-        $nombre = $_POST['txtnombre'];
-        $documentos = $_POST['txtdocumentos'];
+    public function Crud(){
 
-        $newDocumentos = new Foto();
+        session_start();
 
-        $newDocumentos->nombre = $nombre;
-        $newDocumentos->documentos = "./assets/images/".$documentos;
+        $documento = new Documentos();
 
-        $resp = $this->model->Registrar($newDocumentos);
+        if(isset($_REQUEST['id'])){
+            $documento = $this->model->Obtener($_REQUEST['id']);
+        }
 
-        echo $resp;
+        require_once 'view/header.php';
+        require_once "view/documentos/editar.php";
+        require_once 'view/footer.php';
+    }
 
+    public function Guardar(){
+        $documento = new Documentos();
+
+        $documento->id = $_REQUEST['codigo'];
+
+        $documento->nombre = $_REQUEST['nombre'];
+
+        if (isset($_FILES['documento'])){
+            $archivoSubido = $this->subirDocumento();
+            $documento->documentos = $archivoSubido;
+        }
+
+        $documento->id > 0
+            ? $this->model->Actualizar($documento)
+            : $this->model->Registrar($documento);
+
+        header('Location: ?c=documentos&a=index');
+    }
+
+    public function subirDocumento(){
+        $fileDestination = "--";
+
+        $fileName = $_FILES['documento']['name'];
+        $fileTmpName = $_FILES['documento']['tmp_name'];
+        $fileSize = $_FILES['documento']['size'];
+        $fileError = $_FILES['documento']['error'];
+        $fileType = $_FILES['documento']['type'];
+
+        $fileExt = explode(".",$fileName);
+        $fileActualExt = strtolower( end($fileExt)); // end() solo toma la ultima posicion del array $fileExt
+
+        $allowed = array("jpg", "jpeg", "png", "pdf", "txt");
+
+        if (in_array($fileActualExt, $allowed)){
+            if ($fileError === 0){
+
+                if ($fileSize < 5000000){ //menor a 5mb
+                    $fileNameNew = uniqid("", true).".".$fileActualExt;
+                    $fileDestination = "./assets/documentos/".$fileNameNew;
+
+                    move_uploaded_file($fileTmpName ,$fileDestination);
+
+                }else{
+                    echo "El archivo es demasiado grande.";
+                }
+
+            }else{
+                echo "Hubo un problema subiendo el archivo.";
+            }
+
+        }else{
+            echo "Tipo de imagen incorrecto, por favor seleccione solo archivos .jpg - .jpeg - .png";
+        }
+
+        return $fileDestination;
+    }
+
+    public function Eliminar(){
+        $this->model->Eliminar($_REQUEST['id']);
+        header('Location: ?c=documentos&a=index');
     }
 }

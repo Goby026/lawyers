@@ -41,12 +41,14 @@ class Foto
 	{
 		try 
 		{
-			$stm = $this->pdo
-			          ->prepare("SELECT * FROM alumnos WHERE id = ?");
-			          
+		    $consulta = "CALL SP_GETFOTO(".$id.")";
 
-			$stm->execute(array($id));
+			$stm = $this->pdo->query($consulta);
+
+			//$stm->execute(array($id));
+
 			return $stm->fetch(PDO::FETCH_OBJ);
+
 		} catch (Exception $e) 
 		{
 			die($e->getMessage());
@@ -57,40 +59,30 @@ class Foto
 	{
 		try 
 		{
-			$stm = $this->pdo
-			            ->prepare("DELETE FROM alumnos WHERE id = ?");			          
+		    $consulta = "CALL SP_DELFOTO(".$id.")";
+			$stm = $this->pdo->query($consulta);
 
-			$stm->execute(array($id));
+			if ($stm){
+			    return 1;
+            }
+
+			//$stm->execute(array($id));
 		} catch (Exception $e) 
 		{
 			die($e->getMessage());
 		}
 	}
 
-	public function Actualizar($data)
+	public function Actualizar(Foto $data)
 	{
-		try 
+		try
 		{
-			$sql = "UPDATE alumnos SET 
-						Nombre          = ?, 
-						Apellido        = ?,
-                        Correo        = ?,
-						Sexo            = ?, 
-						FechaNacimiento = ?
-				    WHERE id = ?";
+			$consulta = "CALL SP_UPDATEFOTO(".$data->codigo.", '$data->nombre', '$data->foto')";
 
-			$this->pdo->prepare($sql)
-			     ->execute(
-				    array(
-                        $data->Nombre, 
-                        $data->Correo,
-                        $data->Apellido,
-                        $data->Sexo,
-                        $data->FechaNacimiento,
-                        $data->id
-					)
-				);
-		} catch (Exception $e) 
+			if ($this->pdo->query($consulta)){
+			    return 1;
+            }
+		} catch (Exception $e)
 		{
 			die($e->getMessage());
 		}
@@ -98,27 +90,14 @@ class Foto
 
 	public function Registrar(Foto $data)
 	{
-		try 
+		try
 		{
 
 			$consulta = "CALL SP_REGFOTO('".$data->nombre."' ,'".$data->foto."' )";
 
 			$this->pdo->query($consulta);
-
-		// $this->pdo->prepare($sql)
-		//      ->execute(
-		// 		array(
-        //             $data->Nombre,
-        //             $data->Correo, 
-        //             $data->Apellido, 
-        //             $data->Sexo,
-        //             $data->FechaNacimiento,
-        //             date('Y-m-d')
-        //         )
-		// 	);
-
 			return 1;
-		} catch (Exception $e) 
+		} catch (Exception $e)
 		{
 			die($e->getMessage());
 		}

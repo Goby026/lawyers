@@ -1,0 +1,34 @@
+Resulta que por defecto Windows XP reserva un 20% del ancho de banda de nuestra conexión (para el Windows Update y otros servicios de comunicación más).
+
+Hay que decir que, en principio, se trata únicamente de una reserva, es decir, que si no hay ningún servicio usandolo, en teoría se debería de aprovechar. 
+
+Sin embargo, hay gente que dice que esto no es así, y que nunca aprovechamos ese 20%. No está claro, aunque la postura oficial de Microsoft es que se libera lo que no se usa.
+
+Pero esto es algo que podemos evitar, y poder ganar ese 20% que nos quita, y que no se utiliza la mayoría de las veces.
+
+Sólo puede hacerse en XP Professional (para la versión Home deberia acudirse al registro).
+
+Para ello, vamos a Inicio / Ejecutar y ejecutamos el archivo gpedit.msc
+
+Allí se nos abrirá la ventana de Directivas de Grupo y varias opciones en forma de arbol. 
+
+Hacemos click en la de Configuración del equipo.
+
+Repetimoslos siguientes pasos: Doble click en Plantillas administrativas, doble click en Red, doble click en Programador de paquetes QoS.
+
+Ahora damos al botón derecho del ratón sobre Limitar ancho de banda reservado, y pulsamos sobre Propiedades.
+
+Ahora veremos que aparece como Deshabilitado. Sin embargo, pone textualmente: "De forma predeterminada, el Programador de paquetes limita el sistema al 20 por 
+
+ciento del ancho de banda de una conexión. Pero puede usar esta configuración para sobrescribir la predeterminada."
+
+Según esto, lo que podemos hacer es Habilitarlo y establecer un % bajo (por ejemplo un 1% o un 5%).
+
+
+
+
+Recuperar archivos de USB infectado:
+
+1° conectar el usb y eliminar los archivos que esten con acceso directo ya que esos son los archivos infectados
+2° iniciar simbolo de sistema (cmd) e ingresar a la unidad de usb (ejemplo: "f:")
+3° una ves dentro de la unidad escribir el siguiente comando: Attrib/d /s -r -h -s *.*

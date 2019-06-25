@@ -13,7 +13,7 @@ class ParticipantesController{
 
         session_start();
 
-        $listaEmpleados = $this->getParticipantes();
+        $participantes = $this->model->Listar();
         // $c=0;
 
         require_once 'view/header.php';
@@ -22,28 +22,94 @@ class ParticipantesController{
 
     }
 
-    public function getParticipantes(){
-        return $this->model->Listar();
+
+    public function registrarParticipantes(){
+
+        session_start();
+
+        require_once 'view/header.php';
+        require_once "view/participantes/crear.php";
+        require_once 'view/footer.php';
     }
 
-    public function verDatos(){
-        $nombre = $_POST['txtNombre'];
-        $apellidop = $_POST['txtApellidoP'];
-        $apellidom = $_POST['txtApellidoM'];
-        $pais = $_POST['txtPais'];
-        $foto = $_POST['txtfoto'];
+    public function Crud(){
 
-        $newParticipantes = new Participantes();
+        session_start();
 
-        $newParticipantes->nombre = $nombre;
-        $newParticipantes->apellidop = $apellidop;
-        $newParticipantes->apellidom = $apellidom;
-        $newParticipantes->pais = $pais;
-        $newParticipantes->foto = "./assets/images/".$foto;
+        $participante = new Participantes();
 
-        $resp = $this->model->Registrar($newParticipantes);
+        if(isset($_REQUEST['id'])){
+            $participante = $this->model->Obtener($_REQUEST['id']);
+        }
 
-        echo $resp;
+        require_once 'view/header.php';
+        require_once "view/participantes/editar.php";
+        require_once 'view/footer.php';
+    }
 
+    public function Guardar(){
+        $participante = new Participantes();
+
+        $participante->id = $_REQUEST['codigo'];
+
+        $participante->nombre = $_REQUEST['nombre'];
+        $participante->apellidop = $_REQUEST['apellidop'];
+        $participante->apellidom = $_REQUEST['apellidom'];
+        $participante->pais = $_REQUEST['pais'];
+        $participante->foto = null;
+
+        if (isset($_FILES['foto'])){
+            $archivoSubido = $this->subirImagen();
+            $participante->foto = $archivoSubido;
+        }
+
+        $participante->id > 0
+            ? $this->model->Actualizar($participante)
+            : $this->model->Registrar($participante);
+
+        header('Location: ?c=participantes&a=index');
+    }
+
+    public function subirImagen(){
+        $fileDestination = "--";
+
+        $fileName = $_FILES['foto']['name'];
+        $fileTmpName = $_FILES['foto']['tmp_name'];
+        $fileSize = $_FILES['foto']['size'];
+        $fileError = $_FILES['foto']['error'];
+        $fileType = $_FILES['foto']['type'];
+
+        $fileExt = explode(".",$fileName);
+        $fileActualExt = strtolower( end($fileExt)); // end() solo toma la ultima posicion del array $fileExt
+
+        $allowed = array("jpg", "jpeg", "png");
+
+        if (in_array($fileActualExt, $allowed)){
+            if ($fileError === 0){
+
+                if ($fileSize < 500000){ //menor a 5mb
+                    $fileNameNew = uniqid("", true).".".$fileActualExt;
+                    $fileDestination = "./assets/images/participantes/".$fileNameNew;
+
+                    move_uploaded_file($fileTmpName ,$fileDestination);
+
+                }else{
+                    echo "El archivo es demasiado grande.";
+                }
+
+            }else{
+                echo "Hubo un problema subiendo el archivo.";
+            }
+
+        }else{
+            echo "Tipo de imagen incorrecto, por favor seleccione solo archivos .jpg - .jpeg - .png";
+        }
+
+        return $fileDestination;
+    }
+
+    public function Eliminar(){
+        $this->model->Eliminar($_REQUEST['id']);
+        header('Location: ?c=participantes&a=index');
     }
 }
