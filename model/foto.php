@@ -92,7 +92,6 @@ class Foto
 	{
 		try
 		{
-
 			$consulta = "CALL SP_REGFOTO('".$data->nombre."' ,'".$data->foto."' )";
 
 			$this->pdo->query($consulta);

@@ -30,7 +30,7 @@
 <!--                    </div>-->
 <!--                </div>-->
 
-                <div class="col-md-6">
+                <div class="col-md-6 mt-3">
                     <img src="<?php echo $r->imagenInstitucional; ?>" class="card-img" alt="...">
                 </div>
                 <div class="col-md-6">

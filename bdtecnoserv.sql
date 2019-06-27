@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-06-2019 a las 02:27:36
+-- Tiempo de generación: 27-06-2019 a las 03:47:02
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -373,6 +373,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELFOTO` (`_codigo` INT)  BEGIN
 	DELETE FROM foto WHERE codigo = _codigo;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELPARTICIPANTE` (`_codigo` INT)  BEGIN
+	DELETE FROM `participantes` WHERE id = _codigo;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELVIDEO` (`_codigo` INT)  BEGIN
 	DELETE FROM `video` WHERE codigo = _codigo;
 END$$
@@ -399,6 +403,16 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDECRETO` ()  BEGIN
 	SELECT * FROM bdtecnoserv.decreto;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDEPORTES` ()  BEGIN
+	SELECT * FROM deportes;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDETALLEEVENTOS` ()  BEGIN
+	select * from eventos e
+	inner join detalleeventos de on e.idEvento = de.idEvento
+	inner join pais p on de.idPais = p.idPais;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDISCIPLINA` ()  BEGIN
 SELECT * FROM `disciplina` WHERE 1;
 END$$
@@ -409,6 +423,21 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDOCUMENTOS` ()  BEGIN
 SELECT * FROM `documentos` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETEVENTO` (`_codigo` INT)  BEGIN
+	select * from eventos e
+	inner join sedes s on e.idSede = s.idSede
+	inner join deportes d on e.idDeportes = d.idDeporte
+    inner join resutado r on e.idEvento = r.idEvento
+	where e.idEvento = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETEVENTOS` ()  BEGIN
+    select * from eventos e
+	inner join resutado r on r.idEvento = e.idEvento
+	inner join deportes d on e.idDeportes = d.idDeporte
+	inner join sedes s on e.idSede = s.idSede;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFIXTURE` ()  BEGIN
@@ -424,8 +453,22 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFOTOS` ()  BEGIN
 	SELECT * FROM `foto` WHERE 1;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETPARTICIPANTE` (`_codigo` INT)  BEGIN
+	select * from participantes where id = _codigo;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETPARTICIPANTES` ()  BEGIN
 SELECT * FROM `participantes` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETRESULTADOS` ()  BEGIN
+	select * from resutado r
+	inner join eventos e on r.idEvento = e.idEvento
+	inner join deportes d on e.idDeportes = d.idDeporte;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETSEDES` ()  BEGIN
+	SELECT * FROM sedes;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETVIDEO` (`_codigo` INT)  BEGIN
@@ -494,12 +537,24 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGDOCUMENTOS` (`_name` VARCHAR(
 	INSERT INTO documentos (nombre, documentos) VALUES (_name, _picture);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGEVENTO` (`_idSede` INT, `_idHorarioEventos` INT, `_direccion` VARCHAR(200), `_idDeportes` INT, `_fecha` DATE, `_estado` INT)  BEGIN
+	INSERT INTO `eventos`(`idSede`,`idHorarioEventos`,`direccion`,`idDeportes`,`fecha`,`estado`)
+	VALUES (_idSede,_idHorarioEventos,_direccion,_idDeportes,_fecha,_estado);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGFOTO` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
 	INSERT INTO foto (nombre, foto) VALUES (_name, _picture);
 END$$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGPARTICIPANTES` (`_name` VARCHAR(200), `_picture` VARCHAR(200), `_from` VARCHAR(200), `_apeM` VARCHAR(200), `_ApeP` VARCHAR(200))  BEGIN
-INSERT INTO participantes (Nombre, Foto, Pais, ApellidoM, ApellidoP) VALUES (_name, _picture,_from,_apeM,_apeP);
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGPARTICIPANTES` (`_name` VARCHAR(200), `_apeP` VARCHAR(200), `_apeM` VARCHAR(200), `_from` VARCHAR(200), `_picture` TEXT)  BEGIN
+	INSERT INTO participantes (Nombre, ApellidoP, ApellidoM, Pais, Foto ) VALUES (_name,_apeP,_apeM,_from, _picture);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGRESULTADO` (`_idevento` INT, `_pais1` VARCHAR(100), `_pais2` VARCHAR(100), `_res1` DOUBLE, `_res2` DOUBLE)  BEGIN
+	INSERT INTO `resutado`
+	(`idEvento`,`pais1`,`pais2`,`res1`,`res2`)
+	VALUES
+	(_idevento,_pais1,_pais2,_res1,_res2);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGVIDEO` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
@@ -516,11 +571,46 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_TIPOINSTITUCIONAL` ()  BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEDOCUMENTO` (`_codigo` INT, `_nombre` VARCHAR(200), `_documento` VARCHAR(200))  BEGIN
-	UPDATE `documentos` SET `nombre` = _nombre, `documentos` = documento WHERE `id` = _codigo;
+	UPDATE `documentos` SET `nombre` = _nombre, `documentos` = _documento WHERE `id` = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEEVENTO` (`_idevento` INT, `_idsede` INT, `_idHorarioEventos` INT, `_direccion` VARCHAR(100), `_idDeportes` INT, `_fecha` DATE, `_estado` INT)  BEGIN
+	UPDATE `eventos`
+	SET
+	`idSede` = _idsede,
+	`idHorarioEventos` = _idHorarioEventos,
+	`direccion` = _direccion,
+	`idDeportes` = _idDeportes,
+	`fecha` = _fecha,
+	`estado` = _estado
+	WHERE `idEvento` = _idevento;
+    
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEFOTO` (`_codigo` INT, `_nombre` VARCHAR(100), `_foto` VARCHAR(200))  BEGIN
 UPDATE foto SET nombre = _nombre , foto = _foto WHERE codigo = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEPARTICIPANTE` (`_codigo` INT, `_nombre` VARCHAR(200), `_apellidop` VARCHAR(200), `_apellidom` VARCHAR(200), `_pais` VARCHAR(100), `_foto` VARCHAR(200))  BEGIN
+	UPDATE `participantes`
+	SET
+	`Nombre` = _nombre,
+	`ApellidoP` = _apellidop,
+	`ApellidoM` = _apellidom,
+	`Pais` = _pais,
+	`Foto` = _foto
+	WHERE `id` = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATERESULTADO` (`_idresutado` INT, `_idEvento` INT, `_pais1` VARCHAR(200), `_pais2` VARCHAR(200), `_res1` VARCHAR(200), `_res2` VARCHAR(200))  BEGIN
+	UPDATE `resutado`
+	SET
+	`idEvento` = _idEvento,
+	`pais1` = _pais1,
+	`pais2` = _pais2,
+	`res1` = _res1,
+	`res2` = _res2	
+	WHERE `idresutado` = _idresutado;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEVIDEO` (`_cogido` INT, `_nombre` VARCHAR(200), `_video` VARCHAR(200))  BEGIN
@@ -979,8 +1069,18 @@ INSERT INTO `detalledeporte` (`idDetalleDeporte`, `descripcionDeporte`) VALUES
 CREATE TABLE `detalleeventos` (
   `idDetalleEvento` int(11) NOT NULL,
   `idEvento` int(11) DEFAULT NULL,
-  `idDeportista` int(11) DEFAULT NULL
+  `idDeportista` int(11) DEFAULT NULL,
+  `idPais` int(11) DEFAULT NULL,
+  `score` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `detalleeventos`
+--
+
+INSERT INTO `detalleeventos` (`idDetalleEvento`, `idEvento`, `idDeportista`, `idPais`, `score`) VALUES
+(1, 1, NULL, 1, 71),
+(2, 1, NULL, 2, 76);
 
 -- --------------------------------------------------------
 
@@ -1020,7 +1120,9 @@ CREATE TABLE `documentos` (
 --
 
 INSERT INTO `documentos` (`id`, `nombre`, `documentos`, `fechaSistema`) VALUES
-(1, 'Estatuto - Colegio de Ingenieros', './assets/documentos/5d116451de05b6.92281592.pdf', '2019-06-25 00:25:27');
+(1, 'Estatuto del Colegio de Ingenieros', './assets/documentos/5d116ba1156bb0.68440692.pdf', '2019-06-25 00:32:33'),
+(4, 'Ampliar ancho de banda', './assets/documentos/5d116c2b17c198.98283124.txt', '2019-06-25 00:34:51'),
+(5, 'Análisis de requerimientos funcionales', './assets/documentos/5d116c942538a4.51984678.pdf', '2019-06-25 00:36:36');
 
 -- --------------------------------------------------------
 
@@ -1076,16 +1178,49 @@ CREATE TABLE `eventos` (
   `idHorarioEventos` int(11) DEFAULT NULL,
   `direccion` varchar(100) DEFAULT NULL,
   `idDeportes` varchar(45) DEFAULT NULL,
-  `idConfig_Sede_Deporte` varchar(45) DEFAULT NULL
+  `fecha` datetime DEFAULT NULL,
+  `estado` int(11) DEFAULT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `eventos`
 --
 
-INSERT INTO `eventos` (`idEvento`, `idSede`, `idHorarioEventos`, `direccion`, `idDeportes`, `idConfig_Sede_Deporte`) VALUES
-(1, 1, 1, 'av. probando', '3', '1'),
-(3, 4, 1, 'av. seg prueba', '6', '1');
+INSERT INTO `eventos` (`idEvento`, `idSede`, `idHorarioEventos`, `direccion`, `idDeportes`, `fecha`, `estado`, `fechaSistema`) VALUES
+(1, 1, 1, '', '3', '1970-01-01 00:00:00', 1, '2019-06-27 01:38:57'),
+(3, 4, 1, 'av. seg prueba', '6', NULL, NULL, '2019-06-25 23:18:50'),
+(4, 3, 1, '', '1', '2019-06-26 00:00:00', 1, '2019-06-26 02:34:24'),
+(5, 2, 1, '', '1', '2019-06-27 00:00:00', 1, '2019-06-26 02:36:31'),
+(6, 2, 1, '', '5', '2019-06-27 00:00:00', 1, '2019-06-26 02:39:44'),
+(7, 1, 1, '', '2', '2019-06-28 00:00:00', 1, '2019-06-26 02:42:08'),
+(8, 6, 1, '', '8', '2019-06-28 00:00:00', 1, '2019-06-26 02:45:52'),
+(9, 4, 1, '', '7', '2019-06-05 00:00:00', 1, '2019-06-26 02:57:32'),
+(10, 9, 1, '', '6', '2019-06-26 00:00:00', 1, '2019-06-26 02:58:52'),
+(11, 3, 1, '', '4', '2019-06-28 00:00:00', 1, '2019-06-26 03:04:46'),
+(12, 7, 1, '', '13', '2019-06-29 00:00:00', 1, '2019-06-26 03:34:09'),
+(13, 16, 1, '', '4', '2019-06-28 00:00:00', 1, '2019-06-26 03:42:24'),
+(14, 1, 1, '', '8', '2019-06-28 00:00:00', 1, '2019-06-26 03:44:42'),
+(15, 10, 1, '', '5', '2019-06-27 00:00:00', 1, '2019-06-26 03:46:34'),
+(16, 7, 1, '', '6', '2019-06-28 00:00:00', 1, '2019-06-26 03:51:39'),
+(17, 6, 1, '', '11', '2019-06-26 00:00:00', 1, '2019-06-26 03:53:51'),
+(18, 9, 1, '', '7', '2019-06-26 00:00:00', 1, '2019-06-26 03:54:41'),
+(19, 11, 1, '', '54', '2019-06-26 00:00:00', 1, '2019-06-26 04:01:01'),
+(20, 16, 1, '', '8', '2019-06-26 00:00:00', 1, '2019-06-26 04:02:03'),
+(21, 4, 1, '', '6', '2019-06-27 00:00:00', 1, '2019-06-26 04:05:12'),
+(22, 4, 1, '', '6', '2019-06-27 00:00:00', 1, '2019-06-26 04:06:58'),
+(23, 1, 1, '', '10', '2019-06-28 00:00:00', 1, '2019-06-26 04:09:31'),
+(24, 4, 1, '', '9', '2019-06-28 00:00:00', 1, '2019-06-26 04:11:22'),
+(25, 4, 1, '', '1', '2019-06-27 00:00:00', 1, '2019-06-26 04:11:49'),
+(26, 11, 1, '', '9', '2021-08-28 00:00:00', 1, '2019-06-26 04:13:04'),
+(27, 3, 1, '', '6', '2019-06-27 00:00:00', 1, '2019-06-26 04:16:04'),
+(28, 6, 1, '', '8', '2019-06-28 00:00:00', 1, '2019-06-26 04:21:28'),
+(29, 4, 1, '', '3', '2019-06-20 00:00:00', 1, '2019-06-26 04:27:18'),
+(30, 7, 1, '', '1', '2019-06-27 00:00:00', 1, '2019-06-26 04:28:17'),
+(31, 10, 1, '', '8', '2019-06-27 00:00:00', 1, '2019-06-26 04:30:27'),
+(32, 10, 1, '', '6', '2019-06-27 00:00:00', 1, '2019-06-26 04:33:09'),
+(33, 9, 1, '', '12', '2019-06-28 00:00:00', 1, '2019-06-26 04:37:51'),
+(34, 4, 1, '', '1', '2019-06-11 00:00:00', 1, '2019-06-27 01:43:54');
 
 -- --------------------------------------------------------
 
@@ -1521,6 +1656,21 @@ INSERT INTO `norma` (`idNormaPK`, `numNor`, `contNor`, `SecRegFK`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `notificacion`
+--
+
+CREATE TABLE `notificacion` (
+  `idnotificacion` int(11) NOT NULL,
+  `fecha` date DEFAULT NULL,
+  `idEvento` int(11) DEFAULT NULL,
+  `estado` int(11) DEFAULT NULL,
+  `titulo` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `descripcion` text COLLATE utf8_spanish2_ci
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `oficinasorganigrama`
 --
 
@@ -1558,7 +1708,7 @@ INSERT INTO `oficinasorganigrama` (`idSecretaria`, `se_nombre`, `se_tipo`) VALUE
 
 CREATE TABLE `pais` (
   `idPais` int(11) NOT NULL,
-  `NombrePais` varchar(40) DEFAULT NULL,
+  `NombrePais` varchar(200) DEFAULT NULL,
   `bandera` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -1661,19 +1811,20 @@ INSERT INTO `participanteindividual` (`idPartIndividual`, `idDeportistasFK`, `id
 
 CREATE TABLE `participantes` (
   `id` int(11) NOT NULL,
-  `Nombre` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `ApellidoP` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `ApellidoM` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Pais` varchar(45) COLLATE utf8_spanish_ci DEFAULT NULL,
-  `Foto` varchar(200) COLLATE utf8_spanish_ci DEFAULT NULL
+  `Nombre` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `ApellidoP` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `ApellidoM` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Pais` varchar(100) COLLATE utf8_spanish_ci DEFAULT NULL,
+  `Foto` text COLLATE utf8_spanish_ci,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `participantes`
 --
 
-INSERT INTO `participantes` (`id`, `Nombre`, `ApellidoP`, `ApellidoM`, `Pais`, `Foto`) VALUES
-(1, 'Pirata', './assets/images/Grupo 2.png', 'Peru', 'Arias', 'Rendich');
+INSERT INTO `participantes` (`id`, `Nombre`, `ApellidoP`, `ApellidoM`, `Pais`, `Foto`, `fechaSistema`) VALUES
+(3, 'Marcel', 'Rendich', 'Arias', 'Perú', './assets/images/participantes/5d118aa8c41222.70994649.png', '2019-06-25 02:44:56');
 
 -- --------------------------------------------------------
 
@@ -1907,6 +2058,35 @@ INSERT INTO `resultadoindividual` (`idResIndividual`, `idPartIndividualFK`, `fec
 (12, 9, '0000-00-00', '1'),
 (13, 10, '0000-00-00', '1'),
 (14, 1, '0000-00-00', '4');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `resutado`
+--
+
+CREATE TABLE `resutado` (
+  `idresutado` int(11) NOT NULL,
+  `idEvento` int(11) DEFAULT NULL,
+  `pais1` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `pais2` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `res1` double DEFAULT NULL,
+  `res2` double DEFAULT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `resutado`
+--
+
+INSERT INTO `resutado` (`idresutado`, `idEvento`, `pais1`, `pais2`, `res1`, `res2`, `fechaSistema`) VALUES
+(1, 1, 'Antigua y Barbuda', 'Argentina', 71, 76, '2019-06-26 00:53:50'),
+(2, 13, 'Brazil.svg Brasil (BRA)', 'Bolivia.svg Bolivia (BOL)', 1, 2, '2019-06-26 04:23:47'),
+(3, 13, 'Bolivia.svg Bolivia (BOL)', 'Belice Belice (BIZ)', 2, 0, '2019-06-26 04:27:18'),
+(4, 31, 'Antigua y Barbuda Antigua y Barbuda (ANT', 'Chile.png Chile (CHI)', 1, 2, '2019-06-26 04:30:27'),
+(5, 32, 'Brazil.svg Brasil (BRA)', 'Bolivia.svg Bolivia (BOL)', 3, 22, '2019-06-27 01:42:35'),
+(6, 33, 'Honduras Honduras (HON)', 'Mexico.svg México (MEX)', 0, 1, '2019-06-27 01:43:13'),
+(7, 34, 'Perú Perú (PER)', 'Chile.png Chile (CHI)', 3, 2, '2019-06-27 01:43:54');
 
 -- --------------------------------------------------------
 
@@ -2325,7 +2505,20 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `ApellidoU`, `telefonoU`, `DocIdentidad`, `correo`, `password`, `last_session`, `activacion`, `token`, `token_password`, `password_request`, `id_tipo`) VALUES
 (1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '45068903', '1', '123', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
 (2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', '1', '1234', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
-(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-06-24 16:51:40', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
+(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-06-26 14:25:39', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `usuario_notificaciones`
+--
+
+CREATE TABLE `usuario_notificaciones` (
+  `idusuario_notificaciones` int(11) NOT NULL,
+  `idnotificacion` int(11) DEFAULT NULL,
+  `idusuario` int(11) DEFAULT NULL,
+  `estado` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
 
@@ -2642,6 +2835,12 @@ ALTER TABLE `norma`
   ADD KEY `FK_Norma_SeccReg` (`SecRegFK`);
 
 --
+-- Indices de la tabla `notificacion`
+--
+ALTER TABLE `notificacion`
+  ADD PRIMARY KEY (`idnotificacion`);
+
+--
 -- Indices de la tabla `oficinasorganigrama`
 --
 ALTER TABLE `oficinasorganigrama`
@@ -2739,6 +2938,13 @@ ALTER TABLE `resultadogrupal`
 ALTER TABLE `resultadoindividual`
   ADD PRIMARY KEY (`idResIndividual`),
   ADD KEY `ResIndividual_partIndividual_FK` (`idPartIndividualFK`);
+
+--
+-- Indices de la tabla `resutado`
+--
+ALTER TABLE `resutado`
+  ADD PRIMARY KEY (`idresutado`),
+  ADD KEY `resultado.evento_idx` (`idEvento`);
 
 --
 -- Indices de la tabla `seccionreglamento`
@@ -2853,6 +3059,12 @@ ALTER TABLE `usuarios`
   ADD KEY `FK_Usuarios_TipoUsuario` (`correo`);
 
 --
+-- Indices de la tabla `usuario_notificaciones`
+--
+ALTER TABLE `usuario_notificaciones`
+  ADD PRIMARY KEY (`idusuario_notificaciones`);
+
+--
 -- Indices de la tabla `video`
 --
 ALTER TABLE `video`
@@ -2962,7 +3174,7 @@ ALTER TABLE `detalledeporte`
 -- AUTO_INCREMENT de la tabla `detalleeventos`
 --
 ALTER TABLE `detalleeventos`
-  MODIFY `idDetalleEvento` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idDetalleEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `disciplina`
@@ -2974,7 +3186,7 @@ ALTER TABLE `disciplina`
 -- AUTO_INCREMENT de la tabla `documentos`
 --
 ALTER TABLE `documentos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `equipo`
@@ -2998,7 +3210,7 @@ ALTER TABLE `estadousuario`
 -- AUTO_INCREMENT de la tabla `eventos`
 --
 ALTER TABLE `eventos`
-  MODIFY `idEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `fechaevento`
@@ -3091,6 +3303,12 @@ ALTER TABLE `norma`
   MODIFY `idNormaPK` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
+-- AUTO_INCREMENT de la tabla `notificacion`
+--
+ALTER TABLE `notificacion`
+  MODIFY `idnotificacion` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `oficinasorganigrama`
 --
 ALTER TABLE `oficinasorganigrama`
@@ -3118,7 +3336,7 @@ ALTER TABLE `participanteindividual`
 -- AUTO_INCREMENT de la tabla `participantes`
 --
 ALTER TABLE `participantes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `pregfrecareas`
@@ -3173,6 +3391,12 @@ ALTER TABLE `resultadogrupal`
 --
 ALTER TABLE `resultadoindividual`
   MODIFY `idResIndividual` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT de la tabla `resutado`
+--
+ALTER TABLE `resutado`
+  MODIFY `idresutado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `seccionreglamento`
@@ -3275,6 +3499,12 @@ ALTER TABLE `unidadorganizacional`
 --
 ALTER TABLE `usuarios`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario_notificaciones`
+--
+ALTER TABLE `usuario_notificaciones`
+  MODIFY `idusuario_notificaciones` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `video`
@@ -3502,6 +3732,12 @@ ALTER TABLE `resultadogrupal`
 --
 ALTER TABLE `resultadoindividual`
   ADD CONSTRAINT `ResIndividual_partIndividual_FK` FOREIGN KEY (`idPartIndividualFK`) REFERENCES `participanteindividual` (`idPartIndividual`);
+
+--
+-- Filtros para la tabla `resutado`
+--
+ALTER TABLE `resutado`
+  ADD CONSTRAINT `resultado.evento` FOREIGN KEY (`idEvento`) REFERENCES `eventos` (`idEvento`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `sedes`

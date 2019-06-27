@@ -20,6 +20,9 @@
     <!--    <link rel="stylesheet" href="./css/font-awesome/css/font-awesome.min.css">-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
 
+<!--    Bootstrap Select-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
     <link href="./assets/css/styles.css" rel="stylesheet" />
     <link href="./assets/css/style.css" rel="stylesheet" />
     <!--    <link rel="stylesheet" href="./css/css.css" type="text/css">-->
@@ -33,6 +36,11 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+
+<!--    Bootstrap Select-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
 
 </head>
 
@@ -108,6 +116,7 @@
                                 <a class="dropdown-item" href="#">Vivo</a>
                                 <a class="dropdown-item" href="?c=disciplina&a=index">Disciplina</a>
                                 <a class="dropdown-item" href="#">Voluntariado</a>
+                                <a class="dropdown-item" href="?c=evento&a=index">Eventos</a>
 <!--                                <div class="dropdown-divider"></div>-->
 <!--                                <a class="dropdown-item" href="#">Something else here</a>-->
                             </div>
@@ -120,8 +129,23 @@
                     <!--                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">-->
                     <!--                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>-->
                     <!--                    </form>-->
-
                     <ul class="nav navbar-nav navbar-right">
+<!--                        <li class="nav-item">-->
+<!--                            <button type="button" class="btn btn-secondary">-->
+<!--                                <i class="fas fa-bell"></i> <span class="badge badge-light">4</span>-->
+<!--                            </button>-->
+<!--                        </li>-->
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell"></i> <span class="badge badge-warning">4</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="?c=listapaises&a=index">Lista de paises</a>
+                            </div>
+                        </li>
+
+
                         <li class="nav-item">
                             <a class="nav-link" href="#"><i class="fas fa-user"></i> Mi Perfil</a>
                         </li>
