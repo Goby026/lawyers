@@ -52,6 +52,23 @@ class Fixture
         }
     }
 
+    public function Busqueda($deporte, $sede)
+    {
+        try
+        {
+            $stm = $this->pdo
+                ->prepare("CALL SP_FINDFIXTURE(?,?)");
+
+
+            $stm->execute(array($deporte, $sede));
+            return $stm->fetchAll(PDO::FETCH_OBJ);
+
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
     public function Eliminar($id)
     {
         try

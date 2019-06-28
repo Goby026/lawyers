@@ -101,7 +101,8 @@
                                 <a class="dropdown-item" href="?c=foto&a=index">Fotos</a>
                                 <a class="dropdown-item" href="?c=video&a=index">Video</a>
                                 <a class="dropdown-item" href="?c=documentos&a=index">Documentos</a>
-                                <a class="dropdown-item" href="?c=participantes&a=index">Participantes</a>
+                                <a class="dropdown-item" href="?c=disciplina&a=index">Disciplinas</a>
+<!--                                <a class="dropdown-item" href="?c=participantes&a=index">Participantes</a>-->
                             </div>
                         </li>
 
@@ -114,7 +115,7 @@
                                 <a class="dropdown-item" href="?c=medallero&a=index">Medallero</a>
                                 <a class="dropdown-item" href="?c=fixture&a=index">Fixture</a>
                                 <a class="dropdown-item" href="#">Vivo</a>
-                                <a class="dropdown-item" href="?c=disciplina&a=index">Disciplina</a>
+                                <a class="dropdown-item" href="?c=deportista&a=index">Participantes</a>
                                 <a class="dropdown-item" href="#">Voluntariado</a>
                                 <a class="dropdown-item" href="?c=evento&a=index">Eventos</a>
 <!--                                <div class="dropdown-divider"></div>-->

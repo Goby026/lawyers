@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-06-2019 a las 03:47:02
+-- Tiempo de generación: 28-06-2019 a las 04:38:57
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -365,6 +365,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_COMITE` ()  BEGIN
 	INNER JOIN tiporepresentante tr on c.idTipoRepresentante = tr.idTipoRepresentante;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELDEPORTISTA` (`_codigo` INT)  BEGIN
+	DELETE FROM deportistas WHERE idDeportistas = _codigo;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELDOCUMENTO` (`_codigo` INT)  BEGIN
 	DELETE FROM `documentos` WHERE id = _codigo;
 END$$
@@ -399,12 +403,55 @@ BEGIN
     where id_juego=idJuegoD;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_FINDDEPORTISTA` (`_codigo` INT)  BEGIN
+	select * from deportistas de 
+	inner join deportes d on de.idDeporte = d.idDeporte
+	inner join pais p on de.idPais = p.idPais
+	where p.idPais = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_FINDFIXTURE` (`_deporte` VARCHAR(200), `_sede` VARCHAR(200))  BEGIN
+	IF _sede != ""
+		THEN 
+			select f.fechaInicio, d.NombDeporte, s.DireccionSede from fixture f
+			inner join deportes d on f.idDeporte = d.idDeporte
+			inner join config_sede_deporte sd on d.idDeporte = sd.idDeporteFK
+			inner join sedes s on sd.idSedeFK = s.idSede
+			where s.DireccionSede like concat('%',_sede, '%');
+	ELSEIF _deporte != ""
+		THEN 
+			select f.fechaInicio, d.NombDeporte, s.DireccionSede from fixture f
+			inner join deportes d on f.idDeporte = d.idDeporte
+			inner join config_sede_deporte sd on d.idDeporte = sd.idDeporteFK
+			inner join sedes s on sd.idSedeFK = s.idSede
+			where d.NombDeporte like concat('%',_deporte, '%');
+	ELSE
+			select f.fechaInicio, d.NombDeporte, s.DireccionSede from fixture f
+			inner join deportes d on f.idDeporte = d.idDeporte
+			inner join config_sede_deporte sd on d.idDeporte = sd.idDeporteFK
+			inner join sedes s on sd.idSedeFK = s.idSede;
+    END IF;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDECRETO` ()  BEGIN
 	SELECT * FROM bdtecnoserv.decreto;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDEPORTES` ()  BEGIN
 	SELECT * FROM deportes;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDEPORTISTA` (`_codigo` INT)  BEGIN
+	select * from deportistas de 
+	inner join deportes d on de.idDeporte = d.idDeporte
+	inner join pais p on de.idPais = p.idPais
+    where de.idDeportistas = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDEPORTISTAS` ()  BEGIN
+	select * from deportistas de 
+	inner join deportes d on de.idDeporte = d.idDeporte
+	inner join pais p on de.idPais = p.idPais;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETDETALLEEVENTOS` ()  BEGIN
@@ -441,8 +488,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETEVENTOS` ()  BEGIN
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFIXTURE` ()  BEGIN
-	SELECT * FROM fixture f
-	INNER JOIN deportes d ON f.idDeporte = d.idDeporte;
+	select f.fechaInicio, d.NombDeporte, s.DireccionSede from fixture f
+	inner join deportes d on f.idDeporte = d.idDeporte
+	inner join config_sede_deporte sd on d.idDeporte = sd.idDeporteFK
+	inner join sedes s on sd.idSedeFK = s.idSede;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFOTO` (`id` INT)  BEGIN
@@ -451,6 +500,21 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETFOTOS` ()  BEGIN
 	SELECT * FROM `foto` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETNOTIFICACION` (`_codigo` INT)  BEGIN
+	select * from notificaion where idnotificacion = _codigo;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETNOTIFICACIONES` ()  BEGIN
+	select * from notificacion;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETNOTIFICACIONUSUARIO` (`_idusuario` INT)  BEGIN
+	select * from notificacion n
+	inner join usuario_notificaciones un on n.idnotificacion = un.idnotificacion
+	inner join usuarios u on un.idusuario = u.id
+	where u.id = _idusuario;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETPARTICIPANTE` (`_codigo` INT)  BEGIN
@@ -498,7 +562,10 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_LOGIN` (`usuario` VARCHAR(100), 
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_MEDALLERO` ()  BEGIN
-	SELECT p.NombrePais, m.oro, m.plata, m.bronce, (m.oro + m.plata + m.bronce) as 'total' FROM medallero m inner join pais p on m.idPais = p.idPais;
+	SELECT p.NombrePais, m.oro, m.plata, m.bronce, (m.oro + m.plata + m.bronce) as 'total' 
+    FROM medallero m 
+    inner join pais p on m.idPais = p.idPais
+    order by total desc;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_mostrar_datos` ()  NO SQL
@@ -529,6 +596,25 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_PAIS` ()  BEGIN
 	SELECT * FROM pais;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGDEPORTISTA` (`_idDeporte` INT, `_descripcion` VARCHAR(200), `_idPais` INT, `_nombres` VARCHAR(200), `_apellidos` VARCHAR(200), `_peso` VARCHAR(100), `_talla` VARCHAR(100))  BEGIN
+	INSERT INTO `deportistas`
+	(`idDeporte`,
+	`descripcion`,
+	`idPais`,
+	`nombres`,
+	`apellidos`,
+	`peso`,
+	`talla`)
+	VALUES
+	(_idDeporte,
+	_descripcion,
+	_idPais,
+	_nombres,
+	_apellidos,
+	_peso,
+	_talla);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGDISCIPLINA` (`_dis` VARCHAR(200), `_sed` VARCHAR(200), `_direcc` VARCHAR(200))  BEGIN
 INSERT INTO disciplina (disciplina,sede, direccion) VALUES (_dis, _sed,_direcc);
 END$$
@@ -546,6 +632,23 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGFOTO` (`_name` VARCHAR(200), 
 	INSERT INTO foto (nombre, foto) VALUES (_name, _picture);
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGNOTIFICACION` (`_fecha` DATE, `_idEvento` INT, `_estado` INT, `_titulo` VARCHAR(200), `_descripcion` TEXT, `_idtiponotificacion` INT)  BEGIN
+INSERT INTO `notificacion`
+	(`fecha`,
+	`idEvento`,
+	`estado`,
+	`titulo`,
+	`descripcion`,
+    `idtiponotificacion`)
+	VALUES
+	(_fecha,
+	_idEvento,
+	_estado,
+	_titulo,
+	_descripcion,
+    _idtiponotificacion);
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGPARTICIPANTES` (`_name` VARCHAR(200), `_apeP` VARCHAR(200), `_apeM` VARCHAR(200), `_from` VARCHAR(200), `_picture` TEXT)  BEGIN
 	INSERT INTO participantes (Nombre, ApellidoP, ApellidoM, Pais, Foto ) VALUES (_name,_apeP,_apeM,_from, _picture);
 END$$
@@ -555,6 +658,17 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGRESULTADO` (`_idevento` INT, 
 	(`idEvento`,`pais1`,`pais2`,`res1`,`res2`)
 	VALUES
 	(_idevento,_pais1,_pais2,_res1,_res2);
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGUSUARIONOTIFICACION` (`_idnotificacion` INT, `_idusuario` INT, `_estado` INT)  BEGIN
+	INSERT INTO `usuario_notificaciones`
+	(`idnotificacion`,
+	`idusuario`,
+	`estado`)
+	VALUES
+	(_idnotificacion,
+	_idusuario,
+	_estado);
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_REGVIDEO` (`_name` VARCHAR(200), `_picture` TEXT)  BEGIN
@@ -568,6 +682,19 @@ END$$
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_TIPOINSTITUCIONAL` ()  BEGIN
 	SELECT ti.NombreInstitucional, i.descripInstitucional, i.imagenInstitucional FROM institucional i
 	INNER JOIN tipoinstitucional ti ON i.idTipoInstitucional = ti.idTipoInstitucional;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEDEPORTISTA` (`_idDeportista` INT, `_idDeporte` INT, `_descripcion` VARCHAR(200), `_idPais` INT, `_nombres` VARCHAR(200), `_apellidos` VARCHAR(200), `_peso` VARCHAR(100), `_talla` VARCHAR(100))  BEGIN
+	UPDATE `deportistas`
+	SET
+	`idDeporte` = _idDeporte,
+	`descripcion` = _descripcion,
+	`idPais` = _idPais,
+	`nombres` = _nombres,
+	`apellidos` = _apellidos,
+	`peso` = _peso,
+	`talla` = _talla
+	WHERE `idDeportistas` = _idDeportista;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEDOCUMENTO` (`_codigo` INT, `_nombre` VARCHAR(200), `_documento` VARCHAR(200))  BEGIN
@@ -591,6 +718,18 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEFOTO` (`_codigo` INT, `_no
 UPDATE foto SET nombre = _nombre , foto = _foto WHERE codigo = _codigo;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATENOTIFICACION` (`_idnotificacion` INT, `_fecha` DATE, `_idEvento` INT, `_estado` INT, `_titulo` VARCHAR(200), `_descripcion` TEXT, `_idtiponotificacion` INT)  BEGIN
+	UPDATE `notificacion`
+	SET
+	`fecha` = _fecha,
+	`idEvento` = _idEvento,
+	`estado` = _estado,
+	`titulo` = _titulo,
+	`descripcion` = _descripcion,
+    `idtiponotificacion` = _idtiponotificacion
+	WHERE `idnotificacion` = _idnotificacion;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEPARTICIPANTE` (`_codigo` INT, `_nombre` VARCHAR(200), `_apellidop` VARCHAR(200), `_apellidom` VARCHAR(200), `_pais` VARCHAR(100), `_foto` VARCHAR(200))  BEGIN
 	UPDATE `participantes`
 	SET
@@ -611,6 +750,15 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATERESULTADO` (`_idresutado` 
 	`res1` = _res1,
 	`res2` = _res2	
 	WHERE `idresutado` = _idresutado;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEUSUARIONOTIFICACION` (`_codigo` INT, `_idnotificacion` INT, `_idusuario` INT, `_estado` INT)  BEGIN
+	UPDATE `usuario_notificaciones`
+	SET	
+	`idnotificacion` = _idnotificacion,
+	`idusuario` = _idusuario,
+	`estado` = _estado
+	WHERE `idusuario_notificaciones` = _codigo;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_UPDATEVIDEO` (`_cogido` INT, `_nombre` VARCHAR(200), `_video` VARCHAR(200))  BEGIN
@@ -788,7 +936,68 @@ CREATE TABLE `config_sede_deporte` (
 --
 
 INSERT INTO `config_sede_deporte` (`idConfigSedeDeporte`, `idSedeFK`, `idDeporteFK`) VALUES
-(1, 1, 1);
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 4, 4),
+(5, 5, 5),
+(6, 6, 6),
+(7, 7, 7),
+(8, 8, 8),
+(9, 9, 9),
+(10, 10, 10),
+(11, 11, 11),
+(12, 12, 12),
+(13, 13, 13),
+(14, 14, 14),
+(15, 15, 15),
+(16, 16, 16),
+(17, 17, 17),
+(18, 18, 18),
+(19, 19, 19),
+(20, 20, 20),
+(21, 21, 21),
+(22, 1, 22),
+(23, 2, 23),
+(24, 3, 24),
+(25, 4, 25),
+(26, 5, 26),
+(27, 6, 27),
+(28, 7, 28),
+(29, 8, 29),
+(30, 9, 30),
+(31, 10, 31),
+(32, 11, 32),
+(33, 12, 33),
+(34, 13, 34),
+(35, 14, 35),
+(36, 15, 36),
+(37, 16, 37),
+(38, 17, 38),
+(39, 18, 39),
+(40, 19, 40),
+(41, 20, 41),
+(42, 21, 42),
+(43, 1, 43),
+(44, 2, 44),
+(45, 3, 45),
+(46, 4, 46),
+(47, 5, 47),
+(48, 6, 48),
+(49, 7, 49),
+(50, 8, 50),
+(51, 9, 51),
+(52, 10, 52),
+(53, 11, 53),
+(54, 12, 54),
+(55, 13, 55),
+(56, 14, 56),
+(57, 15, 57),
+(58, 16, 58),
+(59, 17, 59),
+(60, 18, 60),
+(61, 19, 61),
+(62, 20, 62);
 
 -- --------------------------------------------------------
 
@@ -952,35 +1161,36 @@ CREATE TABLE `deportistadisciplina` (
 CREATE TABLE `deportistas` (
   `idDeportistas` int(11) NOT NULL,
   `idDeporte` int(11) DEFAULT NULL,
-  `descripcion` varchar(50) DEFAULT NULL,
+  `descripcion` text,
   `idPais` int(11) DEFAULT NULL,
   `nombres` varchar(200) DEFAULT NULL,
   `apellidos` varchar(200) DEFAULT NULL,
   `peso` varchar(45) DEFAULT NULL,
-  `talla` varchar(45) DEFAULT NULL
+  `talla` varchar(50) DEFAULT NULL,
+  `foto` varchar(200) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `deportistas`
 --
 
-INSERT INTO `deportistas` (`idDeportistas`, `idDeporte`, `descripcion`, `idPais`, `nombres`, `apellidos`, `peso`, `talla`) VALUES
-(1, 3, 'badminton deporte de a dos', 1, 'harold Ferrer', 'ga', '50', '90'),
-(2, 3, 'deporte de a dos', 9, 'jonathan Franco', 'ga', '50', '90'),
-(3, 2, 'deporte base', 4, 'frank', 'ga', '50', '90'),
-(4, 2, 'deporte base', 18, 'Ines Melchor', 'ga', '50', '90'),
-(5, 2, 'deporte base', 18, 'Gladys Tejeda', 'ga', '50', '90'),
-(6, 2, 'deporte base', 18, 'Kimberly Garcia', 'ga', '50', '90'),
-(7, 2, 'deporte base', 18, 'Raul Pacheco', 'ga', '50', '90'),
-(8, 3, 'raqueta y una plumilla', 18, 'Fernanda Saponara', 'ga', '50', '90'),
-(9, 3, 'raqueta y una plumilla', 18, 'Mario Cuba Rodriguez', 'ga', '50', '90'),
-(10, 3, 'raqueta y una plumilla', 18, 'Katherine Winder Cochella', 'ga', '50', '90'),
-(11, 3, 'raqueta y una plumilla', 18, 'Paula La torre Regal', 'ga', '50', '90'),
-(12, 3, 'raqueta y una plumilla', 18, 'Diego MiniCuadros', 'ga', '50', '90'),
-(13, 3, 'raqueta y una plumilla', 18, 'Ines Castillo Salazar', 'ga', '50', '90'),
-(14, 3, 'raqueta y una plumilla', 18, 'Daniela Macias Brandes', 'ga', '50', '90'),
-(15, 3, 'raqueta y una plumilla', 18, 'Danica Nishimura Higa', 'ga', '50', '90'),
-(16, 3, 'raqueta y una plumilla', 18, 'Daniel La torre Regal', 'ga', '50', '90');
+INSERT INTO `deportistas` (`idDeportistas`, `idDeporte`, `descripcion`, `idPais`, `nombres`, `apellidos`, `peso`, `talla`, `foto`) VALUES
+(1, 3, 'badminton deporte de a dos', 1, 'harold Ferrer', 'ga', '50', '90', NULL),
+(2, 3, 'deporte de a dos', 9, 'jonathan Franco', 'ga', '50', '90', NULL),
+(3, 2, 'deporte base', 4, 'frank', 'ga', '50', '90', NULL),
+(4, 2, 'deporte base', 18, 'Ines Melchor', 'ga', '50', '90', NULL),
+(5, 2, 'deporte base', 18, 'Gladys Tejeda', 'ga', '50', '90', NULL),
+(6, 2, 'deporte base', 18, 'Kimberly Garcia', 'ga', '50', '90', NULL),
+(7, 2, 'deporte base', 18, 'Raul Pacheco', 'ga', '50', '90', NULL),
+(8, 3, 'raqueta y una plumilla', 18, 'Fernanda Saponara', 'ga', '50', '90', NULL),
+(9, 3, 'raqueta y una plumilla', 18, 'Mario Cuba Rodriguez', 'ga', '50', '90', NULL),
+(10, 3, 'raqueta y una plumilla', 18, 'Katherine Winder Cochella', 'ga', '50', '90', NULL),
+(11, 3, 'raqueta y una plumilla', 18, 'Paula La torre Regal', 'ga', '50', '90', NULL),
+(12, 3, 'raqueta y una plumilla', 18, 'Diego MiniCuadros', 'ga', '50', '90', NULL),
+(13, 3, 'raqueta y una plumilla', 18, 'Ines Castillo Salazar', 'ga', '50', '90', NULL),
+(14, 3, 'raqueta y una plumilla', 18, 'Daniela Macias Brandes', 'ga', '50', '90', NULL),
+(15, 3, 'raqueta y una plumilla', 18, 'Danica Nishimura Higa', 'ga', '50', '90', NULL),
+(16, 3, 'raqueta y una plumilla', 18, 'Daniel La torre Regal', 'ga', '50', '90', NULL);
 
 -- --------------------------------------------------------
 
@@ -1665,7 +1875,8 @@ CREATE TABLE `notificacion` (
   `idEvento` int(11) DEFAULT NULL,
   `estado` int(11) DEFAULT NULL,
   `titulo` varchar(100) COLLATE utf8_spanish2_ci DEFAULT NULL,
-  `descripcion` text COLLATE utf8_spanish2_ci
+  `descripcion` text COLLATE utf8_spanish2_ci,
+  `idtiponotificacion` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
 -- --------------------------------------------------------
@@ -2080,7 +2291,7 @@ CREATE TABLE `resutado` (
 --
 
 INSERT INTO `resutado` (`idresutado`, `idEvento`, `pais1`, `pais2`, `res1`, `res2`, `fechaSistema`) VALUES
-(1, 1, 'Antigua y Barbuda', 'Argentina', 71, 76, '2019-06-26 00:53:50'),
+(1, 1, 'Bermudas Bermudas (BER)', 'Argentina.svg Argentina (ARG)', 71, 76, '2019-06-27 18:02:16'),
 (2, 13, 'Brazil.svg Brasil (BRA)', 'Bolivia.svg Bolivia (BOL)', 1, 2, '2019-06-26 04:23:47'),
 (3, 13, 'Bolivia.svg Bolivia (BOL)', 'Belice Belice (BIZ)', 2, 0, '2019-06-26 04:27:18'),
 (4, 31, 'Antigua y Barbuda Antigua y Barbuda (ANT', 'Chile.png Chile (CHI)', 1, 2, '2019-06-26 04:30:27'),
@@ -2355,6 +2566,29 @@ CREATE TABLE `tipomoneda` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tiponotificacion`
+--
+
+CREATE TABLE `tiponotificacion` (
+  `idtiponotificacion` int(11) NOT NULL,
+  `nombre` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `descripcion` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL,
+  `icono` varchar(200) COLLATE utf8_spanish2_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `tiponotificacion`
+--
+
+INSERT INTO `tiponotificacion` (`idtiponotificacion`, `nombre`, `descripcion`, `icono`) VALUES
+(1, 'Antes', 'Notificación antes de encuentro.', '<i class=\"fas fa-exclamation\"></i>'),
+(2, 'Despues', 'Notificacion despues del partido.', '<i class=\"far fa-bell\"></i>'),
+(3, 'Cancelación', 'Notificación de cancelación', '<i class=\"fas fa-ban\"></i>'),
+(4, 'Cambio', 'Notificación de cambio de fecha/hora', '<i class=\"fas fa-exchange-alt\"></i>');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tiporepresentante`
 --
 
@@ -2505,7 +2739,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `ApellidoU`, `telefonoU`, `DocIdentidad`, `correo`, `password`, `last_session`, `activacion`, `token`, `token_password`, `password_request`, `id_tipo`) VALUES
 (1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '45068903', '1', '123', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
 (2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', '1', '1234', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
-(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-06-26 14:25:39', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
+(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-06-27 13:01:42', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -2838,7 +3072,9 @@ ALTER TABLE `norma`
 -- Indices de la tabla `notificacion`
 --
 ALTER TABLE `notificacion`
-  ADD PRIMARY KEY (`idnotificacion`);
+  ADD PRIMARY KEY (`idnotificacion`),
+  ADD KEY `notificacion.evento_idx` (`idEvento`),
+  ADD KEY `notificacion.tiponotificacion_idx` (`idtiponotificacion`);
 
 --
 -- Indices de la tabla `oficinasorganigrama`
@@ -3018,6 +3254,12 @@ ALTER TABLE `tipomoneda`
   ADD PRIMARY KEY (`idTipoMoneda`);
 
 --
+-- Indices de la tabla `tiponotificacion`
+--
+ALTER TABLE `tiponotificacion`
+  ADD PRIMARY KEY (`idtiponotificacion`);
+
+--
 -- Indices de la tabla `tiporepresentante`
 --
 ALTER TABLE `tiporepresentante`
@@ -3062,7 +3304,9 @@ ALTER TABLE `usuarios`
 -- Indices de la tabla `usuario_notificaciones`
 --
 ALTER TABLE `usuario_notificaciones`
-  ADD PRIMARY KEY (`idusuario_notificaciones`);
+  ADD PRIMARY KEY (`idusuario_notificaciones`),
+  ADD KEY `usuario.notificacion_idx` (`idusuario`),
+  ADD KEY `notificacion.usuario_idx` (`idnotificacion`);
 
 --
 -- Indices de la tabla `video`
@@ -3126,7 +3370,7 @@ ALTER TABLE `comprobantepago`
 -- AUTO_INCREMENT de la tabla `config_sede_deporte`
 --
 ALTER TABLE `config_sede_deporte`
-  MODIFY `idConfigSedeDeporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idConfigSedeDeporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT de la tabla `conocenos`
@@ -3465,6 +3709,12 @@ ALTER TABLE `tipomoneda`
   MODIFY `idTipoMoneda` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT de la tabla `tiponotificacion`
+--
+ALTER TABLE `tiponotificacion`
+  MODIFY `idtiponotificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT de la tabla `tiporepresentante`
 --
 ALTER TABLE `tiporepresentante`
@@ -3680,6 +3930,13 @@ ALTER TABLE `norma`
   ADD CONSTRAINT `FK_Norma_SeccReg` FOREIGN KEY (`SecRegFK`) REFERENCES `seccionreglamento` (`idSecRegPK`);
 
 --
+-- Filtros para la tabla `notificacion`
+--
+ALTER TABLE `notificacion`
+  ADD CONSTRAINT `notificacion.evento` FOREIGN KEY (`idEvento`) REFERENCES `eventos` (`idEvento`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `notificacion.tiponotificacion` FOREIGN KEY (`idtiponotificacion`) REFERENCES `tiponotificacion` (`idtiponotificacion`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
 -- Filtros para la tabla `participantegrupal`
 --
 ALTER TABLE `participantegrupal`
@@ -3774,6 +4031,13 @@ ALTER TABLE `tiposedes`
 --
 ALTER TABLE `unidadorganizacional`
   ADD CONSTRAINT `unidadorganizacional_ibfk_1` FOREIGN KEY (`idSecUniOrgFK`) REFERENCES `oficinasorganigrama` (`idSecretaria`);
+
+--
+-- Filtros para la tabla `usuario_notificaciones`
+--
+ALTER TABLE `usuario_notificaciones`
+  ADD CONSTRAINT `notificacion.usuario` FOREIGN KEY (`idnotificacion`) REFERENCES `notificacion` (`idnotificacion`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `usuario.notificacion` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,18 +1,33 @@
 <main>
-    <div class="jumbotron jumbotron-fluid">
-        <div class="container">
-            <h1 class="display-4">MEDALLERO SEGUN PAISES</h1>
-            <p class="lead">Juegos panamericanos Lima 2019</p>
-        </div>
-    </div>
 
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-12">
+                <!--                <img src="./images/ceremonias-lima-2019.jpg" class="img-fluid" alt="Responsive image" style="width: 100% !important;">-->
+                <section class="row no-gutter align-items-center">
+                    <div class="col-lg-12 text-center p-0 d-flex align-items-center">
+                        <img class="img-fluid position-relative mx-auto" src="./assets/images/competencia.png" alt="banner ceremonias" style="width: 100% !important;">
+                    </div>
+                </section>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 mt-3" style="padding: 15px;">
+                <h4 class="text-danger"><b>RANKING DE PAIS</b></h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 border border-secondary mt-3" style="padding: 15px;">
+                <p class="text-center">Conoce el ranking de todos los paises participantes de los juegos panamericanos Lima 2019</p>
+            </div>
+        </div>
+        <div class="row mt-2">
+            <div class="col-md-12">
                 <table class="table">
                     <thead class="thead-dark">
                     <tr>
-                        <th scope="col">#</th>
+                        <th scope="col">PUESTO</th>
                         <th scope="col">PAIS</th>
                         <th scope="col">ORO</th>
                         <th scope="col">PLATA</th>
