@@ -33,7 +33,8 @@
 
     <title>Weplay-Lima2019</title>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
@@ -139,10 +140,11 @@
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell"></i> <span class="badge badge-warning">4</span>
+                                <i class="fas fa-bell"></i> <span class="badge badge-warning" id="contador">-</span>
                             </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="?c=listapaises&a=index">Lista de paises</a>
+                            <div id="notificaciones" class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+<!--                                <a class="dropdown-item" href="?c=listapaises&a=index" >...</a>-->
                             </div>
                         </li>
 
@@ -191,3 +193,26 @@
     </div>
 </div>
 
+<script>
+    $(document).ready(function () {
+        //console.log('HOLA JQUERY');
+
+        $.ajax({
+            type: 'POST',
+            dataType: "json",
+            url: "?c=index&a=cargarMenu",
+            //data: datos,
+            success: function(response) {
+                // console.log(response.length);
+                $("#contador").text(response.length);
+
+                for(var k in response) {
+                    // console.log(k, response[k]);
+                    // $("#notificaciones").text(response[k].descripcion);
+                    $( "#notificaciones" ).append( "<a class='dropdown-item' href='?c=notificacion&a=index' id='notificaciones'>"+response[k].icono+" "+response[k].descripcion+"</a>" );
+                }
+            }
+        });
+
+    });
+</script>

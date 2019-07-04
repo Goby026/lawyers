@@ -1,4 +1,5 @@
 <?php
+
 class Notificacion
 {
 	private $pdo;
@@ -77,7 +78,7 @@ class Notificacion
 		try 
 		{
 			$stm = $this->pdo
-			            ->prepare("DELETE FROM alumnos WHERE id = ?");			          
+			            ->prepare("CALL SP_DELNOTIFICACION(?)");
 
 			$stm->execute(array($id));
 		} catch (Exception $e) 
@@ -113,7 +114,7 @@ class Notificacion
 	{
 		try
 		{
-		$sql = "CALL SP_REGNOTIFICACION(?,?,?,?,?)";
+		$sql = "CALL SP_REGNOTIFICACION(?,?,?,?,?,?)";
 
 		$this->pdo->prepare($sql)
 		     ->execute(
@@ -126,9 +127,30 @@ class Notificacion
                     $data->idtiponotificacion
                 )
 			);
+
+		return $this->get_last_id("idnotificacion","notificacion");
+
 		} catch (Exception $e) 
 		{
 			die($e->getMessage());
 		}
 	}
+
+    function get_last_id($nombre_id, $tabla){
+        try
+        {
+            $result = array();
+
+            $stm = $this->pdo->prepare("SELECT MAX($nombre_id) AS id FROM $tabla");
+            $stm->execute();
+
+            $result = $stm->fetch(PDO::FETCH_OBJ);
+
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-06-2019 a las 04:38:57
+-- Tiempo de generación: 04-07-2019 a las 22:03:47
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -377,6 +377,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELFOTO` (`_codigo` INT)  BEGIN
 	DELETE FROM foto WHERE codigo = _codigo;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELNOTIFICACION` (`_codigo` INT)  BEGIN
+	DELETE FROM `notificacion`
+	WHERE `idnotificacion` = _codigo;
+END$$
+
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_DELPARTICIPANTE` (`_codigo` INT)  BEGIN
 	DELETE FROM `participantes` WHERE id = _codigo;
 END$$
@@ -514,6 +519,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETNOTIFICACIONUSUARIO` (`_idusu
 	select * from notificacion n
 	inner join usuario_notificaciones un on n.idnotificacion = un.idnotificacion
 	inner join usuarios u on un.idusuario = u.id
+    inner join tiponotificacion tn on n.idtiponotificacion = tn.idtiponotificacion
 	where u.id = _idusuario;
 END$$
 
@@ -523,6 +529,10 @@ END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETPARTICIPANTES` ()  BEGIN
 SELECT * FROM `participantes` WHERE 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETRESULTADO` (`_codigo` INT)  BEGIN
+	select * from resutado where idEvento = _codigo;
 END$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `SP_GETRESULTADOS` ()  BEGIN
@@ -1430,7 +1440,14 @@ INSERT INTO `eventos` (`idEvento`, `idSede`, `idHorarioEventos`, `direccion`, `i
 (31, 10, 1, '', '8', '2019-06-27 00:00:00', 1, '2019-06-26 04:30:27'),
 (32, 10, 1, '', '6', '2019-06-27 00:00:00', 1, '2019-06-26 04:33:09'),
 (33, 9, 1, '', '12', '2019-06-28 00:00:00', 1, '2019-06-26 04:37:51'),
-(34, 4, 1, '', '1', '2019-06-11 00:00:00', 1, '2019-06-27 01:43:54');
+(34, 4, 1, '', '1', '2019-06-11 00:00:00', 1, '2019-06-27 01:43:54'),
+(35, 5, 1, '', '1', '2019-07-01 00:00:00', 1, '2019-07-01 04:53:36'),
+(36, 2, 1, '', '1', '2019-07-01 00:00:00', 1, '2019-07-01 05:15:24'),
+(37, 4, 1, '', '1', '2019-07-02 00:00:00', 1, '2019-07-01 05:22:03'),
+(38, 4, 1, '', '1', '2019-07-01 00:00:00', 1, '2019-07-01 05:26:32'),
+(39, 2, 1, '', '1', '2019-07-01 00:00:00', 1, '2019-07-01 05:32:53'),
+(40, 6, 1, '', '1', '2019-07-05 00:00:00', 1, '2019-07-04 17:20:41'),
+(41, 3, 1, '', '16', '2019-07-04 00:00:00', 1, '2019-07-04 18:13:09');
 
 -- --------------------------------------------------------
 
@@ -1879,6 +1896,16 @@ CREATE TABLE `notificacion` (
   `idtiponotificacion` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
 
+--
+-- Volcado de datos para la tabla `notificacion`
+--
+
+INSERT INTO `notificacion` (`idnotificacion`, `fecha`, `idEvento`, `estado`, `titulo`, `descripcion`, `idtiponotificacion`) VALUES
+(1, '2019-07-01', NULL, 1, 'Fin de encuentro', 'Argentina.svg Argentina (ARG) vs Argentina.svg Argentina (ARG) finalizó', 2),
+(2, '2019-07-01', NULL, 1, 'Fin de encuentro', 'Mexico.svg México (MEX) vs Mexico.svg México (MEX) finalizó', 2),
+(3, '2019-07-04', 40, 1, 'Fin de encuentro', 'Bermudas Bermudas (BER) vs Bermudas Bermudas (BER) finalizó', 2),
+(4, '2019-07-04', 41, 1, 'Fin de encuentro', 'Guatemala.svg Guatemala (GUA) vs Guatemala.svg Guatemala (GUA) finalizó', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -2297,7 +2324,12 @@ INSERT INTO `resutado` (`idresutado`, `idEvento`, `pais1`, `pais2`, `res1`, `res
 (4, 31, 'Antigua y Barbuda Antigua y Barbuda (ANT', 'Chile.png Chile (CHI)', 1, 2, '2019-06-26 04:30:27'),
 (5, 32, 'Brazil.svg Brasil (BRA)', 'Bolivia.svg Bolivia (BOL)', 3, 22, '2019-06-27 01:42:35'),
 (6, 33, 'Honduras Honduras (HON)', 'Mexico.svg México (MEX)', 0, 1, '2019-06-27 01:43:13'),
-(7, 34, 'Perú Perú (PER)', 'Chile.png Chile (CHI)', 3, 2, '2019-06-27 01:43:54');
+(7, 34, 'Perú Perú (PER)', 'Chile.png Chile (CHI)', 3, 2, '2019-06-27 01:43:54'),
+(8, 35, 'Brazil.svg Brasil (BRA)', 'Chile.png Chile (CHI)', 4, 2, '2019-07-01 04:53:36'),
+(9, 38, 'Argentina.svg Argentina (ARG)', 'Brazil.svg Brasil (BRA)', 1, 2, '2019-07-01 05:26:32'),
+(10, 39, 'Mexico.svg México (MEX)', 'Perú Perú (PER)', 1, 2, '2019-07-01 05:32:53'),
+(11, 40, 'Bermudas Bermudas (BER)', 'Brazil.svg Brasil (BRA)', 2, 3, '2019-07-04 17:20:41'),
+(12, 41, 'Guatemala.svg Guatemala (GUA)', 'Estados Unidos Estados Unidos (USA)', 2, 3, '2019-07-04 18:13:09');
 
 -- --------------------------------------------------------
 
@@ -2581,10 +2613,10 @@ CREATE TABLE `tiponotificacion` (
 --
 
 INSERT INTO `tiponotificacion` (`idtiponotificacion`, `nombre`, `descripcion`, `icono`) VALUES
-(1, 'Antes', 'Notificación antes de encuentro.', '<i class=\"fas fa-exclamation\"></i>'),
-(2, 'Despues', 'Notificacion despues del partido.', '<i class=\"far fa-bell\"></i>'),
-(3, 'Cancelación', 'Notificación de cancelación', '<i class=\"fas fa-ban\"></i>'),
-(4, 'Cambio', 'Notificación de cambio de fecha/hora', '<i class=\"fas fa-exchange-alt\"></i>');
+(1, 'Antes', 'Partido por comenzar.', '<i class=\"fas fa-exclamation\"></i>'),
+(2, 'Despues', 'Finalizó encuentro.', '<i class=\"far fa-bell\"></i>'),
+(3, 'Cancelación', 'Cancelación de evento.', '<i class=\"fas fa-ban\"></i>'),
+(4, 'Cambio', 'Modificacion de evento.', '<i class=\"fas fa-exchange-alt\"></i>');
 
 -- --------------------------------------------------------
 
@@ -2738,8 +2770,8 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `usuario`, `nombre`, `ApellidoU`, `telefonoU`, `DocIdentidad`, `correo`, `password`, `last_session`, `activacion`, `token`, `token_password`, `password_request`, `id_tipo`) VALUES
 (1, 'Grover', 'Rendich', 'grover@mail.com', '112233', '45068903', '1', '123', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
-(2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', '1', '1234', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
-(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-06-27 13:01:42', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
+(2, 'raul', 'huaman', 'rhuaman@gmail.com', '964340347', '46797080', 'rhuaman@gmail.com', '1234', '0000-00-00 00:00:00', 1, NULL, '', NULL, 0),
+(3, 'goby', 'Grover', 'Rendich', '944560253', '45068903', 'grover@mail.com', '$2y$10$v7R1GG.M/Tx1LjkefwPqCOcYVO2VUODoa3izUMvHW8AseA8a.0PRu', '2019-07-04 14:13:32', 1, 'c97f7268a29a39332673a811edd36136', '', 0, 2);
 
 -- --------------------------------------------------------
 
@@ -2753,6 +2785,16 @@ CREATE TABLE `usuario_notificaciones` (
   `idusuario` int(11) DEFAULT NULL,
   `estado` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish2_ci;
+
+--
+-- Volcado de datos para la tabla `usuario_notificaciones`
+--
+
+INSERT INTO `usuario_notificaciones` (`idusuario_notificaciones`, `idnotificacion`, `idusuario`, `estado`) VALUES
+(1, 1, NULL, 1),
+(2, 2, 1, 1),
+(3, 3, NULL, 1),
+(4, 4, 3, 1);
 
 -- --------------------------------------------------------
 
@@ -3454,7 +3496,7 @@ ALTER TABLE `estadousuario`
 -- AUTO_INCREMENT de la tabla `eventos`
 --
 ALTER TABLE `eventos`
-  MODIFY `idEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `idEvento` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT de la tabla `fechaevento`
@@ -3550,7 +3592,7 @@ ALTER TABLE `norma`
 -- AUTO_INCREMENT de la tabla `notificacion`
 --
 ALTER TABLE `notificacion`
-  MODIFY `idnotificacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idnotificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `oficinasorganigrama`
@@ -3640,7 +3682,7 @@ ALTER TABLE `resultadoindividual`
 -- AUTO_INCREMENT de la tabla `resutado`
 --
 ALTER TABLE `resutado`
-  MODIFY `idresutado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idresutado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `seccionreglamento`
@@ -3754,7 +3796,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `usuario_notificaciones`
 --
 ALTER TABLE `usuario_notificaciones`
-  MODIFY `idusuario_notificaciones` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idusuario_notificaciones` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `video`

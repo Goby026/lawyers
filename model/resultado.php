@@ -44,7 +44,7 @@ class Resultado
     {
         try
         {
-            $consulta = "CALL SP_GETFOTO(".$id.")";
+            $consulta = "CALL SP_GETRESULTADO(".$id.")";
 
             $stm = $this->pdo->query($consulta);
 
@@ -62,7 +62,7 @@ class Resultado
     {
         try
         {
-            $consulta = "CALL SP_DELFOTO(".$id.")";
+            $consulta = "CALL .......(".$id.")";
             $stm = $this->pdo->query($consulta);
 
             if ($stm){

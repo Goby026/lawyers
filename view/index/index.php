@@ -1,3 +1,6 @@
+<?php
+var_dump($_SESSION);
+?>
 <main>
     <div class="container-fluid">
         <div class="row">

@@ -5,6 +5,8 @@ require_once 'model/resultado.php';
 require_once "model/sede.php";
 require_once "model/pais.php";
 require_once "model/deporte.php";
+require_once "model/notificacion.php";
+require_once "model/usuarioNotificacion.php";
 
 class EventoController{
 
@@ -14,6 +16,8 @@ class EventoController{
     private $sede;
     private $pais;
     private $deporte;
+    private $notificacion;
+    private $uNotificacion;
 
     public function __CONSTRUCT(){
         $this->model = new Evento();
@@ -22,6 +26,8 @@ class EventoController{
         $this->deporte = new Deporte();
         $this->detalleEvento = new DetalleEvento();
         $this->resultado = new Resultado();
+        $this->notificacion = new Notificacion();
+        $this->uNotificacion = new UsuarioNotificacion();
     }
 
     public function Index(){
@@ -82,6 +88,7 @@ class EventoController{
     }
 
     public function Guardar(){
+        session_start();
     //se debe registrar tambien en la tabla resultado que sirve solo como presentacion
 
         $evento = new Evento();
@@ -106,6 +113,30 @@ class EventoController{
         $newResultado->res2 = $_REQUEST['res2'];
 
         $this->resultado->Registrar($newResultado);
+
+        //registrar notificacion
+
+        $fecha = date('Y-m-d', time());
+
+        $noti = new Notificacion();
+        $noti->fecha = $fecha;
+        $noti->idEvento = $lastId->id;
+        $noti->estado = 1;
+        $noti->titulo = "Fin de encuentro";
+        $noti->descripcion = $_REQUEST['pais1']." vs ".$_REQUEST['pais2']." finalizó";
+        $noti->idtiponotificacion = 2; //tipo: notificacion despues del evento
+
+        $lastNoti = $this->notificacion->Registrar($noti);
+
+        //registrar usuario-notificaciones
+
+        $usuarioNoti = new UsuarioNotificacion();
+
+        $usuarioNoti->idnotificacion = $lastNoti->id;
+        $usuarioNoti->idusuario = $_SESSION["id_usuario"];
+        $usuarioNoti->estado = 1;
+
+        $this->uNotificacion->Registrar($usuarioNoti);
 
         header('Location: ?c=evento&a=adminResultados');
 
