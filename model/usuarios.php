@@ -4,6 +4,7 @@ class Usuarios
     private $pdo;
 
     public $idUsuario;
+    public $nombre;
     public $NombreU;
     public $ApellidoU;
     public $emailU;
@@ -48,7 +49,7 @@ class Usuarios
         try
         {
             $stm = $this->pdo
-                ->prepare("SELECT * FROM alumnos WHERE id = ?");
+                ->prepare("SELECT * FROM usuarios WHERE id = ?");
 
 
             $stm->execute(array($id));
@@ -131,7 +132,7 @@ class Usuarios
         {
             $result = array();
 
-            $consulta = "CALL LOGIN_USUARIO('".$user."','".$pass."');";
+            $consulta = "CALL SP_LOGIN('".$user."','".$pass."');";
 
             $stm = $this->pdo->query($consulta);
 
@@ -147,6 +148,7 @@ class Usuarios
         }
     }
 
+    
     public function login1($usuario, $password)
 	{
 		// global $mysqli;
@@ -210,7 +212,6 @@ class Usuarios
 		// $stmt->execute();
 		// $stmt->bind_result($activacion);
 		// $stmt->fetch();
-		
 		if ($resp->activacion == 1)
 		{
 			return true;
@@ -284,12 +285,11 @@ class Usuarios
         $sql = "INSERT INTO usuarios (usuario, password, nombre, ApellidoU, telefonoU, DocIdentidad, correo, activacion, token, id_tipo) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
     $stmt = $this->pdo->prepare($sql)
-        ->execute(
-            array(
-                $usuario, $pass_hash, $nombre, $apellido, $telefono, $documento, $email, $activo, $token, $tipo_usuario)
-        );
+        ->execute(array($usuario, $pass_hash, $nombre, $apellido, $telefono, $documento, $email, $activo, $token, $tipo_usuario));
+
         if($stmt){
-            return 1;
+            $id = $this->pdo->lastInsertId();
+            return $id;
         }else{
             return 0;
         }
@@ -313,9 +313,7 @@ class Usuarios
         $verifica = $stm->fetch(PDO::FETCH_OBJ);
         $rows = $stm->rowCount();
 
-
-		if($rows > 0) {
-			
+		if($rows > 0) {			
 			if($verifica->activacion == 1){
 				$msg = "La cuenta ya se activo anteriormente.";
 				} else {
@@ -331,13 +329,169 @@ class Usuarios
 		return $msg;
     }
     
-    function activarUsuario($id)
+    public function activarUsuario($id)
 	{
 
         $sql = "UPDATE usuarios SET activacion=1 WHERE id = ?";
         $resp= $this->pdo->prepare($sql)->execute(array($id));
 		return $resp;
-	}
+    }
     
 
-}
+    public function getValor($campo, $campoWhere, $valor)
+	{
+        $stmt = $this->pdo->prepare("SELECT $campo FROM usuarios WHERE $campoWhere = ? LIMIT 1");
+        $stmt->execute(array($valor));
+        // $stmt->fetch(PDO::FETCH_OBJ);
+        $num = $stmt->rowCount();
+
+		// $stmt = $mysqli->prepare("SELECT $campo FROM usuarios WHERE $campoWhere = ? LIMIT 1");
+		// $stmt->bind_param('s', $valor);
+		// $stmt->execute();
+		// $stmt->store_result();
+        // $num = $stmt->num_rows;
+        
+        // if ($num > 0)
+		// {
+		// 	$stmt->bind_result($_campo);
+		// 	$stmt->fetch();
+		// 	return $_campo;
+		// }
+		// else
+		// {
+		// 	return null;	
+		// }
+		if ($num > 0)
+		{
+			$resultado = $stmt->fetch(PDO::FETCH_OBJ);
+			return $resultado->$campo;
+		}
+		else
+		{
+			return null;	
+		}
+    }
+    
+
+    public function generaTokenPass($user_id)
+	{
+        // $token = $this->controller->generateToken();
+
+        // $sql = "UPDATE usuarios SET token_password=?, password_request=1 WHERE id = ?";
+        // $resp= $this->pdo->prepare($sql)->execute(array($token, $user_id));
+        // return $token;
+
+          $token = $this->generateToken();
+          $sql = "UPDATE usuarios SET token_password=?, password_request=1 WHERE id = ?";
+
+            $this->pdo->prepare($sql)
+            ->execute(array($token, $user_id));
+            return $token;
+
+
+		// $stmt = $mysqli->prepare("UPDATE usuarios SET token_password=?, password_request=1 WHERE id = ?");
+		// $stmt->bind_param('ss', $token, $user_id);
+		// $stmt->execute();
+		// $stmt->close();
+		// return $token;
+    }
+    
+    public function generateToken()
+	{
+		$gen = md5(uniqid(mt_rand(), false));	
+		return $gen;
+    }
+    
+
+    public function verificaTokenPass($user_id, $token)
+    {
+
+        $stm = $this->pdo->prepare("SELECT activacion FROM usuarios WHERE id = ? AND token_password = ? AND password_request = 1 LIMIT 1");
+        $stm->execute(array($user_id, $token));
+        $result = $stm->fetch(PDO::FETCH_OBJ);
+        $num = $stm->rowCount();
+		
+		if ($num > 0)
+		{            
+			if($result->activacion == 1)
+			{
+				return true;
+			}
+			else 
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return false;	
+		}
+    }
+    
+
+    
+    public function cambiaPassword($password, $user_id, $token)
+    {
+		
+        $sql = "UPDATE usuarios SET password = ?, token_password='', password_request=0 WHERE id = ? AND token_password = ?";
+
+          $stmt = $this->pdo->prepare($sql)->execute(array($password, $user_id, $token));
+          
+       		
+		if($stmt){
+			return true;
+			} else {
+			return false;		
+		}
+    }
+    
+    
+    public function Bienvenido($nomb)
+    {
+
+            $idUsuario = $_SESSION['id_usuario'];
+            
+            $stm = $this->pdo->prepare("SELECT id, nombre FROM usuarios WHERE id = '$idUsuario'");
+            $stm->execute($nomb);
+            $resultado =  $stm->fetch(PDO::FETCH_OBJ);
+            return $resultado->nombre;
+            
+        }
+   } 
+
+
+
+    // $stm = $this->pdo->prepare("SELECT id FROM usuarios WHERE correo = ? LIMIT 1");
+    // $stm->execute(array($email));
+    // $Emailexiste = $stm->fetch(PDO::FETCH_OBJ);
+    // $num = $stm->rowCount();
+    
+    // if ($num > 0){
+        
+    // return true;
+    //     } else {
+    //     return false;	
+    // }
+
+    // if (isset($_GET['fb'])) {
+    //     session_start();
+    //     $user_fb = $_GET['user'];
+        
+    // }else{
+    //     session_start();
+    //     require_once 'model/database.php';
+
+    //     if(!isset($_SESSION["id_usuario"])){ //Si no ha iniciado sesión redirecciona a index.php
+            
+    //     }
+        
+    //     @$idUsuario = $_SESSION['id_usuario'];
+        
+    //     $stm = $this->pdo->prepare("SELECT id, nombre FROM usuarios WHERE id = '$idUsuario'");
+    //     $stm->execute(array($stm));
+    //     $row = $stm->fetch(PDO::FETCH_OBJ);
+    // }
+
+    
+//}
+

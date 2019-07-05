@@ -16,8 +16,8 @@
 <!--</html>-->
 
 <hr>
-<?php if(isset($_SESSION['id_usuario']))
-{?> 
+<?php    if (isset($_SESSION['username'])){
+            ?> 
 <!-- Footer -->
 <footer class="page-footer font-small blue pt-4">
 
@@ -119,8 +119,10 @@
 <!--<script type='text/javascript' src='./jquery/jquery-migrate-1.2.1.min.js'></script>-->
 <!--<script type='text/javascript' src='./jquery/jquery.plugins.js'></script>-->
 <!--<script type='text/javascript' src='./jquery/mediaelement-and-player.min.js'></script>-->
+
 <script type='text/javascript' src='./assets/js/contador.js'></script>
 <script src='https://www.google.com/recaptcha/api.js'></script>
+
 
 </body>
 </html>

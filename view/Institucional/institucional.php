@@ -36,8 +36,8 @@
                 <div class="col-md-6">
                     <div class="card-body">
                         <br>
-                        <h5 class="card-title"><?php echo $r->NombreInstitucional; ?></h5>
-                        <p class="card-text"><?php echo $r->descripInstitucional; ?></p>
+                        <h5 class="card-title"><b><?php echo $r->NombreInstitucional; ?></b></h5>
+                        <p class="card-text"><p align="justify"><?php echo $r->descripInstitucional; ?></p></p>
                     </div>
                 </div>
 
