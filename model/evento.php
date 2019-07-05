@@ -1,5 +1,4 @@
 <?php
-
 class Evento
 {
     private $pdo;
@@ -129,5 +128,4 @@ class Evento
             die($e->getMessage());
         }
     }
-
 }

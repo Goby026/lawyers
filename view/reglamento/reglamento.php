@@ -14,9 +14,9 @@
 
                 <?php foreach($this->norma->Listar($row->codigo) as $r): ?>
 
-                    <li class="list-group-item"><?php echo $r->contenido; ?></li>
+                    <li class="list-group-item"><p align="justify"><?php echo $r->contenido; ?></p></li>
                     <?php foreach($this->subnorma->Listar($r->codigo) as $fila): ?>     
-                            <li class="list-group-item"><div style="margin-left: 2%;"><?php echo $fila->contenido; ?></div></li>
+                            <li class="list-group-item"><div style="margin-left: 2%;"><p align="justify"><?php echo $fila->contenido; ?></p></div></li>
                     <?php endforeach; ?>
 
                 <?php endforeach; ?>
