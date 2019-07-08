@@ -16,8 +16,8 @@
 <!--</html>-->
 
 <hr>
-<?php    if (isset($_SESSION['username'])){
-            ?> 
+<?php //   if (isset($_SESSION['username'])){
+//            ?><!-- -->
 <!-- Footer -->
 <footer class="page-footer font-small blue pt-4">
 
@@ -31,8 +31,8 @@
             <div class="col-md-6 mt-md-0 mt-3">
 
                 <!-- Content -->
-                <h5 class="text-uppercase">Mesa de partes:</h5>
-                <p>Dirección: Av. San Luis cuadra 11 S/N Puerta N° 6 Villa Deportiva Nacional (VIDENA) cruce con la Av. Del Aire, Distrito de San Luis Horario: Lunes a viernes de 8:30 hrs. a 16:30 hrs.</p>
+<!--                <h5 class="text-uppercase">Mesa de partes:</h5>-->
+<!--                <p>Dirección: Av. San Luis cuadra 11 S/N Puerta N° 6 Villa Deportiva Nacional (VIDENA) cruce con la Av. Del Aire, Distrito de San Luis Horario: Lunes a viernes de 8:30 hrs. a 16:30 hrs.</p>-->
 
             </div>
             <!-- Grid column -->
@@ -113,7 +113,7 @@
 </footer>
 <!-- Footer -->
 <?php 
-}
+//}
  ?>
 
 <!--<script type='text/javascript' src='./jquery/jquery-migrate-1.2.1.min.js'></script>-->

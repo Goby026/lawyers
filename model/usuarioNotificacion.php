@@ -20,13 +20,13 @@ class UsuarioNotificacion
 		}
 	}
 
-	public function Listar()
+	public function Listar($idusuario)
 	{
 		try
 		{
 			$result = array();
 
-			$stm = $this->pdo->prepare("CALL SP_GETNOTIFICACIONES()");
+            $stm = $this->pdo->prepare("CALL SP_GETNOTIFICACIONUSUARIO('".$idusuario."')");
 			$stm->execute();
 
 			return $stm->fetchAll(PDO::FETCH_OBJ);

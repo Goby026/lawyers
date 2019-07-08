@@ -1,3 +1,6 @@
+<?php
+var_dump($_SESSION);
+?>
 <div class="main">
     <div class="container">
         <div class="row">

@@ -17,20 +17,30 @@
                         <img src="<?php echo $row->foto; ?>" class="card-img-top" alt="...">
                         <div class="card-body">
                             <h5 class="card-title"><?php echo $row->nombre; ?></h5>
-                            <div class="dropdown">
-                                <button class="btn btn-outline-info btn-block dropdown-toggle" type="button"
-                                        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                        aria-expanded="false">
-                                    Acciones
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                    <a class="dropdown-item"
-                                       href="?c=foto&a=Crud&id=<?php echo $row->codigo; ?>">Editar</a>
-                                    <a class="dropdown-item" href="?c=foto&a=Eliminar&id=<?php echo $row->codigo; ?>">Eliminar</a>
+
+                            <?php
+                            if (isset($_SESSION['tipo_usuario'])){
+                                if ($_SESSION['tipo_usuario'] === "2"){
+                                    ?>
+                                    <div class="dropdown">
+                                        <button class="btn btn-outline-info btn-block dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                            Acciones
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item"
+                                               href="?c=foto&a=Crud&id=<?php echo $row->codigo; ?>">Editar</a>
+                                            <a class="dropdown-item" href="?c=foto&a=Eliminar&id=<?php echo $row->codigo; ?>">Eliminar</a>
 
 
-                                </div>
-                            </div>
+                                        </div>
+                                    </div>
+                                    <?php
+                                }
+                            }
+                            ?>
+
                         </div>
                     </div>
                 </div>

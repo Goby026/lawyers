@@ -1,10 +1,10 @@
 <?php
 
-require_once 'model/preguntasFrecuentes/preguntasFrecuentes.php';
+require_once 'model/preguntasFrecuentes/preguntasfrecuentes.php';
 require_once 'model/preguntasFrecuentes/pregFrecAreas.php';
 require_once 'model/preguntasFrecuentes/respuestapreguntafrec.php';
 
-class PreguntasFrecuentesController
+class PreguntasController
 {
 
     private $model;
@@ -20,20 +20,14 @@ class PreguntasFrecuentesController
 
     public function Index()
     {
-
         session_start();
 
-        
+        $pregFrecAreas = $this->pregFrec->Listar();
 
-        $pregFrecAreas = $this->getPregFrecAreas();
-
-        require_once 'view/header.php';
-        require_once 'view/preguntasFrecuentes/preguntasFrecuentes.php';
-        require_once 'view/footer.php';
+        require_once "view/header.php";
+        require_once "view/preguntasFrecuentes/preguntasFrecuentes.php";
+        require_once "view/footer.php";
 
     }
 
-    public function getPregFrecAreas(){
-        return $this->pregFrec->Listar();
-    }
 }
