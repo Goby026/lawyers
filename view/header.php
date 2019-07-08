@@ -27,15 +27,15 @@
           href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/alertify.min.css"/>
     <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/themes/default.min.css"/>
+
+<!--    gallery CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.css">
+
     <link href="./assets/css/styles.css" rel="stylesheet"/>
     <link href="./assets/css/style.css" rel="stylesheet"/>
     <link href="./assets/css/login.css" rel="stylesheet"/>
     <link href="./assets/css/login1.css" rel="stylesheet"/>
-    <!--    <link rel="stylesheet" href="./css/css.css" type="text/css">-->
-
-    <!--    <link rel="icon" type="" href="./img/icon_inicio.png"/>-->
     <link rel="icon" type="" href="./assets/images/icon_inicio.png"/>
-    <!--    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
 
     <title>Weplay-Lima2019</title>
     <script type="text/javascript" src='./assets/js/facebook.js'></script>
@@ -55,6 +55,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
 
+<!--    gallery script-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.8.1/baguetteBox.min.js"></script>
 
     <!------ Include the above in your HEAD tag ---------->
 

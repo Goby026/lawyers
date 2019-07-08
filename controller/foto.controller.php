@@ -16,9 +16,9 @@ class FotoController{
         $fotos = $this->model->Listar();
         // $c=0;
 
-        require_once 'view/header.php';
-        require_once 'view/Foto/foto.php';
-        require_once 'view/footer.php';
+        require_once "view/header.php";
+        require_once "view/foto/foto.php";
+        require_once "view/footer.php";
 
     }
 
