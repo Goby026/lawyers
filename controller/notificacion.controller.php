@@ -26,4 +26,12 @@ class NotificacionController{
 
     }
 
+    public function leer(){
+
+        $this->notificacion->Eliminar($_REQUEST['id']);
+
+        header("Location: ?c=notificacion&a=index");
+
+    }
+
 }

@@ -7,6 +7,7 @@ require_once "model/pais.php";
 require_once "model/deporte.php";
 require_once "model/notificacion.php";
 require_once "model/usuarioNotificacion.php";
+require_once "model/usuarios.php";
 
 class EventoController{
 
@@ -16,6 +17,7 @@ class EventoController{
     private $sede;
     private $pais;
     private $deporte;
+    private $usuarios;
 
     public function __CONSTRUCT(){
         $this->model = new Evento();
@@ -26,6 +28,7 @@ class EventoController{
         $this->resultado = new Resultado();
         $this->notificacion = new Notificacion();
         $this->uNotificacion = new UsuarioNotificacion();
+        $this->usuarios = new Usuarios();
     }
 
     public function Index(){
@@ -122,12 +125,17 @@ class EventoController{
         $noti->descripcion = $_REQUEST['pais1']." vs ".$_REQUEST['pais2']." finalizó";
         $noti->idtiponotificacion = 2; //tipo: notificacion despues del evento
         $lastNoti = $this->notificacion->Registrar($noti);
-        //registrar usuario-notificaciones
-        $usuarioNoti = new UsuarioNotificacion();
-        $usuarioNoti->idnotificacion = $lastNoti->id;
-        $usuarioNoti->idusuario = $_SESSION["id_usuario"];
-        $usuarioNoti->estado = 1;
-        $this->uNotificacion->Registrar($usuarioNoti);
+
+        //revisar la cantidad de usuarios registrados
+        foreach ($this->usuarios->Listar() as $usuario){
+
+            $usuarioNoti = new UsuarioNotificacion();
+            $usuarioNoti->idnotificacion = $lastNoti->id;
+            $usuarioNoti->idusuario = $usuario->id;
+            $usuarioNoti->estado = 1;
+            $this->uNotificacion->Registrar($usuarioNoti);
+
+        }
 
 
         header('Location: ?c=evento&a=adminResultados');
@@ -165,7 +173,31 @@ class EventoController{
     }
 
     public function Eliminar(){
-        $this->model->Eliminar($_REQUEST['id']);
+        $this->model->Eliminar($_REQUEST['id']);//actualiza estado de evento
+        //registrar notificacion de cancelación
+
+        //registrar notificacion
+        $fecha = date('Y-m-d', time());
+        $noti = new Notificacion();
+        $noti->fecha = $fecha;
+        $noti->idEvento = $_REQUEST['id'];
+        $noti->estado = 1;
+        $noti->titulo = "Cancelación de encuentro";
+        $noti->descripcion = $_REQUEST['pais1']." vs ".$_REQUEST['pais2']." se canceló";
+        $noti->idtiponotificacion = 3; //tipo: notificacion despues del evento
+        $lastNoti = $this->notificacion->Registrar($noti);
+
+        //revisar la cantidad de usuarios registrados
+        foreach ($this->usuarios->Listar() as $usuario){
+
+            $usuarioNoti = new UsuarioNotificacion();
+            $usuarioNoti->idnotificacion = $lastNoti->id;
+            $usuarioNoti->idusuario = $usuario->id;
+            $usuarioNoti->estado = 1;
+            $this->uNotificacion->Registrar($usuarioNoti);
+
+        }
+
         header('Location: ?c=evento&a=index');
     }
 }

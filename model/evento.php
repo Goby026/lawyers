@@ -63,7 +63,7 @@ class Evento
     {
         try
         {
-            $consulta = "CALL SP_DELFOTO(".$id.")";
+            $consulta = "CALL SP_DELEVENTO(".$id.")";
             $stm = $this->pdo->query($consulta);
 
             if ($stm){

@@ -69,19 +69,19 @@ class UsuarioNotificacion
 //        }
 //    }
 
-//	public function Eliminar($id)
-//	{
-//		try
-//		{
-//			$stm = $this->pdo
-//			            ->prepare("DELETE FROM alumnos WHERE id = ?");
-//
-//			$stm->execute(array($id));
-//		} catch (Exception $e)
-//		{
-//			die($e->getMessage());
-//		}
-//	}
+	public function Eliminar($id)
+	{
+		try
+		{
+			$stm = $this->pdo
+			            ->prepare("UPDATE usuario_notificaciones SET estado = 0 WHERE idusuario_notificaciones = ?");
+
+			$stm->execute(array($id));
+		} catch (Exception $e)
+		{
+			die($e->getMessage());
+		}
+	}
 
 	public function Actualizar(UsuarioNotificacion $data)
 	{

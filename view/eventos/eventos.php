@@ -55,7 +55,18 @@
                                 <a href="?c=evento&a=Crud&id=<?php echo $row->idEvento;?>" class="btn btn-outline-warning btn-sm">Editar</a>
                             </td>
                             <td>
-                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                                <?php
+                                if ($row->estado == 1){
+                                    ?>
+                                    <a href="?c=evento&a=Eliminar&id=<?php echo $row->idEvento;?>&pais1=<?php echo $row->pais1;?>&pais2=<?php echo $row->pais2;?>" class="btn btn-danger btn-sm btn-block">Cancelar</a>
+                                    <?php
+                                }else{
+                                    ?>
+                                    <a href="?c=evento&a=Activar&id=<?php echo $row->idEvento;?>&pais1=<?php echo $row->pais1;?>&pais2=<?php echo $row->pais2;?>" class="btn btn-success btn-sm btn-block">Activar</a>
+                                    <?php
+                                }
+                                ?>
+
                             </td>
                         </tr>
 

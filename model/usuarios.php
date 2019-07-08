@@ -37,7 +37,7 @@ class Usuarios
         {
             $result = array();
 
-            $stm = $this->pdo->prepare("SELECT * FROM alumnos");
+            $stm = $this->pdo->prepare("SELECT * FROM usuarios");
             $stm->execute();
 
             return $stm->fetchAll(PDO::FETCH_OBJ);
