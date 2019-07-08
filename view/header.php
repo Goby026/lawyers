@@ -7,6 +7,12 @@
 
     <link rel="stylesheet" href="./assets/css/estilos1.css"><!-- para estilos del contador -->
 
+    <!--    estilos de cada integrante-->
+    <!--    <link href="./estilos/EstilosHome.css" rel="stylesheet" />-->
+    <!--    <link rel="stylesheet" href="./estilos/EstilosAuspiciadores.css">-->
+    <!--    <link href="./estilos/EstilosLosJuegos.css" rel="stylesheet" />-->
+    <!--    <link href="./estilos/EstilosInsti.css" rel="stylesheet" />-->
+
     <!--    Bootstrap-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -116,6 +122,7 @@ if (!isset($_SESSION['username'])){
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="?c=foto&a=index">Fotos</a>
                                 <a class="dropdown-item" href="?c=video&a=index">Video</a>
+                                <a class="dropdown-item" href="?c=documentos&a=index">Documentos</a>
                             </div>
                         </li>
 
@@ -230,8 +237,9 @@ if (isset($_SESSION['username'])){
 
                             </div>
                         </li>
-
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="?c=CompraEntrada&a=index">Mis Entradas</a>
+                        </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
 

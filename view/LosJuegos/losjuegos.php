@@ -71,12 +71,12 @@
         <hr>
         <div class="row">
             <div class="col-md-6">
-                <p>
+                <p align="justify">
                     Los Juegos Panamericanos y Parapanamericanos Lima 2019 son el segundo evento deportivo más importante del Circuito Olímpico y Paralímpico. El legado deportivo que dejará el desarrollo de los Juegos se verá reflejado en todos los distritos de Lima y representan un gran desafío y una vitrina mundial en la que la ciudad de Lima, el Perú y todas sus capacidades y beneficios como destino país para el turismo, las inversiones y el desarrollo de su población, difundirán una imagen renovada como evidencia concreta de la excelencia, la buena gestión y la transparencia de nuestra operación.
                 </p>
             </div>
             <div class="col-md-6">
-                <p>
+                <p align="justify">
                     ¿Te encantan los Juegos Olímpicos y Paralímpicos? Pues vas a amar los Juegos Panamericanos y ParapanamericanosLima 2019. Además, descubrirás quiénes clasifican para los Juegos Olímpicos y Paralímpicos Tokio 2020.
                 </p>
             </div>

@@ -1,7 +1,3 @@
-<?php
-    $_SESSION['IdCategoriaAsiento'] = $_GET['d'];
-?>
-
 <div class="container mt-5">
     <h2 class="text-center mt-4 mb-4">Categorias de entradas</h2>
     <hr>
@@ -13,10 +9,10 @@
             <?php foreach($catasi as $row): ?>
             <div class="row m-2 text-center">
                     <div class="col-6">
-                        <label for=""><?php echo $row->DireccionSede ?></label>
+                        <label for=""><?php echo $row->NombreCategoriaA ?></label>
                     </div>
                     <div class="col-6">
-                        <a class="btn" href="?c=asientos&a=index&d=<?php echo $row->idCategoriaAsiento; ?>" style="background: #<?php echo $row->Color; ?>">Ver</a>
+                        <a class="btn" href="?c=asientos&a=index&categ=<?php echo $row->idCategoriaAsiento; ?>" style="background: #<?php echo $row->Color; ?>">Ver</a>
                     </div>
                 </div>
             <?php endforeach; ?>

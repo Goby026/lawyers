@@ -28,6 +28,38 @@ class UsuarioController{
         require_once 'view/footer.php';
     }
 
+    public function Actualizar_perfil(){
+
+        // session_start();
+        // $usuario = $this->model->Obtener($_SESSION["id_usuario"]);
+
+        // require_once 'view/header.php';
+        // require_once 'view/usuario/editar_perfil.php';
+        // require_once 'view/footer.php';
+    }
+
+    public function Guardar(){
+        session_start();
+        $usuario = new Usuarios();
+        
+        $usuario->id = $_REQUEST['id'];
+        $usuario->usuario = $_REQUEST['usuario'];
+        $usuario->nombre = $_REQUEST['nombre'];
+        $usuario->ApellidoU = $_REQUEST['apellidos'];
+        $usuario->telefonoU = $_REQUEST['telefono'];
+        $usuario->DocIdentidad = $_REQUEST['documento'];
+        $usuario->correo = $_REQUEST['email'];
+        $usuario->last_session = $_REQUEST['ultimo'];
+
+        $this->model->Actualizar($usuario);
+        
+
+        require_once 'view/header.php';
+        require_once 'view/usuario/perfil.php';
+        require_once 'view/footer.php';
+
+    }
+
 
     public function Recupera(){
         require_once 'view/header.php';

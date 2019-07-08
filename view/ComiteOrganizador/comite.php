@@ -14,7 +14,7 @@
         <div class="row">
             <div class="col-md-10 offset-1">
 
-                <small class="mb-0">El Comité Organizador de los XVIII Juegos Panamericanos y Juegos Parapanamericanos Lima 2019 (COPAL) está presidido por un representante del Ministerio de Transportes y Comunicaciones; e integrado por las siguientes personas:</small>
+                <small class="mb-0"><p align="justify">El Comité Organizador de los XVIII Juegos Panamericanos y Juegos Parapanamericanos Lima 2019 (COPAL) está presidido por un representante del Ministerio de Transportes y Comunicaciones; e integrado por las siguientes personas:</p></small>
 
             </div>
         </div>

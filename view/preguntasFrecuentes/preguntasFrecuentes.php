@@ -12,14 +12,14 @@
 
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo $row->area; ?></h5>
+                            <h5 class="card-title"><p align="justify"><?php echo $row->area; ?></p></h5>
 
                             <?php foreach($this->model->Listar($row->codigo) as $r): ?>
-                                <h6 class="card-subtitle mb-2 text-muted"><?php echo $r->pregunta ?></h6>
+                                <h6 class="card-subtitle mb-2 text-muted"><p align="justify"><?php echo $r->pregunta ?></p></h6>
 
                                 <?php foreach($this->respuestas->Listar($r->codigo) as $fila): ?>
 
-                                    <p class="card-text" style="margin-left: 5%;"><?php echo $fila->respuesta ?></p>
+                                    <p class="card-text" style="margin-left: 5%;" align="justify"><?php echo $fila->respuesta ?></p>
 
 
                                 <?php endforeach; ?>

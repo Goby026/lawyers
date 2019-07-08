@@ -29,7 +29,7 @@
                                     </div>
                                     <?php foreach ($this->subnorma->Listar($r->codigo) as $fila): ?>
                                         <div class="card-footer ml-5">
-                                            <?php echo $fila->contenido; ?>
+                                            <p align="justify"><?php echo $fila->contenido; ?></p>
                                         </div>
                                     <?php endforeach; ?>
                                 </div>

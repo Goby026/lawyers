@@ -28,7 +28,25 @@ class Asientos
         {
             $result = array();
 
-            $consulta = "CALL get_AsientosxIdCategoriaxIdSede('".$_SESSION['IdCategoriaAsiento']."','".$_SESSION['IdSede']."');";
+            $consulta = "CALL get_AsientosxIdCategoriaxIdSede('".$_SESSION['IdCategoria']."','".$_SESSION['IdEvento']."');";
+
+            $stm = $this->pdo->query($consulta);
+
+            return $stm->fetchAll(PDO::FETCH_OBJ);
+        }
+        catch(Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+    
+    public function ListarDetalleEvento()
+    {
+        try
+        {
+            $result = array();
+
+            $consulta = "CALL get_DetalleEvento('".$_SESSION['IdEvento']."','".$_SESSION['IdCategoria']."');";
 
             $stm = $this->pdo->query($consulta);
 

@@ -2,26 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="aad9093a-1b1a-4f8a-82eb-6c2f076131b7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/evento.controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/evento.controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/index.controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/index.controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/preguntasFrecuentes.controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/preguntas.controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/database.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/notificacion.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/notificacion.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/preguntasFrecuentes/respuestapreguntafrec.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/preguntasFrecuentes/respuestapreguntafrec.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/resultado.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/resultado.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/usuarioNotificacion.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/usuarioNotificacion.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/Auspiciadores/auspiciadores.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/Auspiciadores/auspiciadores.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/Notificaciones/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/Notificaciones/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/eventos/crear.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/eventos/crear.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/eventos/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/eventos/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/footer.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/foto/foto.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/foto/foto.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/organigrama/organigrama.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/organigrama/organigrama.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/preguntasFrecuentes/preguntasFrecuentes.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/preguntasFrecuentes/preguntasFrecuentes.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/reglamento/reglamento.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/reglamento/reglamento.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/video/video.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/video/video.php" afterDir="false" />
     </list>
     <ignored path=".idea/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,7 +35,7 @@
         <entry file="file://$PROJECT_DIR$/view/header.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="5900">
-              <caret line="291" column="8" lean-forward="true" selection-start-line="291" selection-start-column="8" selection-end-line="291" selection-end-column="8" />
+              <caret line="299" column="8" selection-start-line="299" selection-start-column="8" selection-end-line="299" selection-end-column="8" />
             </state>
           </provider>
         </entry>
@@ -63,7 +44,7 @@
         <entry file="file://$PROJECT_DIR$/index.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="200">
-              <caret line="10" column="2" lean-forward="true" selection-start-line="10" selection-start-column="2" selection-end-line="27" selection-end-column="1" />
+              <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="27" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -72,7 +53,7 @@
         <entry file="file://$PROJECT_DIR$/model/database.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="80">
-              <caret line="4" column="5" lean-forward="true" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+              <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -81,7 +62,7 @@
         <entry file="file://$PROJECT_DIR$/model/notificacion.php">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="331">
-              <caret line="125" column="39" lean-forward="true" selection-start-line="125" selection-start-column="39" selection-end-line="125" selection-end-column="39" />
+              <caret line="125" column="39" selection-start-line="125" selection-start-column="39" selection-end-line="125" selection-end-column="39" />
             </state>
           </provider>
         </entry>
@@ -153,7 +134,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="x" value="-101" />
     <option name="y" value="67" />
     <option name="width" value="1700" />
@@ -253,15 +234,15 @@
       <workItem from="1562252793981" duration="13375000" />
       <workItem from="1562340186934" duration="3933000" />
       <workItem from="1562388106135" duration="3458000" />
-      <workItem from="1562544118637" duration="2324000" />
+      <workItem from="1562544118637" duration="2921000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="242110000" />
+    <option name="totallyTimeSpent" value="242707000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1696" height="1026" extended-state="6" />
+    <frame x="-8" y="-8" width="1696" height="1026" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22432762" />
@@ -593,7 +574,7 @@
     <entry file="file://$PROJECT_DIR$/view/header.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5900">
-          <caret line="291" column="8" lean-forward="true" selection-start-line="291" selection-start-column="8" selection-end-line="291" selection-end-column="8" />
+          <caret line="299" column="8" selection-start-line="299" selection-start-column="8" selection-end-line="299" selection-end-column="8" />
         </state>
       </provider>
     </entry>
@@ -607,21 +588,21 @@
     <entry file="file://$PROJECT_DIR$/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
-          <caret line="10" column="2" lean-forward="true" selection-start-line="10" selection-start-column="2" selection-end-line="27" selection-end-column="1" />
+          <caret line="10" column="2" selection-start-line="10" selection-start-column="2" selection-end-line="27" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/database.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
-          <caret line="4" column="5" lean-forward="true" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
+          <caret line="4" column="5" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model/notificacion.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="331">
-          <caret line="125" column="39" lean-forward="true" selection-start-line="125" selection-start-column="39" selection-end-line="125" selection-end-column="39" />
+          <caret line="125" column="39" selection-start-line="125" selection-start-column="39" selection-end-line="125" selection-end-column="39" />
         </state>
       </provider>
     </entry>

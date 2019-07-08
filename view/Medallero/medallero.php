@@ -23,7 +23,7 @@
             </div>
         </div>
         <div class="row mt-2">
-            <div class="col-md-12">
+            <div class="col-md-12 table-responsive">
                 <table class="table">
                     <thead class="thead-dark">
                     <tr>

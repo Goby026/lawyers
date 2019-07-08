@@ -16,88 +16,13 @@
 <!--</html>-->
 
 <hr>
-<?php //   if (isset($_SESSION['username'])){
+<?php  if (isset($_SESSION['username'])){
 //            ?><!-- -->
 <!-- Footer -->
 <footer class="page-footer font-small blue pt-4">
 
-    <!-- Footer Links -->
-    <div class="container-fluid text-center text-md-left bg-light">
+  
 
-        <!-- Grid row -->
-        <div class="row">
-
-            <!-- Grid column -->
-            <div class="col-md-6 mt-md-0 mt-3">
-
-                <!-- Content -->
-<!--                <h5 class="text-uppercase">Mesa de partes:</h5>-->
-<!--                <p>Dirección: Av. San Luis cuadra 11 S/N Puerta N° 6 Villa Deportiva Nacional (VIDENA) cruce con la Av. Del Aire, Distrito de San Luis Horario: Lunes a viernes de 8:30 hrs. a 16:30 hrs.</p>-->
-
-            </div>
-            <!-- Grid column -->
-
-            <hr class="clearfix w-100 d-md-none pb-3">
-
-            <!-- Grid column -->
-            <div class="col-md-3 mb-md-0 mb-3">
-
-                <!-- Links -->
-                <!--                <h5 class="text-uppercase">Contenidos</h5>-->
-                <!---->
-                <!--                <ul class="list-unstyled">-->
-                <!--                    <li>-->
-                <!--                        <a href="./Home.php">Inicio</a>-->
-                <!--                    </li>-->
-                <!--                    <li>-->
-                <!--                        <a href="./losjuegos.php">Los juegos</a>-->
-                <!--                    </li>-->
-                <!--                    <li>-->
-                <!--                        <a href="./ComiteOrganizador.php">Comite Organizador</a>-->
-                <!--                    </li>-->
-                <!--                    <li>-->
-                <!--                        <a href="./ceremonia.php">Ceremonia</a>-->
-                <!--                    </li>-->
-                <!--                    <li>-->
-                <!--                        <a href="./Auspiciadores.php">Auspiciadores</a>-->
-                <!--                    </li>-->
-                <!--                </ul>-->
-
-            </div>
-            <!-- Grid column -->
-
-            <!-- Grid column -->
-            <div class="col-md-3 mb-md-0 mb-3">
-
-                <!-- Links -->
-                <h5 class="text-uppercase">Contenidos</h5>
-
-                <ul class="list-unstyled">
-                    <li>
-                        <a href="./Home.php">Inicio</a>
-                    </li>
-                    <li>
-                        <a href="./losjuegos.php">Los juegos</a>
-                    </li>
-                    <li>
-                        <a href="./ComiteOrganizador.php">Comite Organizador</a>
-                    </li>
-                    <li>
-                        <a href="./ceremonia.php">Ceremonia</a>
-                    </li>
-                    <li>
-                        <a href="./Auspiciadores.php">Auspiciadores</a>
-                    </li>
-                </ul>
-
-            </div>
-            <!-- Grid column -->
-
-        </div>
-        <!-- Grid row -->
-
-    </div>
-    <!-- Footer Links -->
 
     <div class="footer-copyright text-center py-3 bg-warning">
         <h5>Siguenos <i class="fab fa-facebook-f"></i> <i class="fab fa-instagram"></i> <i class="fab fa-twitter"></i> <i class="fab fa-youtube"></i> <i class="fab fa-linkedin-in"></i> <i class="fab fa-flickr"></i></h5>
@@ -113,7 +38,7 @@
 </footer>
 <!-- Footer -->
 <?php 
-//}
+}
  ?>
 
 <!--<script type='text/javascript' src='./jquery/jquery-migrate-1.2.1.min.js'></script>-->

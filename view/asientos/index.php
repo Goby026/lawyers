@@ -1,8 +1,6 @@
-<?php
-    $_SESSION['IdSede'] = $_GET['d'];
-?>
 <div class="container">
-    <h2 class="text-center">Escoger asientos</h2>
+    <h2 class="text-center mt-5">Escoger asientos</h2>
+    <hr>
     <div class="row">
         <div class="col-md-6 mt-5">
             <div class="m-2">
@@ -22,7 +20,7 @@
                 }
                 
                 ?>
-                <button data-id="<?php echo $row->idAsiento; ?>" data-precio="<?php echo $row->precio; ?>" <?php echo $disabled; ?> style="width: 50px" class="btn btn-<?php echo $estado; ?> m-2 asientos"><?php echo $row->numero; ?></button>
+                <button data-id="<?php echo $row->idAsiento; ?>" data-precio="<?php echo $Precio; ?>" <?php echo $disabled; ?> style="width: 50px" class="btn btn-<?php echo $estado; ?> m-2 asientos"><?php echo $row->numero; ?></button>
             <?php endforeach; ?>
         </div>
         <div class="card text-left mt-5 col-md-12">
@@ -32,15 +30,27 @@
                 <div class="row">
                     <div class="col-md-7">
                         <div class="form-inline">
-                            <div class="form-group col-md-6 offset-md-3 mb-2">
-                                <label for="Categoria" class="col-md-4">Categoria</label> 
-                                <input type="text" name="Categoria" id="Categoria" class="form-control col-md-8" value="<?php echo $Categoria; ?>" readonly >
-                            </div>
-                            <div class="form-group col-md-6 offset-md-3 mb-2">
+                            <div class="form-group col-md-12 mb-2">
                                 <label for="Sede" class="col-md-4">Sede</label> 
                                 <input type="text" name="Sede" id="Sede" class="form-control col-md-8" value="<?php echo $Sede; ?>" readonly>
                             </div>
-                            <div class="form-group col-md-6 offset-md-3 mb-2">
+                            <div class="form-group col-md-12 mb-2">
+                                <label for="Lugar" class="col-md-4">Lugar</label> 
+                                <input type="text" name="Lugar" id="Lugar" class="form-control col-md-8" value="<?php echo $Lugar; ?>" readonly >
+                            </div>
+                            <div class="form-group col-md-12 mb-2">
+                                <label for="Deporte" class="col-md-4">Deporte</label> 
+                                <input type="text" name="Deporte" id="Deporte" class="form-control col-md-8" value="<?php echo $NombDeporte; ?>" readonly >
+                            </div>
+                            <div class="form-group col-md-12 mb-2">
+                                <label for="Categoria" class="col-md-4">Categoria</label> 
+                                <input type="text" name="Categoria" id="Categoria" class="form-control col-md-8" value="<?php echo $Categoria; ?>" readonly >
+                            </div>
+                            <div class="form-group col-md-12 mb-2">
+                                <label for="Precio" class="col-md-4">Precio</label> 
+                                <input type="text" name="Precio" id="Precio" class="form-control col-md-8" value="<?php echo 'S/. '.$Precio; ?>" readonly >
+                            </div>
+                            <div class="form-group col-md-12 mb-2">
                                 <label for="MontoTotal" class="col-md-4">Monto Total</label> 
                                 <input type="text" name="MontoTotal" id="MontoTotal" class="form-control col-md-8" value="S/. 0" readonly>
                                 <span id="TotalPago" hidden></span>
@@ -55,14 +65,13 @@
             </div>
         </div>
         <?php if($_SESSION['id_usuario']) { ?>
-        <div id="paypal-button-container" class="mt-5"></div>
+        <div id="paypal-button-container" class="mt-5 ml-auto mr-auto"></div>
         <?php } else { ?>
         <a href="?c=login&a=acceso" class="btn btn-warning mt-5 ml-auto mr-auto">INICIAR SESION</a>
             
         <?php } ?>
     </div>
 </div>
-<!--<button class="estadio">prueba</button>-->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <script src="./assets/js/alertify.min.js"></script>
 <script src="https://www.paypal.com/sdk/js?client-id=AZyceNz3mWPNGCkd2NjI3Dx3ul9Y54DgP76nbPn0U3tqFMjfsIBoPjn6wsL9o2XPfZfujqKzpisIL9EM&currency=USD"></script>
@@ -92,7 +101,7 @@
                 MontoTotal = MontoTotal + $(this).data('precio');
             });
             $('#MontoTotal').val('S/. '+MontoTotal);
-            $('#TotalPago').text(MontoTotal * 0.329);
+            $('#TotalPago').text(Math.round(MontoTotal * 0.329));
         }
 
         // Render the PayPal button into #paypal-button-container
@@ -113,9 +122,9 @@
             onApprove: function(data, actions) {
                 return actions.order.capture().then(function(details) {
                     ComprarAhora();
-                    alertify.alert("Compra concluida con ¨¦xito", function(){
-                        // location.href= "detalle_venta.php";
-                        location.reload();
+                    alertify.alert("Compra concluida con éxito", function(){
+                        location.href= "?c=CompraEntrada&a=index";
+                        // location.reload();
                     });
                 
                     // Call your server to save the transaction
@@ -144,27 +153,12 @@
             
             $.ajax({
                 type: "POST",
-                url: "./php/comprar.php",
+                url: "?c=CompraEntrada&a=Crear",
                 data: {asientos: JSON.stringify(asientos)},
                 success: function (response) {
                     console.log(asientos)
                 }
             });
         }
-        $('.estadio').click(function (e) { 
-            e.preventDefault();
-            var asientos = new Array(); 
-            $('.asiento_r button').each(function () {
-                asientos.push($(this).attr('id'));
-            });
-            $.ajax({
-                type: "POST",
-                url: "./php/comprar.php",
-                data: {asientos: JSON.stringify(asientos)},
-                success: function (response) {
-                    console.log(asientos)
-                }
-            });
-        });
     
     </script>

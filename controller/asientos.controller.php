@@ -1,6 +1,6 @@
 <?php
 require_once 'model/asientos.php';
-require_once 'model/categoriaasiento.php';
+require_once 'model/categorias.php';
 require_once 'model/sedes.php';
 
 class AsientosController{
@@ -9,22 +9,23 @@ class AsientosController{
 
     public function __CONSTRUCT(){
         $this->model = new Asientos();
-        $this->modelc = new CategoriaAsiento();
-        $this->models = new Sedes();
     }
 
 
     public function Index(){
         session_start();
+        $_SESSION['IdCategoria'] = $_GET['categoria'];
+    
         $Asientos = $this->getAsientos();
-        $CategoriaRow = $this->getCategoria();
-        foreach($CategoriaRow as $row):
-            $Categoria = $row->NombreCategoriaA;
-        endforeach;
-        $UbicacionRow = $this->getUbicacion();
-        foreach($UbicacionRow as $row):
+        $DetalleEvento = $this->getListarDetalleEvento();
+        foreach($DetalleEvento as $row):
+            $Categoria = $row->Categoria;
             $Sede = $row->DireccionSede;
+            $Lugar = $row->Lugar;
+            $NombDeporte = $row->NombDeporte;
+            $Precio = $row->Precio;
         endforeach;
+        $_SESSION['Precio'] = $Precio;
         require_once 'view/header.php';
         require_once 'view/asientos/index.php';
         require_once 'view/footer.php';
@@ -34,12 +35,9 @@ class AsientosController{
         return $this->model->ListarCategoriaAsientos();
     }
     
-    public function getCategoria(){
-        return $this->modelc->NombreCategoria();
+    public function getListarDetalleEvento(){
+        return $this->model->ListarDetalleEvento();
     }
     
-    public function getUbicacion(){
-        return $this->models->Ubicacion();
-    }
     
 }

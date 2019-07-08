@@ -12,6 +12,7 @@ class CategoriaAsientoController{
 
     public function Index(){
         session_start();
+        $_SESSION['IdEvento'] = $_GET['evento'];
         $catasi = $this->get();
         require_once 'view/header.php';
         require_once 'view/categoriaasiento/index.php';

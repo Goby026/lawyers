@@ -33,7 +33,7 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 table-responsive">
                 <table class="table">
                     <thead class="thead-dark">
                     <tr>
@@ -47,7 +47,7 @@
 
                     <?php foreach ($resultados as $row): ?>
 
-                        <tr class="bg-warning">
+                        <tr class="bg-light">
                             <td><?php echo $row->fecha;?></td>
                             <td><?php echo $row->NombDeporte;?></td>
                             <td><?php echo $row->pais1;?></td>

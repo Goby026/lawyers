@@ -12,7 +12,7 @@ class RespuestaPreguntaFrec
 	{
 		try
 		{
-			$this->pdo = Database::StartUp();
+			$this->pdo = Database::StartUp();     
 		}
 		catch(Exception $e)
 		{

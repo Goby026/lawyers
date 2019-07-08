@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="text-right mt-2">
-                    <a href="?c=video&a=registrarVideo" class="btn btn-outline-success"><i class="fas fa-plus"></i> Nuevo Video</a>
+                    <!--<a href="?c=video&a=registrarVideo" class="btn btn-outline-success"><i class="fas fa-plus"></i> Nuevo Video</a>-->
                 </div>
             </div>
         </div>

@@ -3,17 +3,21 @@ class Usuarios
 {
     private $pdo;
 
-    public $idUsuario;
+    public $id;
+    public $usuario;
     public $nombre;
-    public $NombreU;
     public $ApellidoU;
-    public $emailU;
     public $telefonoU;
-    public $passwordU;
     public $DocIdentidad;
-    public $idTipoUsuario;
-    public $idGaleria;
-    public $idEstadoUsuario;
+    public $correo;
+    public $password;
+    public $last_session;
+    public $activacion;
+    public $token;
+    public $token_password;
+    public $password_request;
+    public $id_tipo;
+
 
     public function __CONSTRUCT()
     {
@@ -74,26 +78,28 @@ class Usuarios
         }
     }
 
-    public function Actualizar($data)
+    public function Actualizar(Usuarios $data)
     {
         try
         {
-            $sql = "UPDATE alumnos SET 
-						Nombre          = ?, 
-						Apellido        = ?,
-                        Correo        = ?,
-						Sexo            = ?, 
-						FechaNacimiento = ?
-				    WHERE id = ?";
+            $sql = "UPDATE usuarios SET 
+						usuario       = ?, 
+						nombre        = ?,
+                        ApellidoU     = ?,
+						telefonoU     = ?, 
+                        DocIdentidad  = ?,
+						correo = ?
+                    WHERE id = ?";
 
             $this->pdo->prepare($sql)
                 ->execute(
                     array(
-                        $data->Nombre,
-                        $data->Correo,
-                        $data->Apellido,
-                        $data->Sexo,
-                        $data->FechaNacimiento,
+                        $data->usuario,
+                        $data->nombre,
+                        $data->ApellidoU,
+                        $data->telefonoU,
+                        $data->DocIdentidad,
+                        $data->correo,
                         $data->id
                     )
                 );

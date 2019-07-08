@@ -11,12 +11,12 @@
               <?php foreach($oficinas as $row): ?>
               <div class="col-md-4">
                   <div class="col-md-12 border border-secondary mt-3" style="padding: 15px;">
-                  <p style="color: #0f0f0f;"><?php echo $row->oficina; ?></p>
+                  <?php echo $row->oficina; ?>
 
                   </div>
 
                       <?php foreach( $this->unidades->Listar($row->codigo) as $r): ?>
-                        <ul style="color: #0f0f0f;"><?php echo $r->unidad ?></ul>
+                        <ul><?php echo $r->unidad ?></ul>
                       <?php endforeach; ?>
               </div>
               <?php endforeach; ?>
