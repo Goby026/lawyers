@@ -12,9 +12,8 @@ class UsuarioController{
 
     public function Index(){
 
-
         require_once 'view/header.php';
-        require_once 'view/registro/registro.php';
+        require_once 'view/usuario/registro.php';
         require_once 'view/footer.php';
     }
     
@@ -39,24 +38,44 @@ class UsuarioController{
     }
 
     public function Guardar(){
-        session_start();
+
         $usuario = new Usuarios();
-        
-        $usuario->id = $_REQUEST['id'];
-        $usuario->usuario = $_REQUEST['usuario'];
-        $usuario->nombre = $_REQUEST['nombre'];
-        $usuario->ApellidoU = $_REQUEST['apellidos'];
-        $usuario->telefonoU = $_REQUEST['telefono'];
-        $usuario->DocIdentidad = $_REQUEST['documento'];
-        $usuario->correo = $_REQUEST['email'];
-        $usuario->last_session = $_REQUEST['ultimo'];
 
-        $this->model->Actualizar($usuario);
-        
+        $usuario->idt_perfil = 2;
+        $usuario->username = $_REQUEST['email'];
+        $usuario->password = $_REQUEST['password'];
+        $repass = $_REQUEST['repassword'];
 
-        require_once 'view/header.php';
-        require_once 'view/usuario/perfil.php';
-        require_once 'view/footer.php';
+        if (isset($_REQUEST['terminos'])){
+            if ($usuario->password === $repass){
+                if ($this->model->Registrar($usuario)){
+
+                    $success = "Gracias por registrarse, puede ingresar al sistema";
+
+                    require_once 'view/header.php';
+                    require_once 'view/login/login.php';
+                    require_once 'view/footer.php';
+
+                }else{
+                    $error = "Error al registrar usuario";
+                    require_once 'view/header.php';
+                    require_once 'view/usuario/registro.php';
+                    require_once 'view/footer.php';
+                }
+            }else{
+                $error = "Los passwords no coinciden";
+                require_once 'view/header.php';
+                require_once 'view/usuario/registro.php';
+                require_once 'view/footer.php';
+            }
+        }else{
+            $error = "Debe aceptar los términos y condiciones";
+            require_once 'view/header.php';
+            require_once 'view/usuario/registro.php';
+            require_once 'view/footer.php';
+        }
+
+
 
     }
 
@@ -73,22 +92,22 @@ class UsuarioController{
 
         if(!empty($_POST))
         {
-            $nombre =  $_POST['nombre'];    
-            $apellidos =  $_POST['apellidos'];  
-            $usuario =  $_POST['usuario'];  
-            $documento =  $_POST['documento'];  
-            $telefono =  $_POST['telefono'];    
-            $email =  $_POST['email'];  
+            $nombre =  $_POST['nombre'];
+            $apellidos =  $_POST['apellidos'];
+            $usuario =  $_POST['usuario'];
+            $documento =  $_POST['documento'];
+            $telefono =  $_POST['telefono'];
+            $email =  $_POST['email'];
             $password =  $_POST['password'];    
-            $con_password = $_POST['con_password'];    
+            $con_password = $_POST['con_password'];
             $captcha =  $_POST['g-recaptcha-response'];
             $activo = 1;
             $tipo_usuario = 1;
             $secret = '6LeUoaoUAAAAAF37vU0xD9dRviuSszziR9rZfPal';
             
-            if(!$captcha){
-              $errors[] = "Por favor verifica el captcha";
-        }
+//            if(!$captcha){
+//              $errors[] = "Por favor verifica el captcha";
+//            }
             
             if($this->isNull($nombre, $usuario, $password, $con_password, $email))
             {
@@ -166,7 +185,7 @@ class UsuarioController{
 
         require_once 'view/header.php'; 
         require_once 'view/registro/registro.php';
-        $fallas = $this->resultBlock($errors);
+//        $fallas = $this->resultBlock($errors);
         require_once 'view/footer.php';
         }
         

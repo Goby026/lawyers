@@ -1,44 +1,13 @@
-<main>
-    <div class="container">
-        <div class="row mt-2">
-            <div class="col-md-8">
-                <h3>Mis Notificaciones</h3>
-            </div>
-
-            <div class="col-md-4">
-                <div class="text-right">
-                </div>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">Cras justo odio</li>
+                <li class="list-group-item">Dapibus ac facilisis in</li>
+                <li class="list-group-item">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
         </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th colspan="3" scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach($notificaciones as $noti): ?>
-                    <tr>
-                        <th scope="row"><?php echo $noti->titulo; ?></th>
-                        <?php foreach ($this->resultados->Obtener($noti->idEvento) as $row): ?>
-                            <td><?php echo $row->pais1;?></td>
-                            <td><?php echo $row->res1;?></td>
-                            <td> - </td>
-                            <td><?php echo $row->res2;?></td>
-                            <td><?php echo $row->pais2;?></td>
-                        <?php endforeach; ?>
-                        <td class="text-right">
-                            <a href="?c=notificacion&a=leer&id=<?php echo $noti->idusuario_notificaciones;?>" class="btn btn-danger btn-sm"><i class="fas fa-ban"></i></a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
     </div>
-</main>
+</div>

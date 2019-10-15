@@ -17,7 +17,7 @@ class DocumentosController{
         // $c=0;
 
         require_once 'view/header.php';
-        require_once 'view/Documentos/documentos.php';
+        require_once 'view/documentos/documentos.php';
         require_once 'view/footer.php';
 
     }

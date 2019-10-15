@@ -2,7 +2,7 @@
 
 require_once 'model/database.php';
 
-$controller = 'login';
+$controller = 'home';
 
 // Todo esta lógica hara el papel de un FrontController
 if(!isset($_REQUEST['c']))

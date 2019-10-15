@@ -2,21 +2,13 @@
 class Usuarios
 {
     private $pdo;
+    private $table = "t_usuario";
 
-    public $id;
-    public $usuario;
-    public $nombre;
-    public $ApellidoU;
-    public $telefonoU;
-    public $DocIdentidad;
-    public $correo;
+    //propiedades
+    public $idt_usuario;
+    public $idt_perfil;
+    public $username;
     public $password;
-    public $last_session;
-    public $activacion;
-    public $token;
-    public $token_password;
-    public $password_request;
-    public $id_tipo;
 
 
     public function __CONSTRUCT()
@@ -37,7 +29,7 @@ class Usuarios
         {
             $result = array();
 
-            $stm = $this->pdo->prepare("SELECT * FROM usuarios");
+            $stm = $this->pdo->prepare("SELECT * FROM ".$this->table);
             $stm->execute();
 
             return $stm->fetchAll(PDO::FETCH_OBJ);
@@ -53,7 +45,7 @@ class Usuarios
         try
         {
             $stm = $this->pdo
-                ->prepare("SELECT * FROM usuarios WHERE id = ?");
+                ->prepare("SELECT * FROM ".$this->table." WHERE idt_usuario = ?");
 
 
             $stm->execute(array($id));
@@ -69,7 +61,7 @@ class Usuarios
         try
         {
             $stm = $this->pdo
-                ->prepare("DELETE FROM alumnos WHERE id = ?");
+                ->prepare("DELETE FROM ".$this->table." WHERE idt_usuario = ?");
 
             $stm->execute(array($id));
         } catch (Exception $e)
@@ -82,25 +74,14 @@ class Usuarios
     {
         try
         {
-            $sql = "UPDATE usuarios SET 
-						usuario       = ?, 
-						nombre        = ?,
-                        ApellidoU     = ?,
-						telefonoU     = ?, 
-                        DocIdentidad  = ?,
-						correo = ?
-                    WHERE id = ?";
+            $sql = "UPDATE ". $this->table ." SET idt_perfil = ?, username = ?, password = ? WHERE idt_usuario = ?";
 
             $this->pdo->prepare($sql)
                 ->execute(
                     array(
-                        $data->usuario,
-                        $data->nombre,
-                        $data->ApellidoU,
-                        $data->telefonoU,
-                        $data->DocIdentidad,
-                        $data->correo,
-                        $data->id
+                        $data->idt_perfil,
+                        $data->username,
+                        $data->password,
                     )
                 );
         } catch (Exception $e)
@@ -109,46 +90,42 @@ class Usuarios
         }
     }
 
-    public function Registrar(Alumno $data)
+    public function Registrar(Usuarios $data)
     {
         try
         {
-            $sql = "INSERT INTO alumnos (Nombre,Correo,Apellido,Sexo,FechaNacimiento,FechaRegistro) 
-		        VALUES (?, ?, ?, ?, ?, ?)";
+            $sql = 'INSERT INTO ' . $this->table . ' (idt_perfil, username, password) VALUES (?,?,?)';
 
             $this->pdo->prepare($sql)
                 ->execute(
                     array(
-                        $data->Nombre,
-                        $data->Correo,
-                        $data->Apellido,
-                        $data->Sexo,
-                        $data->FechaNacimiento,
-                        date('Y-m-d')
+                        $data->idt_perfil,
+                        $data->username,
+                        $data->password,
                     )
                 );
+
+            return true;
         } catch (Exception $e)
         {
             die($e->getMessage());
         }
+
+        return false;
     }
 
-    public function Login($user, $pass){
+    public function Login(Usuarios $user){
         try
         {
             $result = array();
 
-            $consulta = "CALL SP_LOGIN('".$user."','".$pass."');";
+            $stm = $this->pdo
+                ->prepare("SELECT * FROM ".$this->table." WHERE username = ? AND password = ?");
 
-            $stm = $this->pdo->query($consulta);
 
-//            $stm->execute();
-
-//            return $stm->fetchAll(PDO::FETCH_OBJ);
-
-            return $stm->rowCount();
-        }
-        catch(Exception $e)
+            $stm->execute(array($user->username, $user->password));
+            return $stm->fetch(PDO::FETCH_OBJ);
+        } catch (Exception $e)
         {
             die($e->getMessage());
         }
@@ -224,7 +201,7 @@ class Usuarios
 		}
 		else
 		{
-			return false;	
+			return false;
         }
     }
 

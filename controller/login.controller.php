@@ -16,22 +16,35 @@ class LoginController{
     }
 
     public function Acceso(){
+
         require_once 'view/header.php';
-        require_once 'view/login/login_prueba.php';
+        require_once 'view/index/index.php';
         require_once 'view/footer.php';
     }
 
     public function Acceder(){
 
-        $usuarios = new Usuarios();
+        $usuario = new Usuarios();
 
-        if ($usuarios->Login($_POST['email'], $_POST['password']) > 0){
+        $usuario->username = $_REQUEST['username'];
+        $usuario->password = $_REQUEST['password'];
 
+        if ($usuario->Login($usuario)){
             session_start();
-            $_SESSION['auth'] = $_POST['email'];
+
+            $user_log = $usuario->Login($usuario);
+
+            $_SESSION['auth'] = $usuario->username;
+            $_SESSION['user_id'] = $user_log->idt_usuario;
 
             require_once 'view/header.php';
             require_once 'view/index/index.php';
+            require_once 'view/footer.php';
+
+        }else{
+            $error = "Error de datos¡¡¡¡¡";
+            require_once 'view/header.php';
+            require_once 'view/login/login.php';
             require_once 'view/footer.php';
         }
 
@@ -80,7 +93,7 @@ class LoginController{
         session_unset();
         session_destroy();
 
-        header("Location: http://www.tecnoweplay.com/");
+        header("Location: ?c=home");
     }
 
 

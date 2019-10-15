@@ -1,53 +1,63 @@
-<!--            <div class="row">-->
-<!--                <div class="col-xs-12">-->
-<!--                    <hr />-->
-<!--                    <footer class="text-center well">-->
-<!--                        <p>Ejemplo desarrollado por <a href="http://anexsoft.com">Anexsoft</a></p>-->
-<!--                    </footer>                -->
-<!--                </div>    -->
-<!--            </div>-->
-<!--        </div>-->
-<!---->
-<!--        <script src="assets/js/bootstrap.min.js"></script>-->
-<!--        <script src="assets/js/jquery-ui/jquery-ui.min.js"></script>-->
-<!--        <script src="assets/js/ini.js"></script>-->
-<!--        <script src="assets/js/jquery.anexsoft-validator.js"></script>-->
-<!--    </body>-->
-<!--</html>-->
+<footer>
+    <section id="footer" class="mt-5">
+        <div class="container-fluid">
+            <div class="row text-center text-xs-center text-sm-left text-md-left">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <h5>Consulta en Linea</h5>
+                    <ul class="list-unstyled quick-links">
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>Home</a></li>
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>About</a></li>
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>FAQ</a></li>
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>Get Started</a></li>
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>Videos</a></li>
+                    </ul>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <h5>Nuestras Redes Sociales</h5>
+                    <ul class="list-unstyled list-inline social text-left">
+                        <li class="list-inline-item"><a href=""><i class="fab fa-facebook"></i></a></li>
+                        <li class="list-inline-item"><a href=""><i class="fa fa-instagram"></i></a></li>
+                        <li class="list-inline-item"><a href=""><i class="fab fa-twitter"></i></a></li>
+                        <li class="list-inline-item"><a href=""><i class="fab fa-youtube"></i></a></li>
+                        <li class="list-inline-item"><a href=""><i class="fas fa-envelope"></i></a></li>
+                        <li class="list-inline-item"><a href=""><i class="fab fa-pinterest-square"></i></a></li>
+                    </ul>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <h5>System Case</h5>
+                    <ul class="list-unstyled quick-links">
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>Terminos y Condiciones</a></li>
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>Información Legal</a></li>
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>Descubre Comó Funciona</a></li>
+                        <li><a href=""><i class="fa fa-angle-double-right"></i>Ayuda </a></li>
 
-<hr>
-<?php  if (isset($_SESSION['username'])){
-//            ?><!-- -->
-<!-- Footer -->
-<footer class="page-footer font-small blue pt-4">
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 mt-2 mt-sm-2 text-center text-white">
 
-  
-
-
-    <div class="footer-copyright text-center py-3 bg-warning">
-        <h5>Siguenos <i class="fab fa-facebook-f"></i> <i class="fab fa-instagram"></i> <i class="fab fa-twitter"></i> <i class="fab fa-youtube"></i> <i class="fab fa-linkedin-in"></i> <i class="fab fa-flickr"></i></h5>
-    </div>
-
-    <!-- Copyright -->
-    <div class="footer-copyright text-center py-0 bg-warning">© 2019 Copyright:
-        <a href="./Home.php"> Juegos Panamericanos</a> <br>
-        <img src="./assets/images/ondas.png" class="img-fluid" alt="Responsive image">
-    </div>
-    <!-- Copyright -->
-
+                    <p class="h6">Copyright 2019 System Case.</p>
+                    <a class="text-green ml-2" href="https://www.sunlimetech.com" target="_blank">Todos los derechos reservados.</a>
+                </div>
+                <hr>
+            </div>
+        </div>
+    </section>
 </footer>
-<!-- Footer -->
-<?php 
-}
- ?>
 
-<!--<script type='text/javascript' src='./jquery/jquery-migrate-1.2.1.min.js'></script>-->
-<!--<script type='text/javascript' src='./jquery/jquery.plugins.js'></script>-->
-<!--<script type='text/javascript' src='./jquery/mediaelement-and-player.min.js'></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
 
-<script type='text/javascript' src='./assets/js/contador.js'></script>
-<script src='https://www.google.com/recaptcha/api.js'></script>
+<!--Bootstrap select js-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 
+<script src="./assets/js/navbar.js"></script>
 
 </body>
 </html>
