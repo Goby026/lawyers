@@ -72,7 +72,7 @@ class CasoController{
 
         $this->model->Registrar($caso);
 
-        header('Location: ?c=caso&a=expediente');
+        header('Location: ?c=caso&a=expedientes');
 
 //        $caso->id > 0 ? $this->model->Actualizar($caso) : $this->model->Registrar($caso);
 //
