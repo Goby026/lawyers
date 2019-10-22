@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-10-2019 a las 17:01:53
+-- Tiempo de generación: 23-10-2019 a las 01:13:26
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -360,18 +360,23 @@ CREATE TABLE `t_usuario` (
   `idt_usuario` int(11) NOT NULL,
   `idt_perfil` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `token_password` text,
+  `password_request` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `t_usuario`
 --
 
-INSERT INTO `t_usuario` (`idt_usuario`, `idt_perfil`, `username`, `password`) VALUES
-(4, 1, 'CORRUPTUS', '123456'),
-(5, 2, 'raul@mail.com', '123456'),
-(6, 2, 'frank@email.com', '123456'),
-(7, 2, 'gac184@hotmail.com', '654321');
+INSERT INTO `t_usuario` (`idt_usuario`, `idt_perfil`, `username`, `password`, `token_password`, `password_request`) VALUES
+(4, 1, 'CORRUPTUS', '123456', NULL, NULL),
+(5, 2, 'raul@mail.com', '123456', NULL, NULL),
+(6, 2, 'frank@email.com', '123456', NULL, NULL),
+(7, 2, 'gac184@hotmail.com', '654321', NULL, NULL),
+(8, 2, 'grover@mail.com', '1234', NULL, NULL),
+(9, 2, 'stripe_dev@protonmail.com', '$2y$10$TgOzcg1P0SFxGAoO.4GoQu/a13LxVG.Kn8Pmq6biu3Ur2qDdaVJ1O', '', 0),
+(11, 2, 'george.rendich@gmail.com', '$2y$10$V3HFLuA4xUQuSjvNbrwPueySOB0LIUqOk2Agtmfbz.4qSdyQcHE/u', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -652,7 +657,7 @@ ALTER TABLE `t_tipocliente`
 -- AUTO_INCREMENT de la tabla `t_usuario`
 --
 ALTER TABLE `t_usuario`
-  MODIFY `idt_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idt_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `t_usuarionoti`
