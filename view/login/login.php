@@ -20,8 +20,29 @@
             </div>
         </div>
         <?php
+    }else if (isset($msg)){
+    ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-success" role="alert">
+                    <?php echo $msg; ?>
+                </div>
+            </div>
+        </div>
+    <?php
+    }else if (isset($msgerr)){
+    ?>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-danger" role="alert">
+                    <?php echo $msgerr; ?>
+                </div>
+            </div>
+        </div>
+        <?php
     }
     ?>
+
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -41,7 +62,7 @@
                     <div class="row">
                         <div class="col-md-6 border-right border-dark">
                             <section>
-                                <form action="?c=login&a=acceder" method="post">
+                                <form action="?c=login&a=validar" method="post">
                                     <div class="form-group">
                                         <label for="usuario">USUARIO O CORREO</label>
                                         <input name="username" type="text" class="form-control" id="usuario"
@@ -60,7 +81,7 @@
                                 </div>
                                 <div class="text-center mt-3">
                                     <!-- <a  href="">registrarme</a> -->
-                                    <a href="?c=usuario&a=index" class="text-muted">recuperar contraseña</a>
+                                    <a href="?c=login&a=recuperarview" class="text-muted">recuperar contraseña</a>
                                 </div>
                             </section>
                         </div>

@@ -1,9 +1,14 @@
+<div class="container-fluid">
+    <div class="row titulos">
+        <h3>Recuperar Contraseña</h3>
+    </div>
+</div>
 <div class="container">
     <div id="loginbox" style="margin-top:50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
         <div class="card">
             <div class="card-header">
-                <div class="card-title">Recuperar Contraseña</div>
-                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="?c=login&a=acceso">Iniciar
+                <div class="card-title">&nbsp;</div>
+                <div style="float:right; font-size: 80%; position: relative; top:-10px"><a href="?c=login&a=index">Iniciar
                         Sesi&oacute;n</a></div>
             </div>
 
@@ -20,7 +25,7 @@
 
                     <div style="margin-top:10px" class="form-group">
                         <div class="col-sm-12 controls">
-                            <button id="btn-login" type="submit" class="btn btn-success">Enviar</a>
+                            <button id="btn-login" type="submit" name="reset_request" class="btn btn-success">Enviar</button>
                         </div>
                     </div>
 

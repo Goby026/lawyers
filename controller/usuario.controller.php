@@ -6,6 +6,7 @@ class UsuarioController{
     private $model;
 
     public function __CONSTRUCT(){
+        session_start();
         $this->model = new Usuarios();
     }
 
@@ -18,8 +19,6 @@ class UsuarioController{
     }
     
     public function perfil(){
-       
-        session_start();
         $usuario = $this->model->Obtener($_SESSION["id_usuario"]);
 
         require_once 'view/header.php';
@@ -47,21 +46,45 @@ class UsuarioController{
         $repass = $_REQUEST['repassword'];
 
         if (isset($_REQUEST['terminos'])){
-            if ($usuario->password === $repass){
-                if ($this->model->Registrar($usuario)){
+            if ($this->validaPassword($_REQUEST['password'], $repass)){
 
-                    $success = "Gracias por registrarse, puede ingresar al sistema";
+                $pass = $this->hashPassword($_REQUEST['password']);
 
-                    require_once 'view/header.php';
-                    require_once 'view/login/login.php';
-                    require_once 'view/footer.php';
+                $usuario->password = $pass;
+
+                if (!$this->model->usuarioExiste($_REQUEST['email'])){
+
+                    if ($this->minMax(20,6, $pass)){
+
+                        if ($this->model->Registrar($usuario)){
+
+                            $success = "Gracias por registrarse, puede ingresar al sistema";
+
+                            require_once 'view/header.php';
+                            require_once 'view/login/login.php';
+                            require_once 'view/footer.php';
+
+                        }else{
+                            $error = "Error al registrar usuario";
+                            require_once 'view/header.php';
+                            require_once 'view/usuario/registro.php';
+                            require_once 'view/footer.php';
+                        }
+
+                    }else{
+                        $error = "Su contraseña debe tener 6 caracteres como mínimo";
+                        require_once 'view/header.php';
+                        require_once 'view/usuario/registro.php';
+                        require_once 'view/footer.php';
+                    }
 
                 }else{
-                    $error = "Error al registrar usuario";
+                    $error = "¡Usuario ya existe!";
                     require_once 'view/header.php';
                     require_once 'view/usuario/registro.php';
                     require_once 'view/footer.php';
                 }
+
             }else{
                 $error = "Los passwords no coinciden";
                 require_once 'view/header.php';
@@ -194,8 +217,6 @@ class UsuarioController{
 
     }
 
-    
-
 
    public function isNull($nombre, $user, $pass, $pass_con, $email){
 		if(strlen(trim($nombre)) < 1 || strlen(trim($user)) < 1 || strlen(trim($pass)) < 1 || strlen(trim($pass_con)) < 1 || strlen(trim($email)) < 1)
@@ -247,50 +268,62 @@ class UsuarioController{
 		return $hash;
     }
     
-    public function enviarEmail($email, $nombre, $asunto, $cuerpo){
-		
-		require_once './assets/PHPMailer/PHPMailerAutoload.php';
-		
-            $mail = new PHPMailer(true); 
-            $mail->SMTPOptions = array(
-                'ssl' => array(
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                    'allow_self_signed' => true
-                )
-            );
-            $mail->SMTPDebug = 2; 
-            $mail->IsSMTP();
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'tls';
-            $mail->Host = 'smtp.gmail.com';
-            $mail->Port = 587;// TCP port to connect to
-            $mail->CharSet = 'UTF-8';
-            $mail->Username ='cesararriolachuco@gmail.com'; //Email para enviar
-            $mail->Password = '08QZMMCLP80'; //Su password
-            //Agregar destinatario
-            $mail->setFrom('cesararriolachuco@gmail.com', 'Panamericanos 2019');
-            $mail->AddAddress($email, $nombre); //A quien mandar email
-            $mail->SMTPKeepAlive = true;  
-            $mail->Mailer = "smtp"; 
-            
-            
-                //Content
-            $mail->isHTML(true); // Set email format to HTML
-            
-            
-            $mail->Subject = $asunto;
-            $mail->Body    = $cuerpo;
-            
-            if(!$mail->send()) {
-              echo 'Error al enviar email';
-              echo 'Mailer error: ' . $mail->ErrorInfo;
-            } else {
-              echo 'Mail enviado correctamente';
-            }
+//    public function enviarEmail($email, $nombre, $asunto, $cuerpo){
+//
+//		require_once './assets/PHPMailer/PHPMailerAutoload.php';
+//
+//            $mail = new PHPMailer(true);
+//            $mail->SMTPOptions = array(
+//                'ssl' => array(
+//                    'verify_peer' => false,
+//                    'verify_peer_name' => false,
+//                    'allow_self_signed' => true
+//                )
+//            );
+//            $mail->SMTPDebug = 2;
+//            $mail->IsSMTP();
+//            $mail->SMTPAuth = true;
+//            $mail->SMTPSecure = 'tls';
+//            $mail->Host = 'smtp.gmail.com';
+//            $mail->Port = 587;// TCP port to connect to
+//            $mail->CharSet = 'UTF-8';
+//            $mail->Username ='cesararriolachuco@gmail.com'; //Email para enviar
+//            $mail->Password = '08QZMMCLP80'; //Su password
+//            //Agregar destinatario
+//            $mail->setFrom('cesararriolachuco@gmail.com', 'Panamericanos 2019');
+//            $mail->AddAddress($email, $nombre); //A quien mandar email
+//            $mail->SMTPKeepAlive = true;
+//            $mail->Mailer = "smtp";
+//
+//
+//                //Content
+//            $mail->isHTML(true); // Set email format to HTML
+//
+//
+//            $mail->Subject = $asunto;
+//            $mail->Body    = $cuerpo;
+//
+//            if(!$mail->send()) {
+//              echo 'Error al enviar email';
+//              echo 'Mailer error: ' . $mail->ErrorInfo;
+//            } else {
+//              echo 'Mail enviado correctamente';
+//            }
+//    }
+
+    public function enviarEmail($email, $subject, $message){
+
+        $to = $email;
+
+        $headers = "From: systemcase <stripe_dev@protonmail.com>\r\n";
+        $headers .= "Reply-To: stripe_dev@protonmail.com\r\n";
+        $headers .= "Content-type: text/html\r\n";
+
+        return mail($to, $subject, $message, $headers);
+
+    //header("Location: ?c=login&a=index&msg=¡Hemos enviado un enlace a su correo¡");
+
     }
-
-
 
     public function activar_usuario()
     {
@@ -311,8 +344,7 @@ class UsuarioController{
 
     public function recuperar_pass(){
 
-        session_start();
-        if(isset($_SESSION["id_usuario"])){
+        if(isset($_SESSION["user_id"])){
             header("Location: ?c=index&a=index");
         }
         
@@ -320,7 +352,6 @@ class UsuarioController{
         
         if(!empty($_POST))
         {
-            
             $email =  $_POST['email'];
             
             if(!$this->isEmail($email))
@@ -329,25 +360,27 @@ class UsuarioController{
             }
             
             if($this->model->emailExiste($email))
-            {			
-                $user_id = $this->model->getValor('id', 'correo', $email);
-                $nombre =  $this->model->getValor('nombre', 'correo', $email);
+            {
+                $user_id = $this->model->getValor('idt_usuario', 'username', $email);
+                $nombre =  $this->model->getValor('username', 'username', $email);
                 
                 $token = $this->model->generaTokenPass($user_id);
                 
-                $url = 'http://www.tecnoweplay.com/?c=usuario&a=restablecer_pass&user_id='.$user_id.'&token='.$token;
+                $url = 'http://localhost/app-abogados/?c=usuario&a=restablecer_pass&user_id='.$user_id.'&token='.$token;
                 
-                $asunto = 'Recuperar Password - SISTEMA DE USUARIOS JUEGOS PANAMERICANOS 2019';
+                $asunto = 'Recuperar Password - SYSTEMCASE';
                 $cuerpo = "Hola $nombre: <br /><br />Se ha solicitado un reinicio de contrase&ntilde;a. <br/><br/>Para restaurar la contrase&ntilde;a, visita la siguiente direcci&oacute;n: <a href='$url'>$url</a>";
                //  var_dump($asunto);
-                if($this->enviarEmail($email, $nombre, $asunto, $cuerpo)){
+                if($this->enviarEmail($email, $asunto, $cuerpo)){
                      var_dump($asunto);
                     echo '<script> alert("Hemos enviado un correo electronico a su email para restablecer tu password ") </script>';
-                    echo '<script> window.location="?c=login&a=Acceso"; </script>';
+                    echo '<script> window.location="?c=login"; </script>';
                     exit;
                 }
+
                 } else {
-                $errors[] = "La direccion de correo electronico no existe";
+//                $errors[] = "La direccion de correo electronico no existe";
+                header("Location: ?c=login&a=index&msgerr=¡Algo salio mal¡");
             }
           
         }
@@ -357,11 +390,11 @@ class UsuarioController{
      public function restablecer_pass()
      {
             if(empty($_GET['user_id'])){
-                header('Location: index.php');
+                header('Location: ?c=index');
             }
             
             if(empty($_GET['token'])){
-                header('Location: index.php');
+                header('Location: ?c=index');
             }
             
             $user_id = $_GET['user_id'];
@@ -369,8 +402,8 @@ class UsuarioController{
             
             if(!$this->model->verificaTokenPass($user_id, $token))
             {
-                    echo 'No se pudo verificar los Datos';
-              exit;
+                echo 'No se pudo verificar los Datos';
+                exit;
             }
 
             require_once 'view/header.php';

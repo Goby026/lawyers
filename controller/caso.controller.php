@@ -14,6 +14,7 @@ class CasoController{
     private $abogado;
     
     public function __CONSTRUCT(){
+        session_start();
         $this->model = new Caso();
         $this->cliente = new Cliente();
         $this->instancia = new Instancia();
@@ -22,8 +23,6 @@ class CasoController{
     }
     
     public function Index(){
-
-        session_start();
 
         $clientes = $this->cliente->Listar();
         $instancias = $this->instancia->Listar();
@@ -36,7 +35,6 @@ class CasoController{
     }
     
     public function Expedientes(){
-        session_start();
         $casos = $this->model->Listar();
 
         if (isset($_REQUEST['t_CasoCod'])){
@@ -50,7 +48,6 @@ class CasoController{
     }
     
     public function Guardar(){
-        session_start();
         $caso = new Caso();
 
         $fecha = date("Y/m/d");

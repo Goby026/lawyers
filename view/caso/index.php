@@ -78,7 +78,9 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="cliente">Cliente </label><button type="button" class="btn btn-info btn-sm text-right"><i class="fa fa-plus"></i></button><br>
+                                    <label for="cliente">Cliente </label>
+<!--<button type="button" class="btn btn-info btn-sm text-right"><i class="fa fa-plus"></i></button>-->
+                                    <br>
                                     <select class="selectpicker" name="idt_cliente" data-live-search="true">
                                         <?php
                                         foreach ($clientes as $cliente) {
