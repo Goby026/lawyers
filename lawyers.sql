@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-10-2019 a las 00:23:04
+-- Tiempo de generación: 22-10-2019 a las 17:01:53
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -111,7 +111,9 @@ CREATE TABLE `t_caso` (
 
 INSERT INTO `t_caso` (`t_CasoCod`, `caso_titulo`, `cod_demandante`, `cod_demandado`, `t_CasoFech`, `t_CasoNumExp`, `t_AboCod`, `t_CasoJuzgado`, `t_CasoObservaciones`, `t_pagoTotal`, `idt_usuario`, `idt_cliente`, `t_MateCod`, `t_InsCod`, `idt_EstadoCaso`) VALUES
 (1, 'DIVORSIO', 1, 1, '2019-10-15', 'S/N', 2, 'JUZGADO CHILCA', '', '0.00', 6, 1, 1, 1, 1),
-(2, 'AGRESIÓN', 5, 6, '2019-10-15', 'S/N', 2, 'JUZGADO CHILCA', '', '0.00', 6, 3, 4, 3, 1);
+(2, 'AGRESIÓN', 5, 6, '2019-10-15', 'S/N', 2, 'JUZGADO CHILCA', '', '0.00', 6, 3, 4, 3, 1),
+(3, 'AGRESIÓN', 1, 1, '2019-10-16', 'S/N', 2, 'JUZGADO CHILCA', '', '0.00', 6, 1, 1, 1, 1),
+(4, 'AGRESIÓN', 1, 1, '2019-10-16', 'S/N', 2, 'JUZGADO CHILCA', '', '0.00', 6, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -149,7 +151,9 @@ INSERT INTO `t_cliente` (`idt_cliente`, `idt_tipoCliente`, `nombres`, `apellidos
 (5, 1, 'JUANA', 'VELIZ', '87986545', '', '', 'JR. ANGAMOS 110', '9875421', '', '2019-10-02', 'JUNIN', 'HUANCAYO', 'CHILCA', '2019-10-15 17:14:33'),
 (6, 1, 'ARTUR', 'BERMUDEZ', '65321451', '', '', 'JR. ANGAMOS 110', '9875421', '', '2019-10-02', 'JUNIN', 'HUANCAYO', 'CHILCA', '2019-10-15 17:14:33'),
 (7, 1, 'MARCIAL', 'PARIONA', '45784512', '', '', 'JR. ANGAMOS 110', '9875421', '', '2019-10-02', 'JUNIN', 'HUANCAYO', 'CHILCA', '2019-10-15 17:14:33'),
-(8, 1, 'JIMMY', 'ÑAUPARI', '63254125', '', '', 'JR. ANGAMOS 110', '9875421', '', '2019-10-02', 'JUNIN', 'HUANCAYO', 'CHILCA', '2019-10-15 17:14:33');
+(8, 1, 'JIMMY', 'ÑAUPARI', '63254125', '', '', 'JR. ANGAMOS 110', '9875421', '', '2019-10-02', 'JUNIN', 'HUANCAYO', 'CHILCA', '2019-10-15 17:14:33'),
+(9, 2, '', '', '', '10450689039', 'Dev Soft EIRL', 'Jr. Cusco 584', '987542525', 'sn', '0000-00-00', '1', '1', '1', '2019-10-22 05:38:08'),
+(10, 1, 'Angélica Verónica', 'Ramos Ortega', '48955223', '', '', 'Jr. Puno 142', '968542155', '', '1995-10-22', '1', '1', '1', NULL);
 
 -- --------------------------------------------------------
 
@@ -564,13 +568,13 @@ ALTER TABLE `t_audiencia`
 -- AUTO_INCREMENT de la tabla `t_caso`
 --
 ALTER TABLE `t_caso`
-  MODIFY `t_CasoCod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `t_CasoCod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `t_cliente`
 --
 ALTER TABLE `t_cliente`
-  MODIFY `idt_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idt_cliente` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `t_confignotificaciones`
