@@ -1,3 +1,8 @@
+<div class="container-fluid">
+    <div class="row titulos">
+        <h3>Panel de inicio</h3>
+    </div>
+</div>
 <div class="container home">
     <div class="row">
         <div class="card" style="width: 18rem;">

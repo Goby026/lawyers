@@ -58,6 +58,10 @@
                                     <!-- <a  href="">registrarme</a> -->
                                     <a href="?c=usuario&a=index" class="alert-link">registrarme</a>
                                 </div>
+                                <div class="text-center mt-3">
+                                    <!-- <a  href="">registrarme</a> -->
+                                    <a href="?c=usuario&a=index" class="text-muted">recuperar contraseña</a>
+                                </div>
                             </section>
                         </div>
                         <div class="col-md-6 my-auto">

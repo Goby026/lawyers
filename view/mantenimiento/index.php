@@ -1,3 +1,8 @@
+<div class="container-fluid">
+    <div class="row titulos">
+        <h3>Mantenimiento</h3>
+    </div>
+</div>
 <div class="container maintenance">
     <div class="list_instancia">
         <h3>Instancias {{num}}</h3>

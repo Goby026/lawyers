@@ -49,6 +49,23 @@ class Cliente
 		}
 	}
 
+    public function ListarTipo($tipo)
+    {
+        try
+        {
+            $result = array();
+
+            $stm = $this->pdo->prepare("SELECT * FROM ".$this->table." WHERE idt_tipoCliente = ".$tipo.";");
+            $stm->execute();
+
+            return $stm->fetchAll(PDO::FETCH_OBJ);
+        }
+        catch(Exception $e)
+        {
+            die($e->getMessage());
+        }
+    }
+
 	public function Obtener($id)
 	{
 		try 
@@ -83,33 +100,56 @@ class Cliente
 	{
 		try 
 		{
-			$sql = "UPDATE alumnos SET 	Nombre = ?, Apellido= ?, Correo = ?,Sexo  = ?, FechaNacimiento = ? WHERE id = ?";
+			$sql = "UPDATE ".$this->table." SET idt_tipoCliente= ?, nombres = ?,apellidos  = ?, dni = ?, ruc = ?, razon_social = ?, direccion = ?, telefono = ?, telefono2 = ?, fec_nac = ?, dpto = ?, prov = ?, dist = ?, fechaSistema = ? WHERE idt_cliente = ?";
 
 			$this->pdo->prepare($sql)->execute(
-				    array($data->Nombre, $data->Correo, $data->Apellido, $data->Sexo, $data->FechaNacimiento, $data->id)
-				);
+				    array(
+                        $data->idt_tipoCliente,
+                        $data->nombres,
+                        $data->apellidos,
+                        $data->dni,
+                        $data->ruc,
+                        $data->razon_social,
+                        $data->direccion,
+                        $data->telefono,
+                        $data->telefono2,
+                        $data->fec_nac,
+                        $data->dpto,
+                        $data->prov,
+                        $data->dist,
+                        $data->fechaSistema,
+                        $data->idt_cliente,
+                    ));
 		} catch (Exception $e) 
 		{
 			die($e->getMessage());
 		}
 	}
 
-	public function Registrar(Alumno $data)
+	public function Registrar(Cliente $data)
 	{
 		try 
 		{
-		$sql = "INSERT INTO alumnos (Nombre,Correo,Apellido,Sexo,FechaNacimiento,FechaRegistro) 
-		        VALUES (?, ?, ?, ?, ?, ?)";
+		$sql = "INSERT INTO ".$this->table." (idt_tipoCliente,nombres,apellidos,dni,ruc, razon_social,direccion,telefono,telefono2,fec_nac,dpto, prov,dist,fechaSistema) 
+		        VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?,?,?)";
 
 		$this->pdo->prepare($sql)
 		     ->execute(
 				array(
-                    $data->Nombre,
-                    $data->Correo, 
-                    $data->Apellido, 
-                    $data->Sexo,
-                    $data->FechaNacimiento,
-                    date('Y-m-d')
+                    $data->idt_tipoCliente,
+                    $data->nombres,
+                    $data->apellidos,
+                    $data->dni,
+                    $data->ruc,
+                    $data->razon_social,
+                    $data->direccion,
+                    $data->telefono,
+                    $data->telefono2,
+                    $data->fec_nac,
+                    $data->dpto,
+                    $data->prov,
+                    $data->dist,
+                    $data->fechaSistema,
                 )
 			);
 		} catch (Exception $e) 

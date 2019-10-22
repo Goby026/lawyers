@@ -29,7 +29,7 @@
 <body>
 
 <!--Navbar-->
-<div class="container-fluid mb-5">
+<div class="container-fluid">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button
                 class="navbar-toggler"
@@ -69,6 +69,11 @@
                         </div>
                     </li>
                     <li class="nav-item">
+                        <a href="?c=index" class="nav-link" tabindex="-1">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <div class="dropdown">
                             <button
                                     class="btn btn-light dropdown-toggle text-monospace"
@@ -81,7 +86,7 @@
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a href="?c=caso&a=index" class="dropdown-item" href="">Registrar Nuevo Caso</a>
-                                <a href="" class="dropdown-item" href="">Clientes</a>
+                                <a href="?c=cliente&a=index" class="dropdown-item">Clientes</a>
                                 <a href="/calendar" class="dropdown-item">Calendario</a>
                                 <a href="?c=mantenimiento&a=index" class="dropdown-item">Mantenimiento</a>
                                 <a href="/modelos" class="dropdown-item">Modelos</a>

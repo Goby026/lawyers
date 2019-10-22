@@ -1,3 +1,8 @@
+<div class="container-fluid">
+    <div class="row titulos">
+        <h3>Nuevo Caso</h3>
+    </div>
+</div>
 <div class="container">
     <div class="row">
         <div class="col-md-12">
@@ -73,7 +78,7 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="cliente">Cliente</label><br>
+                                    <label for="cliente">Cliente </label><button type="button" class="btn btn-info btn-sm text-right"><i class="fa fa-plus"></i></button><br>
                                     <select class="selectpicker" name="idt_cliente" data-live-search="true">
                                         <?php
                                         foreach ($clientes as $cliente) {

@@ -431,13 +431,12 @@ class Usuarios
     
     public function Bienvenido($nomb)
     {
-
-            $idUsuario = $_SESSION['id_usuario'];
+            $idUsuario = $_SESSION['user_id'];
             
-            $stm = $this->pdo->prepare("SELECT id, nombre FROM usuarios WHERE id = '$idUsuario'");
+            $stm = $this->pdo->prepare("SELECT username FROM t_usuario WHERE idt_usuario = '$idUsuario'");
             $stm->execute($nomb);
             $resultado =  $stm->fetch(PDO::FETCH_OBJ);
-            return $resultado->nombre;
+            return $resultado->username;
             
         }
    } 
