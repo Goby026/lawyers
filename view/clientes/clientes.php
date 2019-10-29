@@ -18,7 +18,7 @@
         </div>
     </div>
     <div class="row mt-2">
-        <div class="col-md-6">
+        <div class="col-md-6 fuentes">
             <h5>CLIENTES NATURALES</h5>
             <hr>
             <table class="table">
@@ -46,7 +46,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 fuentes">
             <h5>CLIENTES JURIDICOS</h5>
             <hr>
             <table class="table">

@@ -1,12 +1,12 @@
 <?php
-class Documentos
+class Observacion
 {
     private $pdo;
-    private $table = 't_documento';
+    private $table = 't_observacion';
 
-    public $t_DocuCod;
-    public $t_DocuDescripcion;
-    public $t_url;
+    public $idt_observacion;
+    public $title;
+    public $description;
     public $t_CasoCod;
 
     public function __CONSTRUCT()
@@ -43,7 +43,7 @@ class Documentos
         try
         {
             $stm = $this->pdo
-                ->prepare("SELECT * FROM ".$this->table." WHERE t_DocuCod = ?");
+                ->prepare("SELECT * FROM ".$this->table." WHERE idt_observacion = ?");
 
 
             $stm->execute(array($id));
@@ -59,7 +59,7 @@ class Documentos
         try
         {
             $stm = $this->pdo
-                ->prepare("DELETE FROM ".$this->table." WHERE t_DocuCod = ?");
+                ->prepare("DELETE FROM ".$this->table." WHERE idt_observacion = ?");
 
             $stm->execute(array($id));
         } catch (Exception $e)
@@ -72,14 +72,13 @@ class Documentos
     {
         try
         {
-            $sql = "UPDATE ".$this->table." SET t_DocuDescripcion = ?, t_url = ?, t_CasoCod = ? WHERE t_DocuCod = ?";
+            $sql = "UPDATE ".$this->table." SET title = ?, description = ?, t_CasoCod = ? WHERE idt_observacion = ?";
 
             $this->pdo->prepare($sql)->execute(
                 array(
-                    $data->t_DocuDescripcion,
-                    $data->t_url,
-                    $data->t_CasoCod,
-                    $data->t_DocuCod
+                    $data->title,
+                    $data->description,
+                    $data->t_CasoCod
                 ));
         } catch (Exception $e)
         {
@@ -87,18 +86,18 @@ class Documentos
         }
     }
 
-    public function Registrar(Documentos $data)
+    public function Registrar(Observacion $data)
     {
         try
         {
-            $sql = "INSERT INTO ".$this->table." (t_DocuDescripcion, t_url, t_CasoCod) VALUES (?,?,?)";
+            $sql = "INSERT INTO ".$this->table." (title, description, t_CasoCod) VALUES (?,?,?)";
 
             $this->pdo->prepare($sql)
                 ->execute(
                     array(
-                        $data->t_DocuDescripcion,
-                        $data->t_url,
-                        $data->t_CasoCod,
+                        $data->title,
+                        $data->description,
+                        $data->t_CasoCod
                     )
                 );
         } catch (Exception $e)

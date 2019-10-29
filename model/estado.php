@@ -1,13 +1,13 @@
 <?php
-class Documentos
+class Estado
 {
     private $pdo;
-    private $table = 't_documento';
+    private $table = 't_estado';
 
-    public $t_DocuCod;
-    public $t_DocuDescripcion;
-    public $t_url;
-    public $t_CasoCod;
+    public $t_estado;
+    public $title;
+    public $color;
+    public $t_observacion;
 
     public function __CONSTRUCT()
     {
@@ -21,13 +21,13 @@ class Documentos
         }
     }
 
-    public function Listar($id)
+    public function Listar()
     {
         try
         {
             $result = array();
 
-            $stm = $this->pdo->prepare("SELECT * FROM ".$this->table." WHERE t_CasoCod = ".$id);
+            $stm = $this->pdo->prepare("SELECT * FROM ".$this->table);
             $stm->execute();
 
             return $stm->fetchAll(PDO::FETCH_OBJ);
@@ -43,7 +43,7 @@ class Documentos
         try
         {
             $stm = $this->pdo
-                ->prepare("SELECT * FROM ".$this->table." WHERE t_DocuCod = ?");
+                ->prepare("SELECT * FROM ".$this->table." WHERE t_estado = ?");
 
 
             $stm->execute(array($id));
@@ -59,7 +59,7 @@ class Documentos
         try
         {
             $stm = $this->pdo
-                ->prepare("DELETE FROM ".$this->table." WHERE t_DocuCod = ?");
+                ->prepare("DELETE FROM ".$this->table." WHERE t_estado = ?");
 
             $stm->execute(array($id));
         } catch (Exception $e)
@@ -72,14 +72,14 @@ class Documentos
     {
         try
         {
-            $sql = "UPDATE ".$this->table." SET t_DocuDescripcion = ?, t_url = ?, t_CasoCod = ? WHERE t_DocuCod = ?";
+            $sql = "UPDATE ".$this->table." SET title = ?, color = ?, t_observacion = ? WHERE t_estado = ?";
 
             $this->pdo->prepare($sql)->execute(
                 array(
-                    $data->t_DocuDescripcion,
-                    $data->t_url,
-                    $data->t_CasoCod,
-                    $data->t_DocuCod
+                    $data->title,
+                    $data->color,
+                    $data->t_observacion,
+                    $data->t_estado
                 ));
         } catch (Exception $e)
         {
@@ -87,20 +87,19 @@ class Documentos
         }
     }
 
-    public function Registrar(Documentos $data)
+    public function Registrar(Estado $data)
     {
         try
         {
-            $sql = "INSERT INTO ".$this->table." (t_DocuDescripcion, t_url, t_CasoCod) VALUES (?,?,?)";
+            $sql = "INSERT INTO ".$this->table." (title, color, t_observacion) VALUES (?,?,?)";
 
             $this->pdo->prepare($sql)
                 ->execute(
                     array(
-                        $data->t_DocuDescripcion,
-                        $data->t_url,
-                        $data->t_CasoCod,
-                    )
-                );
+                        $data->title,
+                        $data->color,
+                        $data->t_observacion
+                    ));
         } catch (Exception $e)
         {
             die($e->getMessage());

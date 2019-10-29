@@ -29,7 +29,7 @@
 <body>
 
 <!--Navbar-->
-<div class="container-fluid">
+<div class="container-fluid navegacion">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <button
                 class="navbar-toggler"
@@ -52,6 +52,11 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
                 <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
                     <li class="nav-item">
+                        <a href="?c=index" class="btn btn-light text-monospace" tabindex="-1">
+                            <i class="fas fa-home"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <div class="dropdown">
                             <button
                                     class="btn btn-light dropdown-toggle text-monospace"
@@ -60,18 +65,13 @@
                                     data-toggle="dropdown"
                                     aria-haspopup="true"
                                     aria-expanded="false">
-                                <i class="fa fa-bell"></i>
+                                <i class="far fa-bell"></i>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <a href="?c=notificacion&a=index" class="dropdown-item">Mis Notificaciones</a>
                                 <a href="?c=notificacion&a=config" class="dropdown-item">Configurar Notificaciones</a>
                             </div>
                         </div>
-                    </li>
-                    <li class="nav-item">
-                        <a href="?c=index" class="nav-link" tabindex="-1">
-                            <i class="fa fa-home" aria-hidden="true"></i>
-                        </a>
                     </li>
                     <li class="nav-item">
                         <div class="dropdown">

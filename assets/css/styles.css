@@ -1,3 +1,11 @@
+body{
+    background: gainsboro;
+}
+
+.navegacion{
+    padding: 0;
+}
+
 .titulos{
     background: #007b5e !important;
     color: white;
@@ -8,6 +16,11 @@
     padding: 15px;
     margin-left: 15%;
 }
+
+.fuentes {
+    font-size: 11px;
+}
+
 /*Footer*/
 
 section {

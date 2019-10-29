@@ -6,6 +6,7 @@ class DocumentosController{
     private $model;
 
     public function __CONSTRUCT(){
+        session_start();
         $this->model = new Documentos();
     }
 
@@ -20,16 +21,6 @@ class DocumentosController{
         require_once 'view/documentos/documentos.php';
         require_once 'view/footer.php';
 
-    }
-
-    //function para llamar la vista documentos/crear.php
-    public function registrarDocumento(){
-
-        session_start();
-
-        require_once 'view/header.php';
-        require_once "view/documentos/crear.php";
-        require_once 'view/footer.php';
     }
 
     public function Crud(){
@@ -48,22 +39,23 @@ class DocumentosController{
     }
 
     public function Guardar(){
+        $id = $_REQUEST['t_casocod'];
+
         $documento = new Documentos();
-
-        $documento->id = $_REQUEST['codigo'];
-
-        $documento->nombre = $_REQUEST['nombre'];
+        $documento->t_DocuDescripcion = $_REQUEST['t_docudescripcion'];
 
         if (isset($_FILES['documento'])){
             $archivoSubido = $this->subirDocumento();
-            $documento->documentos = $archivoSubido;
+            $documento->t_url = $archivoSubido;
         }
 
-        $documento->id > 0
-            ? $this->model->Actualizar($documento)
-            : $this->model->Registrar($documento);
+        $documento->t_CasoCod = $id;
 
-        header('Location: ?c=documentos&a=index');
+        $documento->Registrar($documento);
+
+        header("Location: ?c=caso&a=expedientes&t_CasoCod=$id");
+
+//        print_r($_REQUEST);
     }
 
     public function subirDocumento(){
@@ -78,7 +70,7 @@ class DocumentosController{
         $fileExt = explode(".",$fileName);
         $fileActualExt = strtolower( end($fileExt)); // end() solo toma la ultima posicion del array $fileExt
 
-        $allowed = array("jpg", "jpeg", "png", "pdf", "txt");
+        $allowed = array("jpg", "jpeg", "png", "pdf", "txt", "docx", ".xlsx");
 
         if (in_array($fileActualExt, $allowed)){
             if ($fileError === 0){

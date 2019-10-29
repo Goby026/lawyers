@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-10-2019 a las 01:13:26
+-- Tiempo de generación: 29-10-2019 a las 16:25:41
 -- Versión del servidor: 10.1.34-MariaDB
 -- Versión de PHP: 7.2.7
 
@@ -73,13 +73,25 @@ CREATE TABLE `t_apelacion` (
 
 CREATE TABLE `t_audiencia` (
   `t_AudiCod` int(11) NOT NULL,
+  `asunto` varchar(255) NOT NULL,
   `t_AudiDireccion` varchar(100) NOT NULL,
   `t_AudiHora` time NOT NULL,
   `t_AudiFecha` date NOT NULL,
   `t_AudiObservaciones` varchar(45) NOT NULL,
-  `t_caso_t_CasoCod` int(11) NOT NULL,
-  `t_estado` int(11) NOT NULL
+  `t_casocod` int(11) NOT NULL,
+  `t_estado` int(11) NOT NULL,
+  `idt_juzgado` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `t_audiencia`
+--
+
+INSERT INTO `t_audiencia` (`t_AudiCod`, `asunto`, `t_AudiDireccion`, `t_AudiHora`, `t_AudiFecha`, `t_AudiObservaciones`, `t_casocod`, `t_estado`, `idt_juzgado`) VALUES
+(1, 'CONCILIACION', 'JR. Abancay 556', '09:30:00', '2019-10-29', '', 1, 3, 2),
+(2, 'SEPARACION', 'JR. Abancay 556', '11:00:00', '2019-10-30', '', 4, 3, 3),
+(3, 'SEPARACION', 'JR. Abancay 556', '10:30:00', '2019-10-31', '', 1, 4, 3),
+(4, 'CONCILIACION', 'Av. Centenario 698', '10:30:00', '2019-10-30', '', 2, 2, 5);
 
 -- --------------------------------------------------------
 
@@ -177,8 +189,17 @@ CREATE TABLE `t_documento` (
   `t_DocuCod` int(11) NOT NULL,
   `t_DocuDescripcion` text NOT NULL,
   `t_url` varchar(255) DEFAULT NULL,
-  `t_CasoCod` int(11) DEFAULT NULL
+  `t_CasoCod` int(11) DEFAULT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `t_documento`
+--
+
+INSERT INTO `t_documento` (`t_DocuCod`, `t_DocuDescripcion`, `t_url`, `t_CasoCod`, `fechaSistema`) VALUES
+(1, 'Informe psicológico', './assets/documentos/5db7c08bd8eea1.41072691.pdf', 1, '2019-10-29 04:38:11'),
+(2, 'Reporte médico', './assets/documentos/5db7c2f001db43.02837980.docx', 1, '2019-10-29 04:41:20');
 
 -- --------------------------------------------------------
 
@@ -194,6 +215,16 @@ CREATE TABLE `t_estado` (
   `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Volcado de datos para la tabla `t_estado`
+--
+
+INSERT INTO `t_estado` (`t_estado`, `title`, `color`, `t_observacion`, `fechaSistema`) VALUES
+(1, 'ACUERDO', 'bg-success', 'sn', '0000-00-00 00:00:00'),
+(2, 'POSPUESTO', 'bg-warning', 'sn', '0000-00-00 00:00:00'),
+(3, 'NUEVA AUDIENCIA', 'bg-info', 'sn', '0000-00-00 00:00:00'),
+(4, 'DESACUERDO', 'bg-danger', 'sn', '0000-00-00 00:00:00');
+
 -- --------------------------------------------------------
 
 --
@@ -203,7 +234,7 @@ CREATE TABLE `t_estado` (
 CREATE TABLE `t_estadocaso` (
   `idt_EstadoCaso` int(11) NOT NULL,
   `title` varchar(100) DEFAULT NULL,
-  `desc` text,
+  `description` text,
   `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -211,7 +242,7 @@ CREATE TABLE `t_estadocaso` (
 -- Volcado de datos para la tabla `t_estadocaso`
 --
 
-INSERT INTO `t_estadocaso` (`idt_EstadoCaso`, `title`, `desc`, `fechaSistema`) VALUES
+INSERT INTO `t_estadocaso` (`idt_EstadoCaso`, `title`, `description`, `fechaSistema`) VALUES
 (1, 'EN PROCESO', 'EN PROCESO', '2019-10-15 19:59:28'),
 (2, 'CULMINADO', 'CULMINADO', '2019-10-15 19:59:28');
 
@@ -235,6 +266,33 @@ INSERT INTO `t_instancia` (`t_InsCod`, `t_InsNombre`, `t_InsDescripcion`) VALUES
 (1, 'JUZGADO I', 'DESCRIPCION'),
 (3, 'Juzgado II', 'DESCRIPCION-instancia'),
 (5, 'Juzgado III', 'DESCRIPCION-instancia');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `t_juzgado`
+--
+
+CREATE TABLE `t_juzgado` (
+  `idt_juzgado` int(11) NOT NULL,
+  `nombre` varchar(255) DEFAULT NULL,
+  `direccion` varchar(255) DEFAULT NULL,
+  `telefono` varchar(45) DEFAULT NULL,
+  `horariom` varchar(100) DEFAULT NULL,
+  `horariot` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `t_juzgado`
+--
+
+INSERT INTO `t_juzgado` (`idt_juzgado`, `nombre`, `direccion`, `telefono`, `horariom`, `horariot`) VALUES
+(1, 'SALA PENAL DE APELACIONES', 'JR. PARRA DEL RIEGO Nº 400', 'sn', '08:00 hrs - 13:15 hrs', '14:30 hrs - 17:45 hrs'),
+(2, 'SALA MIXTA', 'JR. LIMA Nº 501 - TARMA', 'sn', '08:00 hrs - 13:15 hrs', '14:30 hrs - 17:45 hrs'),
+(3, '01º JUZGADO DE FAMILIA', 'JR. JULIO C. TELLO N° 624', 'sn', '08:00 hrs - 13:15 hrs', '14:30 hrs - 17:45 hrs'),
+(4, '03° JUZGADO DE TRABAJO', 'JR. NEMESIO RAEZ N° 510', 'sn', '08:00 hrs - 13:15 hrs', '14:30 hrs - 17:45 hrs'),
+(5, ' 03° JUZGADO CIVIL', 'JR. MANUEL ALONSO Nº 499', 'sn', '08:00 hrs - 13:15 hrs', '14:30 hrs - 17:45 hrs'),
+(6, '01° JUZGADO PENAL UNIPERSONAL', 'JR. CUZCO Nº 262 - CENTRO CIVICO FORTUNATO CARDENAS PISO 3 -TARMA', 'sn', '08:00 hrs - 13:15 hrs', '14:30 hrs - 17:45 hrs');
 
 -- --------------------------------------------------------
 
@@ -266,8 +324,8 @@ CREATE TABLE `t_modelo` (
   `idmodelo` int(11) NOT NULL,
   `t_url` varchar(255) NOT NULL,
   `t_title` varchar(100) DEFAULT NULL,
-  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `idt_usuario` int(11) NOT NULL
+  `idt_usuario` int(11) NOT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -279,10 +337,17 @@ CREATE TABLE `t_modelo` (
 CREATE TABLE `t_observacion` (
   `idt_observacion` int(11) NOT NULL,
   `title` varchar(100) DEFAULT NULL,
-  `desc` text,
-  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `t_CasoCod` int(11) NOT NULL
+  `description` text,
+  `t_CasoCod` int(11) NOT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `t_observacion`
+--
+
+INSERT INTO `t_observacion` (`idt_observacion`, `title`, `description`, `t_CasoCod`, `fechaSistema`) VALUES
+(1, 'No llego a reunión', 'Se programó una reunión con la parte demandada, pero no se presentó a dicha cita.', 4, '2019-10-29 05:25:00');
 
 -- --------------------------------------------------------
 
@@ -295,8 +360,16 @@ CREATE TABLE `t_pagos` (
   `t_PagoMonto` varchar(45) NOT NULL,
   `t_PagoMontoInicial` int(11) NOT NULL,
   `t_PagoDescrip` varchar(45) NOT NULL,
-  `t_CasoCod` int(11) NOT NULL
+  `t_CasoCod` int(11) NOT NULL,
+  `fechaSistema` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Volcado de datos para la tabla `t_pagos`
+--
+
+INSERT INTO `t_pagos` (`idPagoCod`, `t_PagoMonto`, `t_PagoMontoInicial`, `t_PagoDescrip`, `t_CasoCod`, `fechaSistema`) VALUES
+(1, '200', 0, 'Pago para constitución de empresa SUNARP', 4, '2019-10-29 15:21:58');
 
 -- --------------------------------------------------------
 
@@ -339,14 +412,14 @@ CREATE TABLE `t_resolucion` (
 CREATE TABLE `t_tipocliente` (
   `idt_tipoCliente` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `desc` text
+  `description` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `t_tipocliente`
 --
 
-INSERT INTO `t_tipocliente` (`idt_tipoCliente`, `title`, `desc`) VALUES
+INSERT INTO `t_tipocliente` (`idt_tipoCliente`, `title`, `description`) VALUES
 (1, 'NATURAL', 'CLIENTE NATURAL'),
 (2, 'JURIDICO', 'CLIENTE JURIDICO');
 
@@ -427,8 +500,9 @@ ALTER TABLE `t_apelacion`
 --
 ALTER TABLE `t_audiencia`
   ADD PRIMARY KEY (`t_AudiCod`),
-  ADD KEY `fk_t_audiencia_t_caso1_idx` (`t_caso_t_CasoCod`),
-  ADD KEY `audiencia.estado_idx` (`t_estado`);
+  ADD KEY `fk_t_audiencia_t_caso1_idx` (`t_casocod`),
+  ADD KEY `audiencia.estado_idx` (`t_estado`),
+  ADD KEY `audiencia.juzgado_idx` (`idt_juzgado`);
 
 --
 -- Indices de la tabla `t_caso`
@@ -478,6 +552,12 @@ ALTER TABLE `t_estadocaso`
 --
 ALTER TABLE `t_instancia`
   ADD PRIMARY KEY (`t_InsCod`);
+
+--
+-- Indices de la tabla `t_juzgado`
+--
+ALTER TABLE `t_juzgado`
+  ADD PRIMARY KEY (`idt_juzgado`);
 
 --
 -- Indices de la tabla `t_materia`
@@ -567,7 +647,7 @@ ALTER TABLE `t_apelacion`
 -- AUTO_INCREMENT de la tabla `t_audiencia`
 --
 ALTER TABLE `t_audiencia`
-  MODIFY `t_AudiCod` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `t_AudiCod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `t_caso`
@@ -591,13 +671,13 @@ ALTER TABLE `t_confignotificaciones`
 -- AUTO_INCREMENT de la tabla `t_documento`
 --
 ALTER TABLE `t_documento`
-  MODIFY `t_DocuCod` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `t_DocuCod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `t_estado`
 --
 ALTER TABLE `t_estado`
-  MODIFY `t_estado` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `t_estado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `t_estadocaso`
@@ -610,6 +690,12 @@ ALTER TABLE `t_estadocaso`
 --
 ALTER TABLE `t_instancia`
   MODIFY `t_InsCod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `t_juzgado`
+--
+ALTER TABLE `t_juzgado`
+  MODIFY `idt_juzgado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `t_materia`
@@ -627,13 +713,13 @@ ALTER TABLE `t_modelo`
 -- AUTO_INCREMENT de la tabla `t_observacion`
 --
 ALTER TABLE `t_observacion`
-  MODIFY `idt_observacion` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idt_observacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `t_pagos`
 --
 ALTER TABLE `t_pagos`
-  MODIFY `idPagoCod` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idPagoCod` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `t_perfil`
@@ -693,7 +779,8 @@ ALTER TABLE `t_apelacion`
 --
 ALTER TABLE `t_audiencia`
   ADD CONSTRAINT `audiencia.estado` FOREIGN KEY (`t_estado`) REFERENCES `t_estado` (`t_estado`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  ADD CONSTRAINT `fk_t_audiencia_t_caso1` FOREIGN KEY (`t_caso_t_CasoCod`) REFERENCES `t_caso` (`t_CasoCod`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `audiencia.juzgado` FOREIGN KEY (`idt_juzgado`) REFERENCES `t_juzgado` (`idt_juzgado`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_t_audiencia_t_caso1` FOREIGN KEY (`t_casocod`) REFERENCES `t_caso` (`t_CasoCod`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Filtros para la tabla `t_caso`

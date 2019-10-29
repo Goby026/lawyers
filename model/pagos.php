@@ -1,12 +1,13 @@
 <?php
-class Documentos
+class Pagos
 {
     private $pdo;
-    private $table = 't_documento';
+    private $table = 't_pagos';
 
-    public $t_DocuCod;
-    public $t_DocuDescripcion;
-    public $t_url;
+    public $idPagoCod;
+    public $t_PagoMonto;
+    public $t_PagoMontoInicial;
+    public $t_PagoDescrip;
     public $t_CasoCod;
 
     public function __CONSTRUCT()
@@ -43,7 +44,7 @@ class Documentos
         try
         {
             $stm = $this->pdo
-                ->prepare("SELECT * FROM ".$this->table." WHERE t_DocuCod = ?");
+                ->prepare("SELECT * FROM ".$this->table." WHERE idPagoCod = ?");
 
 
             $stm->execute(array($id));
@@ -59,7 +60,7 @@ class Documentos
         try
         {
             $stm = $this->pdo
-                ->prepare("DELETE FROM ".$this->table." WHERE t_DocuCod = ?");
+                ->prepare("DELETE FROM ".$this->table." WHERE idPagoCod = ?");
 
             $stm->execute(array($id));
         } catch (Exception $e)
@@ -72,14 +73,15 @@ class Documentos
     {
         try
         {
-            $sql = "UPDATE ".$this->table." SET t_DocuDescripcion = ?, t_url = ?, t_CasoCod = ? WHERE t_DocuCod = ?";
+            $sql = "UPDATE ".$this->table." SET t_PagoMonto = ?, t_PagoMontoInicial = ?, t_PagoDescrip = ?, t_CasoCod = ? WHERE idPagoCod = ?";
 
             $this->pdo->prepare($sql)->execute(
                 array(
-                    $data->t_DocuDescripcion,
-                    $data->t_url,
+                    $data->t_PagoMonto,
+                    $data->t_PagoMontoInicial,
+                    $data->t_PagoDescrip,
                     $data->t_CasoCod,
-                    $data->t_DocuCod
+                    $data->idPagoCod
                 ));
         } catch (Exception $e)
         {
@@ -87,17 +89,18 @@ class Documentos
         }
     }
 
-    public function Registrar(Documentos $data)
+    public function Registrar(Pagos $data)
     {
         try
         {
-            $sql = "INSERT INTO ".$this->table." (t_DocuDescripcion, t_url, t_CasoCod) VALUES (?,?,?)";
+            $sql = "INSERT INTO ".$this->table." (t_PagoMonto, t_PagoMontoInicial, t_PagoDescrip, t_CasoCod) VALUES (?,?,?,?)";
 
             $this->pdo->prepare($sql)
                 ->execute(
                     array(
-                        $data->t_DocuDescripcion,
-                        $data->t_url,
+                        $data->t_PagoMonto,
+                        $data->t_PagoMontoInicial,
+                        $data->t_PagoDescrip,
                         $data->t_CasoCod,
                     )
                 );
