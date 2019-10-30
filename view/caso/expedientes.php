@@ -320,8 +320,11 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
-                                                            class="fas fa-pen"></i></button>
+                                                <!--                                                <button type="button" class="btn btn-warning btn-sm"><i-->
+                                                <!--                                                            class="fas fa-pen"></i></button>-->
+                                                <button class="btn btn-primary manual"
+                                                        onclick="ver('<?php echo $doc->t_url ?>')"><i
+                                                            class="far fa-file-pdf"></i></button>
                                             </td>
                                         </tr>
                                         <?php
@@ -444,7 +447,8 @@
                                             <h5 class="card-title">PAGOS / ADELANTOS</h5>
                                         </div>
                                         <div class="col text-right m-0 p-0">
-                                            <button type="button" class="btn btn-success text-right" data-toggle="modal" data-target="#pagos_ad">
+                                            <button type="button" class="btn btn-success text-right" data-toggle="modal"
+                                                    data-target="#pagos_ad">
                                                 <i class="fas fa-plus"></i>
                                             </button>
                                         </div>
@@ -464,21 +468,23 @@
                                             <div class="modal-body">
 
                                                 <!--id de caso-->
-                                                <input type="hidden" name="t_casocod" value="<?php echo $t_CasoCod;?>">
+                                                <input type="hidden" name="t_casocod" value="<?php echo $t_CasoCod; ?>">
 
                                                 <div class="form-group">
                                                     <label for="t_PagoMonto">Total:</label>
-                                                    <input type="number" class="form-control" name="t_PagoMonto" id="t_PagoMonto" placeholder="S/." required/>
+                                                    <input type="number" class="form-control" name="t_PagoMonto"
+                                                           id="t_PagoMonto" placeholder="S/." required/>
                                                 </div>
 
-<!--                                                <div class="form-group">-->
-<!--                                                    <label for="t_PagoMontoInicial">Monto Inicial:</label>-->
-<!--                                                    <input type="number" class="form-control" name="t_PagoMontoInicial" id="t_PagoMontoInicial" placeholder="S/." required/>-->
-<!--                                                </div>-->
+                                                <!--                                                <div class="form-group">-->
+                                                <!--                                                    <label for="t_PagoMontoInicial">Monto Inicial:</label>-->
+                                                <!--                                                    <input type="number" class="form-control" name="t_PagoMontoInicial" id="t_PagoMontoInicial" placeholder="S/." required/>-->
+                                                <!--                                                </div>-->
 
                                                 <div class="form-group">
                                                     <label for="t_PagoDescrip">Concepto:</label>
-                                                    <input type="text" class="form-control" name="t_PagoDescrip" id="t_PagoDescrip" required/>
+                                                    <input type="text" class="form-control" name="t_PagoDescrip"
+                                                           id="t_PagoDescrip" required/>
                                                 </div>
 
                                             </div>
@@ -515,7 +521,7 @@
                                             <td scope="row"><?php echo $pago->idPagoCod; ?></td>
                                             <td><?php echo $pago->t_PagoDescrip; ?></td>
                                             <td><?php echo $pago->fechaSistema; ?></td>
-                                            <td><?php echo "S/. ".$pago->t_PagoMonto; ?></td>
+                                            <td><?php echo "S/. " . $pago->t_PagoMonto; ?></td>
                                             <td>
                                                 <button type="button" class="btn btn-warning btn-sm"><i
                                                             class="fas fa-pen"></i></button>
@@ -536,3 +542,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    function ver(archivo) {
+        window.open(archivo, '_blank');
+    }
+</script>
