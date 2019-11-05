@@ -7,6 +7,7 @@ class Modelo
     public $idmodelo;
     public $t_url;
     public $t_title;
+    public $body;
     public $idt_usuario;
     public $fechaSistema;
 
@@ -73,13 +74,15 @@ class Modelo
     {
         try
         {
-            $sql = "UPDATE ".$this->table." SET t_url = ?, t_title = ?, idt_usuario = ? WHERE idmodelo = ?";
+            $sql = "UPDATE ".$this->table." SET t_url = ?, t_title = ?, body = ?, idt_usuario = ? WHERE idmodelo = ?";
 
             $this->pdo->prepare($sql)->execute(
                 array(
                     $data->t_url,
                     $data->t_title,
-                    $data->idt_usuario
+                    $data->body,
+                    $data->idt_usuario,
+                    $data->idmodelo
                 ));
         } catch (Exception $e)
         {
@@ -91,13 +94,14 @@ class Modelo
     {
         try
         {
-            $sql = "INSERT INTO ".$this->table." (t_url, t_title, idt_usuario) VALUES (?,?,?)";
+            $sql = "INSERT INTO ".$this->table." (t_url, t_title, body,idt_usuario) VALUES (?,?,?,?)";
 
             $this->pdo->prepare($sql)
                 ->execute(
                     array(
                         $data->t_url,
                         $data->t_title,
+                        $data->body,
                         $data->idt_usuario
                     )
                 );

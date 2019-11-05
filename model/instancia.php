@@ -55,16 +55,19 @@ class Instancia
 
 	public function Eliminar($id)
 	{
-		try 
+		try
 		{
 			$stm = $this->pdo
 			            ->prepare("DELETE FROM ".$this->table." WHERE t_InsCod = ?");
 
 			$stm->execute(array($id));
+
+			return true;
 		} catch (Exception $e) 
 		{
 			die($e->getMessage());
 		}
+		return false;
 	}
 
 	public function Actualizar($data)

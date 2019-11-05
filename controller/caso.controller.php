@@ -53,7 +53,7 @@ class CasoController{
     }
     
     public function Expedientes(){
-        $casos = $this->model->Listar();
+        $casos = $this->model->Listar(1);
 
         if (isset($_REQUEST['t_CasoCod'])){
 
@@ -100,6 +100,20 @@ class CasoController{
 
 //        $caso->id > 0 ? $this->model->Actualizar($caso) : $this->model->Registrar($caso);
 //
+
+    }
+
+    public function CerrarCaso(){
+
+        $caso = new Caso();
+
+        $caso->t_CasoCod = $_REQUEST['t_casocod'];
+
+        if ($this->model->CerrarCaso($caso)){
+            header("Location: ?c=caso&a=expedientes&caseClosed=OK");
+        }else{
+            header("Location: ?c=caso&a=expedientes&caseClosed=NO");
+        }
 
     }
     

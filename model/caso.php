@@ -32,14 +32,14 @@ class Caso
 		}
 	}
 
-	public function Listar()
+	public function Listar($tipo)
 	{
 		try
 		{
 			$result = array();
 
 			$stm = $this->pdo->prepare("SELECT * FROM ".$this->table." c
-inner join t_cliente cli on c.idt_cliente = cli.idt_cliente");
+inner join t_cliente cli on c.idt_cliente = cli.idt_cliente "."WHERE c.idt_EstadoCaso = ".$tipo);
 			$stm->execute();
 
 			return $stm->fetchAll(PDO::FETCH_OBJ);
@@ -111,6 +111,26 @@ inner join t_cliente cli on c.idt_cliente = cli.idt_cliente");
 		}
 	}
 
+    public function CerrarCaso(Caso $caso)
+    {
+        try
+        {
+            $sql = "UPDATE ".$this->table." SET idt_EstadoCaso = 2 WHERE t_CasoCod= ?";
+
+            $this->pdo->prepare($sql)->execute(
+                array(
+                    $caso->t_CasoCod,
+                )
+            );
+            return true;
+        } catch (Exception $e)
+        {
+            die($e->getMessage());
+        }
+
+        return false;
+    }
+
 	public function Registrar(Caso $data)
 	{
 		try 
@@ -135,8 +155,8 @@ inner join t_cliente cli on c.idt_cliente = cli.idt_cliente");
                     $data->t_InsCod,
                     $data->idt_EstadoCaso,
                 )
-			);
-		} catch (Exception $e) 
+             );
+		} catch (Exception $e)
 		{
 			die($e->getMessage());
 		}

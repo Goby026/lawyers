@@ -6,6 +6,7 @@ class AlumnoController{
     private $model;
     
     public function __CONSTRUCT(){
+        session_start();
         $this->model = new Alumno();
     }
     

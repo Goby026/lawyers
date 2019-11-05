@@ -1,28 +1,7 @@
 <div class="container-fluid">
     <div class="row titulos">
-        <h3>Lista de casos</h3>
+        <h3>Lista de casos Cerrados</h3>
     </div>
-    <?php
-    if (isset($_GET['caseClosed'])) {
-        if ($_GET['caseClosed'] == 'OK') {
-            ?>
-            <div class="row">
-                <div class="alert alert-primary" role="alert">
-                    ¡Se cerró correctamente el caso, puede visualizar los casos en la sección de expedientes cerrados!
-                </div>
-            </div>
-            <?php
-        }else{
-            ?>
-            <div class="row">
-                <div class="alert alert-danger" role="alert">
-                    ¡Ocurrio un error al cerrar el caso!
-                </div>
-            </div>
-            <?php
-        }
-    }
-    ?>
 </div>
 <div class="container bg-light">
     <div class="row">
@@ -66,7 +45,7 @@
                                 <td><?php echo $caso->caso_titulo; ?></td>
                                 <td><?php echo $caso->nombres . " " . $caso->apellidos; ?></td>
                                 <td>
-                                    <a href="?c=caso&a=expedientes&t_CasoCod=<?php echo $caso->t_CasoCod; ?>"
+                                    <a href="?c=cerrados&a=index&t_CasoCod=<?php echo $caso->t_CasoCod; ?>"
                                        class="btn btn-next"><i class="fas fa-chevron-circle-right"></i>
                                     </a>
                                 </td>
@@ -85,7 +64,7 @@
                 ?>
                 <div class="row">
                     <div class="col-md-12 text-right">
-                        <a href="?c=caso&a=expedientes" class="btn btn-danger btn-sm mr-1 mt-1"><i
+                        <a href="?c=cerrados&a=index" class="btn btn-danger btn-sm mr-1 mt-1"><i
                                     class="fa fa-window-close"></i></a>
                     </div>
                 </div>
@@ -123,9 +102,9 @@
                                             <h5>AUDIENCIAS</h5>
                                         </div>
                                         <div class="col text-right m-0 p-0">
-                                            <a href="" class="btn btn-success ml-auto" data-target="#audiencia"
-                                               data-toggle="modal"><i class="fas fa-plus"></i>
-                                            </a>
+<!--                                            <a href="" class="btn btn-success ml-auto" data-target="#audiencia"-->
+<!--                                               data-toggle="modal"><i class="fas fa-plus"></i>-->
+<!--                                            </a>-->
                                         </div>
                                     </div>
                                 </form>
@@ -228,7 +207,7 @@
                                         <th>Asunto</th>
                                         <th>Lugar</th>
                                         <th>Estado</th>
-                                        <th>&nbsp;</th>
+<!--                                        <th>&nbsp;</th>-->
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -241,10 +220,10 @@
                                             <td><?php echo $audiencia->asunto; ?></td>
                                             <td><?php echo $audiencia->t_AudiDireccion; ?></td>
                                             <td><?php echo $audiencia->title; ?></td>
-                                            <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
-                                                            class="fas fa-pen"></i></button>
-                                            </td>
+<!--                                            <td>-->
+<!--                                                <button type="button" class="btn btn-warning btn-sm"><i-->
+<!--                                                            class="fas fa-pen"></i></button>-->
+<!--                                            </td>-->
                                         </tr>
                                         <?php
                                     }
@@ -268,11 +247,11 @@
                                             <h5 class="card-title">DOCUMENTOS</h5>
                                         </div>
                                         <div class="col text-right m-0 p-0">
-                                            <button type="button" class="btn btn-success text-right"
-                                                    data-toggle="modal"
-                                                    data-target="#documentos">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
+<!--                                            <button type="button" class="btn btn-success text-right"-->
+<!--                                                    data-toggle="modal"-->
+<!--                                                    data-target="#documentos">-->
+<!--                                                <i class="fas fa-plus"></i>-->
+<!--                                            </button>-->
                                         </div>
                                     </div>
                                 </form>
@@ -324,7 +303,6 @@
                                         <th>Tipo</th>
                                         <th>Fecha</th>
                                         <th>Archivo</th>
-                                        <th>&nbsp;</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -339,10 +317,6 @@
                                                 <button class="btn btn-primary manual"
                                                         onclick="ver('<?php echo $doc->t_url ?>')"><i
                                                             class="far fa-file-pdf"></i></button>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
-                                                            class="fas fa-pen"></i></button>
                                             </td>
                                         </tr>
                                         <?php
@@ -368,9 +342,9 @@
                                             </h5>
                                         </div>
                                         <div class="col text-right m-0 p-0">
-                                            <a href="" class="btn btn-success ml-auto" data-target="#observaciones"
-                                               data-toggle="modal"><i class="fas fa-plus"></i>
-                                            </a>
+<!--                                            <a href="" class="btn btn-success ml-auto" data-target="#observaciones"-->
+<!--                                               data-toggle="modal"><i class="fas fa-plus"></i>-->
+<!--                                            </a>-->
                                         </div>
                                     </div>
                                 </form>
@@ -427,7 +401,7 @@
                                         <th>Título</th>
                                         <th>Descripción</th>
                                         <th>Fecha</th>
-                                        <th>&nbsp;</th>
+<!--                                        <th>&nbsp;</th>-->
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -439,10 +413,10 @@
                                             <td><?php echo $obs->title; ?></td>
                                             <td><?php echo $obs->description; ?></td>
                                             <td><?php echo $obs->fechaSistema; ?></td>
-                                            <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
-                                                            class="fas fa-pen"></i></button>
-                                            </td>
+<!--                                            <td>-->
+<!--                                                <button type="button" class="btn btn-warning btn-sm"><i-->
+<!--                                                            class="fas fa-pen"></i></button>-->
+<!--                                            </td>-->
                                         </tr>
                                         <?php
                                     }
@@ -465,10 +439,10 @@
                                             <h5 class="card-title">PAGOS / ADELANTOS</h5>
                                         </div>
                                         <div class="col text-right m-0 p-0">
-                                            <button type="button" class="btn btn-success text-right" data-toggle="modal"
-                                                    data-target="#pagos_ad">
-                                                <i class="fas fa-plus"></i>
-                                            </button>
+<!--                                            <button type="button" class="btn btn-success text-right" data-toggle="modal"-->
+<!--                                                    data-target="#pagos_ad">-->
+<!--                                                <i class="fas fa-plus"></i>-->
+<!--                                            </button>-->
                                         </div>
                                     </div>
                                 </form>
@@ -528,7 +502,7 @@
                                         <th>Concepto</th>
                                         <th>Fecha</th>
                                         <th>Monto</th>
-                                        <th>&nbsp;</th>
+<!--                                        <th>&nbsp;</th>-->
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -540,10 +514,10 @@
                                             <td><?php echo $pago->t_PagoDescrip; ?></td>
                                             <td><?php echo $pago->fechaSistema; ?></td>
                                             <td><?php echo "S/. " . $pago->t_PagoMonto; ?></td>
-                                            <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
-                                                            class="fas fa-pen"></i></button>
-                                            </td>
+<!--                                            <td>-->
+<!--                                                <button type="button" class="btn btn-warning btn-sm"><i-->
+<!--                                                            class="fas fa-pen"></i></button>-->
+<!--                                            </td>-->
                                         </tr>
                                         <?php
                                     }
@@ -553,49 +527,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Cerrar Caso -->
-                <div class="row cierre">
-                    <div class="col-md-12">
-                        <div class="form-row">
-                            <div class="col">
-
-                            </div>
-                            <div class="col">
-                                <button type="button" class="btn btn-danger btn-block" data-toggle="modal"
-                                        data-target="#cerrarCaso"><i class=""></i> Cerrar Caso
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal -->
-                <div class="modal fade" id="cerrarCaso" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                     aria-hidden="true">
-                    <form action="?c=caso&a=cerrarcaso" method="post">
-                        <!--id de caso-->
-                        <input type="hidden" name="t_casocod" value="<?php echo $t_CasoCod; ?>">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Cerrar Caso</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    El caso ##### será cerrado
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar
-                                    </button>
-                                    <button type="submit" class="btn btn-primary">Continuar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
                 </div>
 
                 <?php
