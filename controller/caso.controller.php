@@ -151,7 +151,7 @@ class CasoController{
 
         //Registrar usuarioNotificacion
         $usunoti = new UsuarioNotificacion();
-        $usunoti->idnotificacion = $noti_inserted->idnotificacion;
+        $usunoti->idnotificacion = $noti_inserted->id;
         $usunoti->idusuario = $_SESSION['user_id'];
         $usunoti->estado = 1;
 

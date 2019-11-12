@@ -85,13 +85,23 @@
                                 <span class="badge badge-info" id="contador">-</span>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <div id="notificaciones" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                </div>
+                                <div id="notificaciones"></div>
                                 <a href="?c=notificacion&a=index" class="dropdown-item">Mis Notificaciones</a>
                                 <a href="?c=notificacion&a=config" class="dropdown-item">Configurar Notificaciones</a>
                             </div>
                         </div>
                     </li>
+<!--                    <li class="nav-item">-->
+<!--                        <div class="dropdown">-->
+<!--                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"-->
+<!--                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                                <i class="fas fa-bell"></i> <span class="badge badge-warning" id="contador">-</span>-->
+<!--                            </a>-->
+<!--                            <div id="notificaciones" class="dropdown-menu" aria-labelledby="navbarDropdown">-->
+<!---->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </li>-->
                     <li class="nav-item">
                         <div class="dropdown">
                             <button
@@ -122,26 +132,7 @@
                     </li>
                 </ul>
             </div>
-            <script>
-                $(document).ready(function () {
-                    console.log('HOLA JQUERY');
-                    $.ajax({
-                        type: 'POST',
-                        dataType: "json",
-                        url: "?c=index&a=cargarMenu",
-                        //data: datos,
-                        success: function (response) {
-                            console.log(response);
-                            $("#contador").text(response.length);
-                            for (var k in response) {
-                                console.log(k, response[k]);
-                                // $("#notificaciones").text(response[k].descripcion);
-                                $("#notificaciones").append("<a class='dropdown-item' href='?c=notificacion&a=index' id='notificaciones'>" + response[k].icono + " " + response[k].descripcion + "</a>");
-                            }
-                        }
-                    });
-                });
-            </script>
+
             <?php
         } else {
             ?>
@@ -166,3 +157,24 @@
         ?>
     </nav>
 </div>
+
+<script>
+    $(document).ready(function () {
+        // console.log('HOLA JQUERY');
+        $.ajax({
+            type: 'POST',
+            dataType: "json",
+            url: "?c=index&a=cargarMenu",
+            //data: datos,
+            success: function (response) {
+                // console.log(response);
+                $("#contador").text(response.length);
+                for (var k in response) {
+                    console.log('OK');
+                    // $("#notificaciones").text(response[k].descripcion);
+                    $("#notificaciones").append("<a class='dropdown-item' href='?c=notificacion&a=index'>" + response[k].icono + " " + response[k].descripcion + "</a>");
+                }
+            }
+        });
+    });
+</script>

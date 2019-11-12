@@ -6,13 +6,24 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <ul class="list-group">
-                <li class="list-group-item">Cras justo odio</li>
-                <li class="list-group-item">Dapibus ac facilisis in</li>
-                <li class="list-group-item">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
-            </ul>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th colspan="3" scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach($notificaciones as $noti): ?>
+                    <tr>
+                        <th scope="row"><?php echo $noti->descripcion; ?></th>
+
+                        <td class="text-right">
+                            <a href="?c=notificacion&a=leer&id=<?php echo $noti->idusuario_notificaciones;?>" class="btn btn-danger btn-sm"><i class="fas fa-ban"></i></a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

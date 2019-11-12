@@ -1,25 +1,19 @@
 <?php
 require_once 'model/audiencia.php';
-//require_once 'model/cliente.php';
-//require_once  'model/instancia.php';
-//require_once  'model/materia.php';
-//require_once  'model/abogado.php';
+require_once 'model/notificacion.php';
+require_once 'model/usuarioNotificacion.php';
 
 class AudienciaController{
     
     private $model;
-//    private $cliente;
-//    private $instancia;
-//    private $materia;
-//    private $abogado;
+    private $notificacion;
+    private $usunotificacion;
     
     public function __CONSTRUCT(){
         session_start();
         $this->model = new Audiencia();
-//        $this->cliente = new Cliente();
-//        $this->instancia = new Instancia();
-//        $this->materia = new Materia();
-//        $this->abogado = new Abogado();
+        $this->notificacion = new Notificacion();
+        $this->usunotificacion = new UsuarioNotificacion();
     }
     
     public function Index(){
@@ -48,6 +42,26 @@ class AudienciaController{
         $audiencia->idt_juzgado = $_REQUEST['idt_juzgado'];
 
         $this->model->Registrar($audiencia);
+
+        $fecha = date("Y/m/d");
+
+        //Registrar Notificacion
+        $noti = new Notificacion();
+        $noti->fecha = $fecha;
+        $noti->estado = 1;
+        $noti->titulo = $_REQUEST['asunto'];
+        $noti->descripcion = "Nueva audiencia";
+        $noti->idtiponotificacion = 1;
+
+        $noti_inserted = $this->notificacion->Registrar($noti);
+
+        //Registrar usuarioNotificacion
+        $usunoti = new UsuarioNotificacion();
+        $usunoti->idnotificacion = $noti_inserted->id;
+        $usunoti->idusuario = $_SESSION['user_id'];
+        $usunoti->estado = 1;
+
+        $this->usunotificacion->Registrar($usunoti);
 
         header("Location: ?c=caso&a=expedientes&t_CasoCod=$t_casocod");
 

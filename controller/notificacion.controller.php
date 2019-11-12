@@ -15,7 +15,7 @@ class NotificacionController{
 
         session_start();
 
-//        $notificaciones = $this->notificacion->Listar($_SESSION["id_usuario"]);
+        $notificaciones = $this->notificacion->Listar($_SESSION["user_id"]);
 
         require_once 'view/header.php';
         require_once 'view/Notificaciones/index.php';

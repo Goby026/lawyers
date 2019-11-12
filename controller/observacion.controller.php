@@ -1,13 +1,19 @@
 <?php
 require_once 'model/observacion.php';
+require_once 'model/notificacion.php';
+require_once 'model/usuarioNotificacion.php';
 
 class ObservacionController{
     
     private $model;
+    private $notificacion;
+    private $usunotificacion;
     
     public function __CONSTRUCT(){
         session_start();
         $this->model = new Observacion();
+        $this->notificacion = new Notificacion();
+        $this->usunotificacion = new UsuarioNotificacion();
     }
     
     public function Index(){
@@ -39,6 +45,26 @@ class ObservacionController{
         $observacion->t_CasoCod = $_REQUEST['t_casocod'];
 
         $this->model->Registrar($observacion);
+
+        $fecha = date("Y/m/d");
+
+        //Registrar Notificacion
+        $noti = new Notificacion();
+        $noti->fecha = $fecha;
+        $noti->estado = 1;
+        $noti->titulo = $_REQUEST['title'];
+        $noti->descripcion = $_REQUEST['description'];
+        $noti->idtiponotificacion = 2;
+
+        $noti_inserted = $this->notificacion->Registrar($noti);
+
+        //Registrar usuarioNotificacion
+        $usunoti = new UsuarioNotificacion();
+        $usunoti->idnotificacion = $noti_inserted->id;
+        $usunoti->idusuario = $_SESSION['user_id'];
+        $usunoti->estado = 1;
+
+        $this->usunotificacion->Registrar($usunoti);
 
         header("Location: ?c=caso&a=expedientes&t_CasoCod=$t_casocod");
     }
