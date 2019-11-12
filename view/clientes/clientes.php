@@ -20,8 +20,11 @@
     <div class="row mt-2">
         <div class="col-md-6 fuentes">
             <h5>CLIENTES NATURALES</h5>
+            <form>
+                <input type="text" class="form-control" placeholder="Nombres - DNI - Teléfono" id="cli_natu">
+            </form>
             <hr>
-            <table class="table">
+            <table class="table naturales">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Nombres y apellidos</th>
@@ -48,8 +51,11 @@
         </div>
         <div class="col-md-6 fuentes">
             <h5>CLIENTES JURIDICOS</h5>
+            <form>
+                <input type="text" class="form-control" placeholder="Razón - RUC - Teléfono" id="cli_juri">
+            </form>
             <hr>
-            <table class="table">
+            <table class="table juridicos">
                 <thead class="thead-dark">
                 <tr>
                     <th scope="col">Razon</th>
@@ -76,3 +82,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    $('input#cli_natu').quicksearch('.naturales tbody tr');
+
+    $('input#cli_juri').quicksearch('.juridicos tbody tr');
+</script>

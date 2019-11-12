@@ -10,6 +10,8 @@ require_once  'model/juzgado.php';
 require_once  'model/documentos.php';
 require_once  'model/observacion.php';
 require_once  'model/pagos.php';
+require_once  'model/notificacion.php';
+require_once  'model/usuarioNotificacion.php';
 
 class CasoController{
     
@@ -24,6 +26,8 @@ class CasoController{
     private $documentos;
     private $observacion;
     private $pagos;
+    private $notificacion;
+    private $usunotificacion;
     
     public function __CONSTRUCT(){
         session_start();
@@ -38,6 +42,8 @@ class CasoController{
         $this->documentos = new Documentos();
         $this->observacion = new Observacion();
         $this->pagos = new Pagos();
+        $this->notificacion = new Notificacion();
+        $this->usunotificacion = new UsuarioNotificacion();
     }
     
     public function Index(){
@@ -53,7 +59,39 @@ class CasoController{
     }
     
     public function Expedientes(){
-        $casos = $this->model->Listar(1);
+
+        $tipoCliente = 3;
+
+        if (isset($_REQUEST['tipoCliente'])){
+
+                $tipoCliente = $_REQUEST['tipoCliente'];
+
+                $tipoCliente++;
+
+                if ($tipoCliente > 3){
+                    $tipoCliente = 1;
+                }
+
+                switch ($tipoCliente){
+
+                    case 1://naturales
+                        $casos = $this->model->Listar(1, $tipoCliente);
+                        break;
+                    case 2://juridicos
+                        $casos = $this->model->Listar(1, $tipoCliente);
+                        break;
+                    case 3://todos
+                        $casos = $this->model->Listar(1, $tipoCliente);
+                        break;
+                    default:
+                        $casos = $this->model->Listar(1, $tipoCliente);
+                }
+
+        }else{
+
+            $casos = $this->model->Listar(1, $tipoCliente);
+
+        }
 
         if (isset($_REQUEST['t_CasoCod'])){
 
@@ -69,12 +107,15 @@ class CasoController{
             $detalle = $this->model->Obtener($t_CasoCod);
         }
         
-        require_once 'view/header.php';
-        require_once 'view/caso/expedientes.php';
-        require_once 'view/footer.php';
+        require_once "view/header.php";
+        require_once "view/caso/expedientes.php";
+        require_once "view/footer.php";
     }
     
     public function Guardar(){
+
+        $data = [];
+
         $caso = new Caso();
 
         $fecha = date("Y/m/d");
@@ -96,10 +137,35 @@ class CasoController{
 
         $this->model->Registrar($caso);
 
+        $fecha = date('Y-m-d', time());
+
+        //Registrar Notificacion
+        $noti = new Notificacion();
+        $noti->fecha = $fecha;
+        $noti->estado = 1;
+        $noti->titulo = "Nuevo caso";
+        $noti->descripcion = "Nuevo caso";
+        $noti->idtiponotificacion = 4;
+
+        $noti_inserted = $this->notificacion->Registrar($noti);
+
+        //Registrar usuarioNotificacion
+        $usunoti = new UsuarioNotificacion();
+        $usunoti->idnotificacion = $noti_inserted->idnotificacion;
+        $usunoti->idusuario = $_SESSION['user_id'];
+        $usunoti->estado = 1;
+
+        $this->usunotificacion->Registrar($usunoti);
+
         header('Location: ?c=caso&a=expedientes');
 
 //        $caso->id > 0 ? $this->model->Actualizar($caso) : $this->model->Registrar($caso);
-//
+
+//        $data['caso'] = $caso;
+//        $data['notificacion'] = $noti;
+//        $data['usuarioNotificacion'] = $usunoti;
+
+//        print_r($data);
 
     }
 

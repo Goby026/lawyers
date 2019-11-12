@@ -22,6 +22,22 @@
     <!--    custom styles   -->
     <link rel="stylesheet" href="./assets/css/styles.css">
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+    <!--QuickSearch-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.quicksearch/2.4.0/jquery.quicksearch.min.js" integrity="sha256-hD1kpQcVntR40eMx9uED+E4HAjD2OJkLIFcP6ukVd+g=" crossorigin="anonymous"></script>
+
+
+    <!--stripe-->
+    <script src="https://js.stripe.com/v3/"></script>
+
     <title>System-case</title>
 
 </head>
@@ -66,8 +82,11 @@
                                     aria-haspopup="true"
                                     aria-expanded="false">
                                 <i class="far fa-bell"></i>
+                                <span class="badge badge-info" id="contador">-</span>
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <div id="notificaciones" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                </div>
                                 <a href="?c=notificacion&a=index" class="dropdown-item">Mis Notificaciones</a>
                                 <a href="?c=notificacion&a=config" class="dropdown-item">Configurar Notificaciones</a>
                             </div>
@@ -90,7 +109,7 @@
                                 <a href="/calendar" class="dropdown-item">Calendario</a>
                                 <a href="?c=mantenimiento&a=index" class="dropdown-item">Mantenimiento</a>
                                 <a href="/modelos" class="dropdown-item">Modelos</a>
-                                <a class="dropdown-item" href="">Configuración</a>
+                                <a class="dropdown-item" href="?c=usuario&a=perfil">Configuración</a>
                             </div>
                         </div>
                     </li>
@@ -103,6 +122,26 @@
                     </li>
                 </ul>
             </div>
+            <script>
+                $(document).ready(function () {
+                    console.log('HOLA JQUERY');
+                    $.ajax({
+                        type: 'POST',
+                        dataType: "json",
+                        url: "?c=index&a=cargarMenu",
+                        //data: datos,
+                        success: function (response) {
+                            console.log(response);
+                            $("#contador").text(response.length);
+                            for (var k in response) {
+                                console.log(k, response[k]);
+                                // $("#notificaciones").text(response[k].descripcion);
+                                $("#notificaciones").append("<a class='dropdown-item' href='?c=notificacion&a=index' id='notificaciones'>" + response[k].icono + " " + response[k].descripcion + "</a>");
+                            }
+                        }
+                    });
+                });
+            </script>
             <?php
         } else {
             ?>
@@ -127,4 +166,3 @@
         ?>
     </nav>
 </div>
-

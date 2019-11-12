@@ -34,51 +34,79 @@
                                aria-label="Search">
                         &nbsp;<button class="btn btn-primary my-2 my-sm-0" type="button"><i class="fas fa-search"></i>
                         </button>
+                        <a href="?c=caso&a=expedientes&tipoCliente=<?php echo $tipoCliente;?>" class="btn btn-warning" type="button"><i class="fas fa-arrows-alt-h"></i></a>
                     </form>
                 </div>
             </div>
-            <!--            <nav class="navbar navbar-light bg-light p-0 m-0">-->
-            <!--                -->
-            <!--                <form class="form-inline my-auto">-->
-            <!--                    <button class="btn btn-warning" type="button"><i class="fas fa-arrows-alt-h"></i></button>-->
-            <!--                    <button class="btn btn-success" type="button"><i class="fa fa-user"></i></button>-->
-            <!--                </form>-->
-            <!--            </nav>-->
+<!--            <nav class="navbar navbar-light bg-light p-0 m-0">-->
+<!--                -->
+<!--                <form class="form-inline my-auto">-->
+<!--                    <button class="btn btn-success" type="button"><i class="fa fa-user"></i></button>-->
+<!--                </form>-->
+<!--            </nav>-->
             <div class="row mt-1">
                 <div class="col-md-12">
-                    <table class="table table-hover">
-                        <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Inicio Proc.</th>
-                            <th scope="col">Caso</th>
-                            <th scope="col">Cliente</th>
-                            <th scope="col">&nbsp;</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <?php
-                        foreach ($casos as $caso) {
-                            ?>
-                            <tr>
-                                <th scope="row"><?php echo $caso->t_CasoCod; ?></th>
-                                <td><?php echo $caso->t_CasoFech; ?></td>
-                                <td><?php echo $caso->caso_titulo; ?></td>
-                                <td><?php echo $caso->nombres . " " . $caso->apellidos; ?></td>
-                                <td>
-                                    <a href="?c=caso&a=expedientes&t_CasoCod=<?php echo $caso->t_CasoCod; ?>"
-                                       class="btn btn-next"><i class="fas fa-chevron-circle-right"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            <?php
+                    <?php
+                    if (isset($tipoCliente)) {
+                        switch ($tipoCliente){
+                            case 1:
+                                $title = "<h4>Naturales</h4>";
+                                $letra = "<kbd>N</kbd>";
+                                break;
+                            case 2:
+                                $title = "<h4>Jurídicos</h4>";
+                                $letra = "<kbd>J</kbd>";
+                                break;
+                            case 3:
+                                $title = "<h4>Todos</h4>";
+                                $letra = "<kbd>T</kbd>";
+                                break;
                         }
                         ?>
-                        </tbody>
-                    </table>
+
+                        <?php
+                    }else {
+                        $title = "<h4>Todos</h4>";
+                        $letra = "<kbd>T</kbd>";
+                    }
+                    ?>
+                        <p>
+                            <?php echo $title;?>
+                        </p>
+                        <table class="table table-hover">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Inicio Proc.</th>
+                                <th scope="col">Caso</th>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">&nbsp;</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ($casos as $caso) {
+                                ?>
+                                <tr>
+                                    <th scope="row"><?php echo $letra." - ".$caso->t_CasoCod; ?></th>
+                                    <td><?php echo $caso->t_CasoFech; ?></td>
+                                    <td><?php echo $caso->caso_titulo; ?></td>
+                                    <td><?php echo $caso->nombres . " " . $caso->apellidos; ?></td>
+                                    <td>
+                                        <a href="?c=caso&a=expedientes&t_CasoCod=<?php echo $caso->t_CasoCod; ?>"
+                                           class="btn btn-next"><i class="fas fa-chevron-circle-right"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                            </tbody>
+                        </table>
                 </div>
             </div>
         </div>
+
         <div class="col-md-6 p-0 m-0 fuentes">
             <?php
             if (isset($detalle)) {
@@ -606,6 +634,7 @@
 </div>
 
 <script>
+
     function ver(archivo) {
         window.open(archivo, '_blank');
     }

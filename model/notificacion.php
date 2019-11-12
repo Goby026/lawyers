@@ -2,10 +2,10 @@
 class Notificacion
 {
 	private $pdo;
+	private $table = "notificacion";
     
     public $idnotificacion;
     public $fecha;
-    public $idEvento;
     public $estado;
     public $titulo;
     public $descripcion;
@@ -90,13 +90,12 @@ class Notificacion
 	{
 		try 
 		{
-			$sql = "CALL SP_UPDATENOTIFICACION(?,?,?,?,?,?,?)";
+			$sql = "CALL SP_UPDATENOTIFICACION(?,?,?,?,?,?)";
 
 			$this->pdo->prepare($sql)->execute(
 				    array(
 				        $data->idnotificacion,
                         $data->fecha,
-                        $data->idEvento,
                         $data->estado,
                         $data->titulo,
                         $data->descripcion,
@@ -114,13 +113,12 @@ class Notificacion
 		try
 		{
 
-		$sql = "CALL SP_REGNOTIFICACION(?,?,?,?,?,?)";
+		$sql = "CALL SP_REGNOTIFICACION(?,?,?,?,?)";
 
 		$this->pdo->prepare($sql)
 		     ->execute(
 				array(
                     $data->fecha,
-                    $data->idEvento,
                     $data->estado,
                     $data->titulo,
                     $data->descripcion,
@@ -128,7 +126,7 @@ class Notificacion
                 )
 			);
 
-            return $this->get_last_id("idnotificacion","notificacion");
+            return $this->get_last_id("idnotificacion",$this->table);
 
 		} catch (Exception $e) 
 		{

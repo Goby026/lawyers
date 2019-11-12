@@ -19,7 +19,7 @@ class UsuarioController{
     }
     
     public function perfil(){
-        $usuario = $this->model->Obtener($_SESSION["id_usuario"]);
+        $usuario = $this->model->Obtener($_SESSION["user_id"]);
 
         require_once 'view/header.php';
         require_once 'view/usuario/perfil.php';

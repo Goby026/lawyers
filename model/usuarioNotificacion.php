@@ -105,7 +105,7 @@ class UsuarioNotificacion
 
 	public function Registrar(UsuarioNotificacion $data)
 	{
-		try 
+		try
 		{
 		$sql = "CALL SP_REGUSUARIONOTIFICACION(?,?,?)";
 
@@ -117,7 +117,7 @@ class UsuarioNotificacion
                     $data->estado
                 )
 			);
-		} catch (Exception $e) 
+		} catch (Exception $e)
 		{
 			die($e->getMessage());
 		}
