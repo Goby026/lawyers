@@ -32,17 +32,17 @@ class Caso
 		}
 	}
 
-	public function Listar($tipo, $tipoCli)
+	public function Listar($tipo, $tipoCli, $user_id)
 	{
 		try
 		{
 			$result = array();
             $query = "SELECT * FROM ".$this->table." c
-inner join t_cliente cli on c.idt_cliente = cli.idt_cliente "."WHERE c.idt_EstadoCaso = ".$tipo." AND cli.idt_tipoCliente =".$tipoCli;
+inner join t_cliente cli on c.idt_cliente = cli.idt_cliente "."WHERE c.idt_EstadoCaso = ".$tipo." AND cli.idt_tipoCliente =".$tipoCli." AND c.idt_usuario = ".$user_id;
 
 			if ($tipoCli == 3) {//todos los clientes
 			    $query = "SELECT * FROM ".$this->table." c
-inner join t_cliente cli on c.idt_cliente = cli.idt_cliente "."WHERE c.idt_EstadoCaso = ".$tipo;
+inner join t_cliente cli on c.idt_cliente = cli.idt_cliente "."WHERE c.idt_EstadoCaso = ".$tipo." AND c.idt_usuario = ".$user_id;
             }
 
 			$stm = $this->pdo->prepare($query);

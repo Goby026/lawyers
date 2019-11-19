@@ -75,21 +75,21 @@ class CasoController{
                 switch ($tipoCliente){
 
                     case 1://naturales
-                        $casos = $this->model->Listar(1, $tipoCliente);
+                        $casos = $this->model->Listar(1, $tipoCliente, $_SESSION['user_id']);
                         break;
                     case 2://juridicos
-                        $casos = $this->model->Listar(1, $tipoCliente);
+                        $casos = $this->model->Listar(1, $tipoCliente, $_SESSION['user_id']);
                         break;
                     case 3://todos
-                        $casos = $this->model->Listar(1, $tipoCliente);
+                        $casos = $this->model->Listar(1, $tipoCliente, $_SESSION['user_id']);
                         break;
                     default:
-                        $casos = $this->model->Listar(1, $tipoCliente);
+                        $casos = $this->model->Listar(1, $tipoCliente, $_SESSION['user_id']);
                 }
 
         }else{
 
-            $casos = $this->model->Listar(1, $tipoCliente);
+            $casos = $this->model->Listar(1, $tipoCliente, $_SESSION['user_id']);
 
         }
 
@@ -186,5 +186,13 @@ class CasoController{
     public function Eliminar(){
         $this->model->Eliminar($_REQUEST['id']);
         header('Location: index.php');
+    }
+
+
+//    =================================REST=================================
+
+    public function getCasos(){
+        $notis = $this->model->Listar(1, 3, $_SESSION['user_id']);
+        echo json_encode($notis);
     }
 }

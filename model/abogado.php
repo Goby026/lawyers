@@ -52,7 +52,7 @@ class Abogado
 		try 
 		{
 			$stm = $this->pdo
-			          ->prepare("SELECT * FROM ".$this->table." WHERE t_AboCod = ?");
+			          ->prepare("SELECT * FROM ".$this->table." WHERE idt_usuario = ?");
 			          
 
 			$stm->execute(array($id));
@@ -77,11 +77,11 @@ class Abogado
 		}
 	}
 
-	public function Actualizar($data)
+	public function Actualizar(Abogado $data)
 	{
 		try 
 		{
-			$sql = "UPDATE ".$this->table." SET t_AboNombre= ?, t_AboApellidos = ?,t_AboDni  = ?, t_AboDireccion = ?, t_AboTelfcel = ?, t_AboTelf = ?, t_AboCorreo = ?, t_AboDepartamento = ?, t_AboProvincia = ?, t_AboDistrito = ?, t_AboContraseña = ?, idt_usuario = ? WHERE t_AboCod = ?";
+			$sql = "UPDATE ".$this->table." SET t_AboNombre= ?, t_AboApellidos = ?,t_AboDni  = ?, t_AboDireccion = ?, t_AboTelfcel = ?, t_AboTelf = ?, t_AboCorreo = ?, t_AboDepartamento = ?, t_AboProvincia = ?, t_AboDistrito = ?, t_AboContrasena = ?, idt_usuario = ? WHERE t_AboCod = ?";
 
 			$this->pdo->prepare($sql)->execute(
 				    array(
@@ -95,7 +95,7 @@ class Abogado
                         $data->t_AboDepartamento,
                         $data->t_AboProvincia,
                         $data->t_AboDistrito,
-                        $data->t_AboContraseña,
+                        $data->t_AboContrasena,
                         $data->idt_usuario,
                         $data->t_AboCod,
                     ));

@@ -1,13 +1,16 @@
 <?php
 require_once 'model/usuarios.php';
+require_once 'model/abogado.php';
 
 class UsuarioController{
 
     private $model;
+    private $abogados;
 
     public function __CONSTRUCT(){
         session_start();
         $this->model = new Usuarios();
+        $this->abogados = new Abogado();
     }
 
 
@@ -17,9 +20,16 @@ class UsuarioController{
         require_once 'view/usuario/registro.php';
         require_once 'view/footer.php';
     }
-    
+
+    //configuracion
     public function perfil(){
         $usuario = $this->model->Obtener($_SESSION["user_id"]);
+
+        $abogado = $this->abogados->Obtener($_SESSION["user_id"]);
+
+        if (isset($_REQUEST['payments'])){
+            $pagos = 1;
+        }
 
         require_once 'view/header.php';
         require_once 'view/usuario/perfil.php';
@@ -28,12 +38,27 @@ class UsuarioController{
 
     public function Actualizar_perfil(){
 
-        // session_start();
-        // $usuario = $this->model->Obtener($_SESSION["id_usuario"]);
+        $_REQUEST['t_AboCod'];
 
-        // require_once 'view/header.php';
-        // require_once 'view/usuario/editar_perfil.php';
-        // require_once 'view/footer.php';
+        $abogado = new Abogado();
+
+        $abogado->t_AboCod= $_REQUEST['t_AboCod'];
+        $abogado->t_AboNombre= $_REQUEST['t_AboNombre'];
+        $abogado->t_AboApellidos= $_REQUEST['t_AboApellidos'];
+        $abogado->t_AboDni= $_REQUEST['t_AboDni'];
+        $abogado->t_AboDireccion= $_REQUEST['t_AboDireccion'];
+        $abogado->t_AboTelfcel= $_REQUEST['t_AboTelfcel'];
+        $abogado->t_AboTelf= $_REQUEST['t_AboTelf'];
+        $abogado->t_AboCorreo= $_REQUEST['t_AboCorreo'];
+        $abogado->t_AboDepartamento= $_REQUEST['t_AboDepartamento'];
+        $abogado->t_AboProvincia= $_REQUEST['t_AboProvincia'];
+        $abogado->t_AboDistrito= $_REQUEST['t_AboDistrito'];
+        $abogado->t_AboContrasena= '';
+        $abogado->idt_usuario= $_REQUEST['idt_usuario'];
+
+        $this->abogados->Actualizar($abogado);
+
+         header("Location: ?c=usuario&a=perfil");
     }
 
     public function Guardar(){
