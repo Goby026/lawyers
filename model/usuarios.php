@@ -157,7 +157,7 @@ class Usuarios
                 $_SESSION['auth'] = $login->username;
                 $_SESSION['user_id'] = $login->idt_usuario;
 
-                return true;
+                return $login;
             } else {
 
                 $errors = "La contrase&ntilde;a es incorrecta";

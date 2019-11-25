@@ -41,7 +41,7 @@ class CerradosController{
     
     public function Index(){
 
-        $casos = $this->model->Listar(2, 3);
+        $casos = $this->model->Listar(2, 3,$_SESSION['user_id']);
 
         if (isset($_REQUEST['t_CasoCod'])){
 

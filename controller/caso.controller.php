@@ -61,6 +61,7 @@ class CasoController{
     public function Expedientes(){
 
         $tipoCliente = 3;
+        $monto = 0;
 
         if (isset($_REQUEST['tipoCliente'])){
 
@@ -103,8 +104,13 @@ class CasoController{
             $pagos = $this->pagos->Listar($t_CasoCod);
             $estados = $this->estado->Listar();
             $juzgados = $this->juzgado->Listar();
-
             $detalle = $this->model->Obtener($t_CasoCod);
+
+            $instancias = $this->instancia->Listar();
+
+            $materias = $this->materia->Listar();
+//            $materia = $this->materia->Obtener();
+
         }
         
         require_once "view/header.php";
@@ -194,5 +200,31 @@ class CasoController{
     public function getCasos(){
         $notis = $this->model->Listar(1, 3, $_SESSION['user_id']);
         echo json_encode($notis);
+    }
+
+    public function updateInstancia(){
+
+        $caso = new Caso();
+        $caso->t_InsCod = $_REQUEST['t_InsCod'];
+        $caso->t_CasoCod = $_REQUEST['t_CasoCod'];
+
+        if ($this->model->updateInstancia($caso)){
+            echo json_encode($caso);
+        }else{
+            return false;
+        }
+    }
+
+    public function updateMateria(){
+
+        $caso = new Caso();
+        $caso->t_MateCod = $_REQUEST['t_MateCod'];
+        $caso->t_CasoCod = $_REQUEST['t_CasoCod'];
+
+        if ($this->model->updateMateria($caso)){
+            echo json_encode($caso);
+        }else{
+            return false;
+        }
     }
 }

@@ -68,6 +68,33 @@ class AudienciaController{
 //        print_r($audiencia);
 
     }
+
+    public function Modificar(){
+
+        $audiencia = new Audiencia();
+
+        $t_casocod = $_REQUEST['t_casocod'];
+        $t_AudiCod = $_REQUEST['t_AudiCod'];
+
+//        $fecha = date("Y/m/d");
+
+        $audiencia->t_AudiCod = $t_AudiCod;
+        $audiencia->asunto = $_REQUEST['asunto'];
+        $audiencia->t_AudiDireccion = $_REQUEST['t_AudiDireccion'];
+        $audiencia->t_AudiHora = $_REQUEST['t_AudiHora'];
+        $audiencia->t_AudiFecha = $_REQUEST['t_AudiFecha'];
+        $audiencia->t_AudiObservaciones = $_REQUEST['t_AudiObservaciones'];
+        $audiencia->t_casocod = $t_casocod;
+        $audiencia->t_estado = $_REQUEST['t_estado'];
+        $audiencia->idt_juzgado = $_REQUEST['idt_juzgado'];
+
+        $this->model->Actualizar($audiencia);
+
+        header("Location: ?c=caso&a=expedientes&t_CasoCod=$t_casocod");
+
+//        print_r($audiencia);
+
+    }
     
     public function Eliminar(){
         $this->model->Eliminar($_REQUEST['id']);

@@ -1,12 +1,18 @@
 <?php
 require_once 'model/usuarios.php';
+require_once 'model/abogado.php';
+require_once 'model/modelo.php';
 
 class LoginController{
 
     private $model;
+    private $modelos;
+    private $abogado;
 
     public function __CONSTRUCT(){
         $this->model = new Usuarios();
+        $this->modelos = new Modelo();
+        $this->abogado = new Abogado();
     }
 
     public function Index(){
@@ -17,13 +23,6 @@ class LoginController{
         }
         require_once 'view/header.php';
         require_once 'view/login/login.php';
-        require_once 'view/footer.php';
-    }
-
-    public function Acceso(){
-
-        require_once 'view/header.php';
-        require_once 'view/index/login.php';
         require_once 'view/footer.php';
     }
 
@@ -61,7 +60,7 @@ class LoginController{
           header("Location: ?c=home");
         }
 
-        $errors = array();
+        $err = "¡Error de datos!";
 
         if(!empty($_POST))
         {
@@ -70,6 +69,10 @@ class LoginController{
 
           $resp=$this->model->login1($usuario,$password);
 
+          $lawyer = $this->abogado->Obtener($resp->idt_usuario);
+
+            $_SESSION['user_data'] = $lawyer->t_AboNombre." ".$lawyer->t_AboApellidos;
+
            if($resp){
 
              require_once 'view/header.php';
@@ -77,13 +80,18 @@ class LoginController{
              require_once 'view/footer.php';
 
            }else {
-               echo 'error de datos';
+               header("Location: ?c=login&a=index&msgerr=$err");
            }
 
         }else{
-            echo "INGRESE BIEN LOS DATOS";
+            header("Location: ?c=login&a=index&msgerr=$err");
         }
 
+    }
+
+    public function validarFb(){
+        $models = $this->modelos->Listar();
+        echo json_encode($models);
     }
 
     public function recuperarview(){

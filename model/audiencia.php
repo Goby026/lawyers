@@ -76,7 +76,7 @@ inner join t_estado e on a.t_estado = e.t_estado where c.t_CasoCod = ".$id);
         }
     }
 
-    public function Actualizar($data)
+    public function Actualizar(Audiencia $data)
     {
         try
         {

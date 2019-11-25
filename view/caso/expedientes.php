@@ -12,7 +12,7 @@
                 </div>
             </div>
             <?php
-        }else{
+        } else {
             ?>
             <div class="row">
                 <div class="alert alert-danger" role="alert">
@@ -34,21 +34,22 @@
                                aria-label="Search">
                         &nbsp;<button class="btn btn-primary my-2 my-sm-0" type="button"><i class="fas fa-search"></i>
                         </button>
-                        <a href="?c=caso&a=expedientes&tipoCliente=<?php echo $tipoCliente;?>" class="btn btn-warning" type="button"><i class="fas fa-arrows-alt-h"></i></a>
+                        <a href="?c=caso&a=expedientes&tipoCliente=<?php echo $tipoCliente; ?>" class="btn btn-warning"
+                           type="button"><i class="fas fa-arrows-alt-h"></i></a>
                     </form>
                 </div>
             </div>
-<!--            <nav class="navbar navbar-light bg-light p-0 m-0">-->
-<!--                -->
-<!--                <form class="form-inline my-auto">-->
-<!--                    <button class="btn btn-success" type="button"><i class="fa fa-user"></i></button>-->
-<!--                </form>-->
-<!--            </nav>-->
+            <!--            <nav class="navbar navbar-light bg-light p-0 m-0">-->
+            <!--                -->
+            <!--                <form class="form-inline my-auto">-->
+            <!--                    <button class="btn btn-success" type="button"><i class="fa fa-user"></i></button>-->
+            <!--                </form>-->
+            <!--            </nav>-->
             <div class="row mt-1">
                 <div class="col-md-12">
                     <?php
                     if (isset($tipoCliente)) {
-                        switch ($tipoCliente){
+                        switch ($tipoCliente) {
                             case 1:
                                 $title = "<h4>Naturales</h4>";
                                 $letra = "<kbd>N</kbd>";
@@ -65,44 +66,44 @@
                         ?>
 
                         <?php
-                    }else {
+                    } else {
                         $title = "<h4>Todos</h4>";
                         $letra = "<kbd>T</kbd>";
                     }
                     ?>
-                        <p>
-                            <?php echo $title;?>
-                        </p>
-                        <table class="table table-hover">
-                            <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Inicio Proc.</th>
-                                <th scope="col">Caso</th>
-                                <th scope="col">Cliente</th>
-                                <th scope="col">&nbsp;</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <?php
-                            foreach ($casos as $caso) {
-                                ?>
-                                <tr>
-                                    <th scope="row"><?php echo $letra." - ".$caso->t_CasoCod; ?></th>
-                                    <td><?php echo $caso->t_CasoFech; ?></td>
-                                    <td><?php echo $caso->caso_titulo; ?></td>
-                                    <td><?php echo $caso->nombres . " " . $caso->apellidos; ?></td>
-                                    <td>
-                                        <a href="?c=caso&a=expedientes&t_CasoCod=<?php echo $caso->t_CasoCod; ?>"
-                                           class="btn btn-next"><i class="fas fa-chevron-circle-right"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php
-                            }
+                    <p>
+                        <?php echo $title; ?>
+                    </p>
+                    <table class="table table-hover">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Inicio Proc.</th>
+                            <th scope="col">Caso</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($casos as $caso) {
                             ?>
-                            </tbody>
-                        </table>
+                            <tr>
+                                <th scope="row"><?php echo $letra . " - " . $caso->t_CasoCod; ?></th>
+                                <td><?php echo $caso->t_CasoFech; ?></td>
+                                <td><?php echo $caso->caso_titulo; ?></td>
+                                <td><?php echo $caso->nombres . " " . $caso->apellidos; ?></td>
+                                <td>
+                                    <a href="?c=caso&a=expedientes&t_CasoCod=<?php echo $caso->t_CasoCod; ?>"
+                                       class="btn btn-next"><i class="fas fa-chevron-circle-right"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -110,7 +111,9 @@
         <div class="col-md-6 p-0 m-0 fuentes">
             <?php
             if (isset($detalle)) {
+//                print_r($detalle);
                 ?>
+                <input type="hidden" value="<?php echo $detalle->t_CasoCod; ?>" id="t_CasoCod">
                 <div class="row">
                     <div class="col-md-12 text-right">
                         <a href="?c=caso&a=expedientes" class="btn btn-danger btn-sm mr-1 mt-1"><i
@@ -122,20 +125,42 @@
                     <div class="col-md-6">
                         <div class="form-group ml-2">
                             <label for="instancias">Instancia:</label>
-                            <select class="form-control" id="instancias">
-                                <option>Juzgado</option>
-                                <option>Sala</option>
-                                <option>Casación</option>
+                            <select class="form-control" id="instancia">
+                                <?php
+                                foreach ($instancias as $instancia) {
+                                    if ($instancia->t_InsCod == $detalle->t_InsCod) {
+                                        ?>
+                                        <option value="<?php echo $instancia->t_InsCod; ?>"
+                                                selected><?php echo $instancia->t_InsNombre; ?></option>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <option value="<?php echo $instancia->t_InsCod; ?>"><?php echo $instancia->t_InsNombre; ?></option>
+                                        <?php
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group mr-2">
                             <label for="materias">Materia:</label>
-                            <select class="form-control" id="materias">
-                                <option>Civil</option>
-                                <option>Penal</option>
-                                <option>Constitucional</option>
+                            <select class="form-control" id="materia">
+                                <?php
+                                foreach ($materias as $materia) {
+                                    if ($materia->t_MateCod == $detalle->t_MateCod) {
+                                        ?>
+                                        <option value="<?php echo $materia->t_MateCod; ?>"
+                                                selected><?php echo $materia->t_MateDescripcion; ?></option>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <option value="<?php echo $materia->t_MateCod; ?>"><?php echo $materia->t_MateDescripcion; ?></option>
+                                        <?php
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -270,9 +295,133 @@
                                             <td><?php echo $audiencia->t_AudiDireccion; ?></td>
                                             <td><?php echo $audiencia->title; ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
+                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                                        data-target="#mod_audiencia<?php echo $audiencia->t_AudiCod; ?>">
+                                                    <i
                                                             class="fas fa-pen"></i></button>
                                             </td>
+
+
+                                            <!--Modificar audiencia Modal -->
+                                            <div class="modal fade"
+                                                 id="mod_audiencia<?php echo $audiencia->t_AudiCod; ?>" tabindex="-1"
+                                                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <form action="?c=audiencia&a=modificar" method="post">
+
+                                                    <input type="hidden" name="t_AudiCod"
+                                                           value="<?php echo $audiencia->t_AudiCod; ?>">
+
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Modificar
+                                                                    Audiencia</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                <div class="form-group">
+                                                                    <label for="asunto">Asunto:</label>
+                                                                    <input type="text" class="form-control"
+                                                                           name="asunto" id="asunto" value="<?php echo $audiencia->asunto; ?>"
+                                                                           required/>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="t_AudiDireccion">Direccion:</label>
+                                                                    <input type="text" name="t_AudiDireccion"
+                                                                           class="form-control"
+                                                                           id="t_AudiDireccion" value="<?php echo $audiencia->t_AudiDireccion; ?>" required/>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="t_AudiHora">Hora:</label>
+                                                                    <input type="time" name="t_AudiHora"
+                                                                           class="form-control"
+                                                                           id="t_AudiHora" value="<?php echo $audiencia->t_AudiHora; ?>" required/>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="t_AudiFecha">Fecha:</label>
+                                                                    <input type="date" name="t_AudiFecha"
+                                                                           class="form-control"
+                                                                           id="t_AudiFecha" value="<?php echo $audiencia->t_AudiFecha; ?>" required/>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="t_AudiObservaciones">Observación:</label>
+                                                                    <textarea class="form-control"
+                                                                              name="t_AudiObservaciones"
+                                                                              id="t_AudiObservaciones" cols="10"
+                                                                              rows="5">
+                                                                        <?php echo $audiencia->t_AudiObservaciones; ?>
+                                                                    </textarea>
+                                                                </div>
+
+                                                                <!--id de caso-->
+                                                                <input type="hidden" name="t_casocod"
+                                                                       value="<?php echo $t_CasoCod; ?>">
+
+                                                                <div class="form-group">
+                                                                    <label for="idt_juzgado">Juzgado:</label>
+                                                                    <select class="form-control" name="idt_juzgado"
+                                                                            id="idt_juzgado">
+                                                                        <?php
+                                                                        foreach ($juzgados as $juzgado) {
+                                                                            if ($juzgado->idt_juzgado == $audiencia->idt_juzgado) {
+                                                                                ?>
+                                                                                <option value="<?php echo $juzgado->idt_juzgado; ?>"
+                                                                                        selected><?php echo $juzgado->nombre; ?></option>
+                                                                                <?php
+                                                                            } else {
+                                                                                ?>
+                                                                                <option value="<?php echo $juzgado->idt_juzgado; ?>"><?php echo $juzgado->nombre; ?></option>
+                                                                                <?php
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="t_estado">Estado</label>
+                                                                    <select class="form-control" name="t_estado"
+                                                                            id="t_estado">
+                                                                        <?php
+                                                                        foreach ($estados as $estado) {
+                                                                            if ($estado->t_estado == $audiencia->t_estado) {
+                                                                                ?>
+                                                                                <option value="<?php echo $estado->t_estado; ?>"
+                                                                                        selected><?php echo $estado->title; ?></option>
+                                                                                <?php
+                                                                            } else {
+                                                                                ?>
+                                                                                <option value="<?php echo $estado->t_estado; ?>"><?php echo $estado->title; ?></option>
+                                                                                <?php
+                                                                            }
+                                                                        }
+                                                                        ?>
+                                                                    </select>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cerrar
+                                                                </button>
+                                                                <button type="submit" class="btn btn-warning">
+                                                                    Modificar
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
+
                                         </tr>
                                         <?php
                                     }
@@ -567,15 +716,23 @@
                                             <td scope="row"><?php echo $pago->idPagoCod; ?></td>
                                             <td><?php echo $pago->t_PagoDescrip; ?></td>
                                             <td><?php echo $pago->fechaSistema; ?></td>
-                                            <td><?php echo "S/. " . $pago->t_PagoMonto; ?></td>
+                                            <td><input type="text" class="form-control text-center border-0" id="monto"
+                                                       value="<?php echo $pago->t_PagoMonto; ?>" readonly></td>
                                             <td>
                                                 <button type="button" class="btn btn-warning btn-sm"><i
                                                             class="fas fa-pen"></i></button>
                                             </td>
                                         </tr>
                                         <?php
+                                        $monto += $pago->t_PagoMonto;
                                     }
                                     ?>
+                                    <tr>
+                                        <td colspan="3" class="text-right mr-5"><b>Total</b></td>
+                                        <td><input type="text" class="form-control text-center border-0" id="total"
+                                                   value="<?php echo $monto; ?>" readonly></td>
+                                        <td>&nbsp;</td>
+                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -634,6 +791,72 @@
 </div>
 
 <script>
+
+    window.onload = function () {
+
+        var sum = 0;
+
+        $('#monto').each(function () {
+            sum += parseFloat(this.value);
+        });
+
+        // var monto = document.getElementById("monto").value;
+
+        console.log(sum);
+
+        // monto.forEach( valor =>{
+        //     console.log(valor);
+        // });
+    };
+
+    //actualizar instancia
+    document.getElementById("instancia").onchange = function () {
+        updateInstancia()
+    };
+
+    function updateInstancia() {
+
+        var t_InsCod = document.getElementById("instancia").value;
+        var t_CasoCod = document.getElementById("t_CasoCod").value;
+
+        $.ajax({
+            type: 'POST',
+            dataType: "json",
+            url: "?c=caso&a=updateInstancia",
+            data: {
+                t_InsCod: t_InsCod,
+                t_CasoCod: t_CasoCod
+            },
+            success: function (response) {
+                console.log(response);
+            }
+        });
+
+    }
+
+    //actualizar materias
+    document.getElementById("materia").onchange = function () {
+        updateMateria()
+    };
+
+    function updateMateria() {
+        var t_MateCod = document.getElementById("materia").value;
+        var t_CasoCod = document.getElementById("t_CasoCod").value;
+
+        $.ajax({
+            type: 'POST',
+            dataType: "json",
+            url: "?c=caso&a=updateMateria",
+            data: {
+                t_MateCod: t_MateCod,
+                t_CasoCod: t_CasoCod
+            },
+            success: function (response) {
+                console.log(response);
+            }
+        });
+
+    }
 
     function ver(archivo) {
         window.open(archivo, '_blank');

@@ -25,8 +25,7 @@
     <link href="./assets/css/landing-page.min.css" rel="stylesheet">
 
     <!--    Bootstrap Select-->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 
 
     <!--favicon-->
@@ -140,7 +139,7 @@ if (isset($_SESSION['auth'])) {
                                     id="dropdownMenuButton"
                                     data-toggle="dropdown"
                                     aria-haspopup="true"
-                                    aria-expanded="false">Mi cuenta
+                                    aria-expanded="false"><?php echo $_SESSION['user_data']; ?>
                             </button>
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -204,22 +203,5 @@ if (isset($_SESSION['auth'])) {
 
 
 <script>
-    $(document).ready(function () {
-        // console.log('HOLA JQUERY');
-        $.ajax({
-            type: 'POST',
-            dataType: "json",
-            url: "?c=index&a=cargarMenu",
-            //data: datos,
-            success: function (response) {
-                // console.log(response);
-                $("#contador").text(response.length);
-                for (var k in response) {
-                    console.log('OK');
-                    // $("#notificaciones").text(response[k].descripcion);
-                    $("#notificaciones").append("<a class='dropdown-item' href='?c=notificacion&a=index'>" + response[k].icono + " " + response[k].descripcion + "</a>");
-                }
-            }
-        });
-    });
+
 </script>
