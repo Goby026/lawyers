@@ -130,7 +130,7 @@ class CasoController{
         $caso->cod_demandante = $_REQUEST['cod_demandante'];
         $caso->cod_demandado = $_REQUEST['cod_demandado'];
         $caso->t_CasoFech = $fecha;
-        $caso->t_CasoNumExp = 'S/N'; //--
+        $caso->t_CasoNumExp = $_REQUEST['t_CasoNumExp'];
         $caso->t_AboCod = $_REQUEST['t_AboCod'];
         $caso->t_CasoJuzgado = $_REQUEST['t_CasoJuzgado'];
         $caso->t_CasoObservaciones = "";

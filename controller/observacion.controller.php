@@ -68,6 +68,22 @@ class ObservacionController{
 
         header("Location: ?c=caso&a=expedientes&t_CasoCod=$t_casocod");
     }
+
+    public function Actualizar(){
+
+        $t_CasoCod = $_REQUEST['t_CasoCod'];
+        $idt_observacion = $_REQUEST['idt_observacion'];
+
+        $observacion = new Observacion();
+        $observacion->idt_observacion = $idt_observacion;
+        $observacion->title = $_REQUEST['title'];
+        $observacion->description = $_REQUEST['description'];
+        $observacion->t_CasoCod = $t_CasoCod;
+
+        $this->model->Actualizar($observacion);
+
+        header("Location: ?c=caso&a=expedientes&t_CasoCod=$t_CasoCod");
+    }
     
     public function Eliminar(){
         $this->model->Eliminar($_REQUEST['id']);

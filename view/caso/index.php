@@ -12,7 +12,10 @@
                         <div class="card">
                             <h5 class="card-header">Partes procesales 1:</h5>
                             <div class="card-body">
-
+                                <div class="form-group">
+                                    <label for="t_CasoNumExp">Expediente</label>
+                                    <input type="text" name="t_CasoNumExp" class="form-control" required/>
+                                </div>
                                 <div class="form-group">
                                     <label for="demandante">Demandante:</label> <br>
 
@@ -63,7 +66,7 @@
                         <div class="card">
                             <h5 class="card-header">Partes procesales 2:</h5>
                             <div class="card-body">
-
+                                <br>
                                 <div class="form-group">
                                     <label for="Abogado">Abogado:</label><br>
                                     <select class="selectpicker" data-width='75%' name="t_AboCod"

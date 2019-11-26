@@ -68,7 +68,7 @@ class Observacion
         }
     }
 
-    public function Actualizar($data)
+    public function Actualizar(Observacion $data)
     {
         try
         {
@@ -78,7 +78,8 @@ class Observacion
                 array(
                     $data->title,
                     $data->description,
-                    $data->t_CasoCod
+                    $data->t_CasoCod,
+                    $data->idt_observacion
                 ));
         } catch (Exception $e)
         {

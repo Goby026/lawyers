@@ -115,7 +115,10 @@
                 ?>
                 <input type="hidden" value="<?php echo $detalle->t_CasoCod; ?>" id="t_CasoCod">
                 <div class="row">
-                    <div class="col-md-12 text-right">
+                    <div class="col-md-10">
+                        <h5 class="mt-1">EXPEDIENTE: <small><?php echo $detalle->t_CasoNumExp; ?></small> </h5>
+                    </div>
+                    <div class="col-md-2 text-right">
                         <a href="?c=caso&a=expedientes" class="btn btn-danger btn-sm mr-1 mt-1"><i
                                     class="fa fa-window-close"></i></a>
                     </div>
@@ -250,10 +253,6 @@
                                                             <?php
                                                         }
                                                         ?>
-                                                        <!--                                                        <option selected>Acuerdo</option>-->
-                                                        <!--                                                        <option>Pospuesto</option>-->
-                                                        <!--                                                        <option>Nueva Audiencia</option>-->
-                                                        <!--                                                        <option>Desacuerdo</option>-->
                                                     </select>
                                                 </div>
 
@@ -300,7 +299,6 @@
                                                     <i
                                                             class="fas fa-pen"></i></button>
                                             </td>
-
 
                                             <!--Modificar audiencia Modal -->
                                             <div class="modal fade"
@@ -421,7 +419,6 @@
                                                 </form>
                                             </div>
 
-
                                         </tr>
                                         <?php
                                     }
@@ -518,9 +515,60 @@
                                                             class="far fa-file-pdf"></i></button>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
+                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                                        data-target="#mod_documento<?php echo $doc->t_DocuCod; ?>"><i
                                                             class="fas fa-pen"></i></button>
                                             </td>
+
+                                            <!--Modificar documentos Modal -->
+                                            <div class="modal fade" id="mod_documento<?php echo $doc->t_DocuCod; ?>" tabindex="-1"
+                                                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <form action="?c=documentos&a=actualizar" method="post" enctype="multipart/form-data">
+
+                                                    <input type="hidden" name="t_DocuCod"
+                                                           value="<?php echo $doc->t_DocuCod; ?>">
+
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Modificar
+                                                                    Documento</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                <div class="form-group">
+                                                                    <label for="t_docudescripcion">Nombre:</label>
+                                                                    <input type="text" name="t_docudescripcion" id="t_docudescripcion"
+                                                                           class="form-control" value="<?php echo $doc->t_DocuDescripcion; ?>">
+                                                                </div>
+
+                                                                <!--id de caso-->
+                                                                <input type="hidden" name="t_CasoCod" value="<?php echo $t_CasoCod; ?>">
+
+                                                                <div class="form-group">
+                                                                    <label for="documento">Archivo:</label>
+                                                                    <input type="file" name="documento" id="documento"
+                                                                           class="form-control">
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cerrar
+                                                                </button>
+                                                                <button type="submit" class="btn btn-warning">
+                                                                    Modificar
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
                                         </tr>
                                         <?php
                                     }
@@ -575,10 +623,6 @@
                                                     <!--id de caso-->
                                                     <input type="hidden" name="t_casocod"
                                                            value="<?php echo $t_CasoCod; ?>">
-
-                                                    <!--                                                    <button type="submit" class="btn btn-primary">Programar-->
-                                                    <!--                                                        recordatorio-->
-                                                    <!--                                                    </button>-->
                                                 </div>
 
                                             </div>
@@ -617,9 +661,60 @@
                                             <td><?php echo $obs->description; ?></td>
                                             <td><?php echo $obs->fechaSistema; ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
+                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                                        data-target="#mod_obs<?php echo $obs->idt_observacion; ?>"><i
                                                             class="fas fa-pen"></i></button>
                                             </td>
+
+                                            <!--Modificar observacion Modal -->
+                                            <div class="modal fade" id="mod_obs<?php echo $obs->idt_observacion; ?>" tabindex="-1"
+                                                 role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <form action="?c=observacion&a=actualizar" method="post">
+
+                                                    <input type="hidden" name="idt_observacion"
+                                                           value="<?php echo $obs->idt_observacion; ?>">
+
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Modificar
+                                                                    Observación</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                        aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+
+                                                                <label for="title">Título:</label>
+                                                                <input type="text" name="title" id="title" class="form-control" value="<?php echo $obs->title; ?>"/>
+
+                                                                <div class="form-group">
+                                                                    <label for="description">Descripción:</label>
+                                                                    <textarea class="form-control" rows="5" id="description"
+                                                                              name="description">
+                                                                        <?php echo $obs->description; ?>
+                                                                    </textarea>
+                                                                </div>
+
+                                                                <!--id de caso-->
+                                                                <input type="hidden" name="t_CasoCod"
+                                                                       value="<?php echo $t_CasoCod; ?>">
+
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                        data-dismiss="modal">Cerrar
+                                                                </button>
+                                                                <button type="submit" class="btn btn-warning">
+                                                                    Modificar
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
                                         </tr>
                                         <?php
                                     }
@@ -663,7 +758,7 @@
                                             <div class="modal-body">
 
                                                 <!--id de caso-->
-                                                <input type="hidden" name="t_casocod" value="<?php echo $t_CasoCod; ?>">
+                                                <input type="hidden" name="t_CasoCod" value="<?php echo $t_CasoCod; ?>">
 
                                                 <div class="form-group">
                                                     <label for="t_PagoMonto">Total:</label>
@@ -719,9 +814,58 @@
                                             <td><input type="text" class="form-control text-center border-0" id="monto"
                                                        value="<?php echo $pago->t_PagoMonto; ?>" readonly></td>
                                             <td>
-                                                <button type="button" class="btn btn-warning btn-sm"><i
+                                                <button type="button" class="btn btn-warning btn-sm" data-toggle="modal"
+                                                        data-target="#mod_pagos<?php echo $pago->idPagoCod; ?>"><i
                                                             class="fas fa-pen"></i></button>
                                             </td>
+
+                                            <!-- Modificar Pago Modal -->
+                                            <div class="modal fade" id="mod_pagos<?php echo $pago->idPagoCod; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                 aria-hidden="true">
+                                                <form action="?c=pagosad&a=actualizar" method="post">
+                                                    <!--id de caso-->
+                                                    <input type="hidden" name="t_CasoCod" value="<?php echo $t_CasoCod; ?>">
+
+                                                    <!--id de pago-->
+                                                    <input type="hidden" name="idPagoCod" value="<?php echo $pago->idPagoCod; ?>">
+
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <!-- Modal Header -->
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">MODIFICAR PAGOS/ADELANTOS:</h4>
+                                                            </div>
+                                                            <!-- Modal body -->
+                                                            <div class="modal-body">
+
+                                                                <div class="form-group">
+                                                                    <label for="t_PagoMonto">Total:</label>
+                                                                    <input type="number" class="form-control" name="t_PagoMonto"
+                                                                           id="t_PagoMonto" placeholder="S/." value="<?php echo $pago->t_PagoMonto; ?>" required/>
+                                                                </div>
+
+                                                                <div class="form-group">
+                                                                    <label for="t_PagoDescrip">Concepto:</label>
+                                                                    <input type="text" class="form-control" name="t_PagoDescrip"
+                                                                           id="t_PagoDescrip" value="<?php echo $pago->t_PagoDescrip; ?>" required/>
+                                                                </div>
+
+                                                            </div>
+
+                                                            <!-- Modal footer -->
+                                                            <div class="modal-footer">
+                                                                <button type="submit" class="btn btn-primary">Guardar</button>
+
+                                                                <button type="button" class="btn btn-danger"
+                                                                        data-dismiss="modal">
+                                                                    Cerrar
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
                                         </tr>
                                         <?php
                                         $monto += $pago->t_PagoMonto;

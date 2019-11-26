@@ -64,6 +64,24 @@ class PagosadController{
 //        print_r($pago);
 
     }
+
+    public function Actualizar(){
+
+        $t_CasoCod = $_REQUEST['t_CasoCod'];
+        $idPagoCod = $_REQUEST['idPagoCod'];
+
+        $pago = new Pagos();
+        $pago->idPagoCod = $idPagoCod;
+        $pago->t_PagoMonto = $_REQUEST['t_PagoMonto'];
+        $pago->t_PagoMontoInicial = "0.0";
+        $pago->t_PagoDescrip = $_REQUEST['t_PagoDescrip'];
+        $pago->t_CasoCod = $t_CasoCod;
+
+        $this->model->Actualizar($pago);
+
+        header("Location: ?c=caso&a=expedientes&t_CasoCod=$t_CasoCod");
+
+    }
     
     public function Eliminar(){
         $this->model->Eliminar($_REQUEST['id']);

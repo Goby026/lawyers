@@ -58,6 +58,27 @@ class DocumentosController{
 //        print_r($_REQUEST);
     }
 
+    public function Actualizar(){
+        $id = $_REQUEST['t_CasoCod'];
+
+        $documento = new Documentos();
+        $documento->t_DocuCod = $_REQUEST['t_DocuCod'];
+        $documento->t_DocuDescripcion = $_REQUEST['t_docudescripcion'];
+
+        if (isset($_FILES['documento'])){
+            $archivoSubido = $this->subirDocumento();
+            $documento->t_url = $archivoSubido;
+        }
+
+        $documento->t_CasoCod = $id;
+
+        $this->model->Actualizar($documento);
+
+        header("Location: ?c=caso&a=expedientes&t_CasoCod=$id");
+
+//        print_r($documento);
+    }
+
     public function subirDocumento(){
         $fileDestination = "--";
 
