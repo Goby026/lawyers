@@ -3,13 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="aad9093a-1b1a-4f8a-82eb-6c2f076131b7" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controller/pagosad.controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/pagosad.controller.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lawyers 20191126 1415.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/login.controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/login.controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/mantenimiento.controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/mantenimiento.controller.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controller/notificacion.controller.php" beforeDir="false" afterPath="$PROJECT_DIR$/controller/notificacion.controller.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/model/database.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/database.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/usuarios.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/usuarios.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/systemcase 20191202 2015.sql" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/caso/expedientes.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/caso/expedientes.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/footer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/login/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/login/login.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/mantenimiento/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/mantenimiento/index.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/mantenimiento/modelo.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/mantenimiento/modelo.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/view/notificaciones/configuracion.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/notificaciones/configuracion.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/view/usuario/perfil.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/usuario/perfil.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/stripe/stripe.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/stripe/stripe.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/view/usuario/registro.php" beforeDir="false" afterPath="$PROJECT_DIR$/view/usuario/registro.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,7 +44,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/model" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
@@ -45,9 +52,9 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\app-abogados\model" />
       <recent name="C:\xampp\htdocs\app-abogados\controller" />
       <recent name="C:\xampp\htdocs\app-abogados\view\caso" />
-      <recent name="C:\xampp\htdocs\app-abogados\model" />
       <recent name="C:\xampp\htdocs\app-abogados\view\clientes" />
       <recent name="C:\xampp\htdocs\app-abogados\view\home" />
     </key>
@@ -161,7 +168,8 @@
       <workItem from="1575167395108" duration="1757000" />
       <workItem from="1575250390280" duration="6763000" />
       <workItem from="1575299152506" duration="16424000" />
-      <workItem from="1575335376066" duration="227000" />
+      <workItem from="1575335376066" duration="11701000" />
+      <workItem from="1575382904360" duration="18772000" />
     </task>
     <servers />
   </component>

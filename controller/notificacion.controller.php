@@ -1,36 +1,53 @@
 <?php
 require_once "model/usuarioNotificacion.php";
+require_once "model/tiponotificacion.php";
 
 class NotificacionController{
 
 //    private $model;
     private $notificacion;
+    private $tiponotificacion;
 
     public function __CONSTRUCT(){
+
+        session_start();
+
 //        $this->model = new Usuarios();
         $this->notificacion = new UsuarioNotificacion();
+        $this->tiponotificacion = new Tiponotificacion();
     }
 
     public function Index(){
 
-        session_start();
-
         $notificaciones = $this->notificacion->Listar($_SESSION["user_id"]);
 
         require_once 'view/header.php';
-        require_once 'view/Notificaciones/index.php';
+        require_once 'view/notificaciones/index.php';
         require_once 'view/footer.php';
 
     }
 
     public function Config(){
 
-        session_start();
+        $tiponotificaciones = $this->tiponotificacion->Listar();
 
         require_once 'view/header.php';
-        require_once 'view/Notificaciones/configuracion.php';
+        require_once 'view/notificaciones/configuracion.php';
         require_once 'view/footer.php';
 
+    }
+
+    public function tiponoti(){
+        $idtiponotificacion = $_REQUEST['idtiponotificacion'];
+        $val = $_REQUEST['val'];
+
+        $tipo = new Tiponotificacion();
+        $tipo->state = $val;
+        $tipo->idtiponotificacion = $idtiponotificacion;
+
+        $tipo->Actualizar($tipo);
+
+        echo json_encode($tipo);
     }
 
     public function leer(){

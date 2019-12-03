@@ -97,11 +97,24 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
 
 <!--tinyMCE-->
-<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+<!--<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>-->
+<script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 
 <script src="./assets/js/navbar.js"></script>
 
-<script>tinymce.init({selector:'textarea'});</script>
+<!--<script>tinymce.init({selector:'textarea'});</script>-->
+
+<script>
+    tinymce.init({
+        selector: 'textarea',
+        external_plugins:
+            {
+                'saveToPdf': 'https://cdn.rawgit.com/Api2Pdf/api2pdf.tinymce/master/save-to-pdf/dist/save-to-pdf/plugin.js'
+            },
+        toolbar: 'saveToPdf',
+        saveToPdfHandler: '/REPLACE-WITH-HANDLER-URL'
+    });
+</script>
 
 </body>
 </html>

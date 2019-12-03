@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-md-12 p-2 ml-4">
                     <form class="form-inline" style="width: 100%">
-                        <input class="form-control" type="search" placeholder="Busqueda"
+                        <input class="form-control" type="search" placeholder="Busqueda" id="expedientes"
                                aria-label="Search">
                         &nbsp;<button class="btn btn-primary my-2 my-sm-0" type="button"><i class="fas fa-search"></i>
                         </button>
@@ -74,7 +74,7 @@
                     <p>
                         <?php echo $title; ?>
                     </p>
-                    <table class="table table-hover">
+                    <table class="table table-hover expedientes">
                         <thead class="thead-dark">
                         <tr>
                             <th scope="col">#</th>
@@ -758,7 +758,7 @@
                                             <div class="modal-body">
 
                                                 <!--id de caso-->
-                                                <input type="hidden" name="t_CasoCod" value="<?php echo $t_CasoCod; ?>">
+                                                <input type="hidden" name="t_casocod" value="<?php echo $t_CasoCod; ?>">
 
                                                 <div class="form-group">
                                                     <label for="t_PagoMonto">Total:</label>
@@ -936,6 +936,8 @@
 
 <script>
 
+    $('input#expedientes').quicksearch('.expedientes tbody tr');
+
     window.onload = function () {
 
         var sum = 0;
@@ -944,13 +946,7 @@
             sum += parseFloat(this.value);
         });
 
-        // var monto = document.getElementById("monto").value;
-
         console.log(sum);
-
-        // monto.forEach( valor =>{
-        //     console.log(valor);
-        // });
     };
 
     //actualizar instancia

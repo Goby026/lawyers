@@ -7,10 +7,10 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                        <h3 class="panel-title">Cargar <?php echo '$'.$itemPrice; ?> con Stripe</h3>
+                        <h3 class="panel-title">Subscripción</h3>
                         <!-- Product Info -->
-                        <p><b>Item Name:</b> <?php echo $itemName; ?></p>
-                        <p><b>Price:</b> <?php echo '$'.$itemPrice.' '.$currency; ?></p>
+                        <p><b>Servicio:</b> <?php echo $itemName; ?></p>
+                        <p><b>Precio:</b> <?php echo '$'.$itemPrice.' '.$currency; ?></p>
                     </div>
                     <div class="card-text">
                         <form action="?c=pagosad&a=stripe" method="POST" id="paymentFrm">

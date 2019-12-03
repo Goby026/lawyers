@@ -1,17 +1,14 @@
 <?php
 require_once 'model/usuarios.php';
 require_once 'model/abogado.php';
-require_once 'model/modelo.php';
 
 class LoginController{
 
     private $model;
-    private $modelos;
     private $abogado;
 
     public function __CONSTRUCT(){
         $this->model = new Usuarios();
-        $this->modelos = new Modelo();
         $this->abogado = new Abogado();
     }
 
@@ -27,30 +24,30 @@ class LoginController{
     }
 
     public function Acceder(){
-
-        $usuario = new Usuarios();
-
-        $usuario->username = $_REQUEST['username'];
-        $usuario->password = $_REQUEST['password'];
-
-        if ($usuario->Login($usuario)){
-            session_start();
-
-            $user_log = $usuario->Login($usuario);
-
-            $_SESSION['auth'] = $usuario->username;
-            $_SESSION['user_id'] = $user_log->idt_usuario;
-
-            require_once 'view/header.php';
-            require_once 'view/index/index.php';
-            require_once 'view/footer.php';
-
-        }else{
-            $error = "Error de datos¡¡¡¡¡";
-            require_once 'view/header.php';
-            require_once 'view/login/login.php';
-            require_once 'view/footer.php';
-        }
+//
+//        $usuario = new Usuarios();
+//
+//        $usuario->username = $_REQUEST['username'];
+//        $usuario->password = $_REQUEST['password'];
+//
+//        if ($usuario->Login($usuario)){
+//            session_start();
+//
+//            $user_log = $usuario->Login($usuario);
+//
+//            $_SESSION['auth'] = $usuario->username;
+//            $_SESSION['user_id'] = $user_log->idt_usuario;
+//
+//            require_once 'view/header.php';
+//            require_once 'view/index/index.php';
+//            require_once 'view/footer.php';
+//
+//        }else{
+//            $error = "Error de datos¡¡¡¡¡";
+//            require_once 'view/header.php';
+//            require_once 'view/login/login.php';
+//            require_once 'view/footer.php';
+//        }
 
     }
     
@@ -90,8 +87,43 @@ class LoginController{
     }
 
     public function validarFb(){
-        $models = $this->modelos->Listar();
-        echo json_encode($models);
+//validar si el id de fb ya existe
+//        $fb = $this->hashPassword($_REQUEST['id']);
+        $fb = $_REQUEST['id'];
+        $email = $_REQUEST['email'];
+
+//echo $this->model->emailExiste($email);
+
+        if ($this->model->Obtenerfb($fb) != null){
+//            ingresar
+            session_start();
+            $_SESSION['auth'] = $email;
+            $_SESSION['user_id'] = $this->model->Obtenerfb($fb)->idt_usuario;
+
+            echo "login";
+//            print_r($this->model->Obtenerfb($fb));
+        }else{
+
+            //validar si email existe
+            //if (!$this->model->emailExiste($email)){
+//            session_start();
+            //    echo "no existe email";
+            //}else{
+            //    echo "¡El email indicado ya existe en nuestros registros, ingrese con su cuenta por favor!";
+            //}
+//            registrar usuario con fb
+            $usuario = new Usuarios();
+            $usuario->idt_perfil = 2;
+            $usuario->username = $email;
+            $usuario->password = "";
+            $usuario->token_pass = "";
+            $usuario->fb = $fb;
+
+//            $this->model->Registrar($usuario);
+//            print_r($usuario);
+            echo  "registrar";
+        }
+
     }
 
     public function recuperarview(){
@@ -148,6 +180,10 @@ class LoginController{
         header("Location: ?c=home");
     }
 
-
+    public function hashPassword($password)
+    {
+        $hash = password_hash($password, PASSWORD_DEFAULT);
+        return $hash;
+    }
 
 }

@@ -14,53 +14,64 @@
 
                 <div class="card-body">
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Alerta de nuevo caso
-                                </label>
-                            </div>
-                        </li>
+                        <?php
+                        foreach ($tiponotificaciones as $tipo) {
+                            ?>
 
-                        <li class="list-group-item">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Alerta de nueva audiencia
-                                </label>
-                            </div>
-                        </li>
+                            <li class="list-group-item">
+                                <div class="form-check">
+                                    <?php
+                                    if ($tipo->state == 0){
+                                        ?>
+                                        <input class="form-check-input" type="checkbox" value="" id="newcase<?php echo $tipo->idtiponotificacion;?>" onchange="ver(<?php echo $tipo->idtiponotificacion;?>)">
+                                        <?php
+                                    }else{
+                                        ?>
+                                        <input class="form-check-input" type="checkbox" value="" id="newcase<?php echo $tipo->idtiponotificacion;?>" onchange="ver(<?php echo $tipo->idtiponotificacion;?>)" checked>
+                                        <?php
+                                    }
+                                    ?>
 
-                        <li class="list-group-item">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Alerta de nueva observación
-                                </label>
-                            </div>
-                        </li>
+                                    <label class="form-check-label" for="newcase<?php echo $tipo->idtiponotificacion;?>">
+                                        <?php echo $tipo->nombre; ?>
+                                    </label>
+                                </div>
+                            </li>
 
-                        <li class="list-group-item">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Alerta de nuevo documento
-                                </label>
-                            </div>
-                        </li>
-
-                        <li class="list-group-item">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Alerta de registro de pagos
-                                </label>
-                            </div>
-                        </li>
+                            <?php
+                        }
+                        ?>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    //actualizar instancia
+    // document.getElementById("newcase").onchange = function () {
+    //     var checkedValue = document.querySelector('#newcase').checked;
+    //     console.log("val:", checkedValue);
+    // };
+
+    function ver(id){
+        if (document.querySelector('#newcase'+id).checked){
+            var checkedValue = 1;
+        }else{
+            var checkedValue = 0;
+        }
+
+        $.ajax({
+            type: 'POST',
+            dataType: "json",
+            url: "?c=notificacion&a=tiponoti",
+            data: {
+                idtiponotificacion: id,
+                val: checkedValue
+            },
+            success: function (response) {
+                console.log(response);
+            }
+        });
+    }
+</script>

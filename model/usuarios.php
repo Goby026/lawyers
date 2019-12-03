@@ -10,6 +10,9 @@ class Usuarios
     public $idt_perfil;
     public $username;
     public $password;
+    public $token_password;
+    public $password_request;
+    public $fb;
 
 
     public function __CONSTRUCT()
@@ -49,6 +52,20 @@ class Usuarios
         }
     }
 
+    public function Obtenerfb($fb)
+    {
+        try {
+            $stm = $this->pdo
+                ->prepare("SELECT * FROM " . $this->table . " WHERE fb = ?");
+
+
+            $stm->execute(array($fb));
+            return $stm->fetch(PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
     public function Eliminar($id)
     {
         try {
@@ -82,7 +99,7 @@ class Usuarios
     public function Registrar(Usuarios $data)
     {
         try {
-            $sql = 'INSERT INTO ' . $this->table . ' (idt_perfil, username, password) VALUES (?,?,?)';
+            $sql = 'INSERT INTO ' . $this->table . ' (idt_perfil, username, password, fb) VALUES (?,?,?,?)';
 
             $this->pdo->prepare($sql)
                 ->execute(
@@ -90,6 +107,7 @@ class Usuarios
                         $data->idt_perfil,
                         $data->username,
                         $data->password,
+                        $data->fb,
                     )
                 );
 
@@ -108,6 +126,22 @@ class Usuarios
 
             $stm = $this->pdo
                 ->prepare("SELECT * FROM " . $this->table . " WHERE username = ? AND password = ?");
+
+
+            $stm->execute(array($user->username, $user->password));
+            return $stm->fetch(PDO::FETCH_OBJ);
+        } catch (Exception $e) {
+            die($e->getMessage());
+        }
+    }
+
+    public function Loginfb($id)
+    {
+        try {
+            $result = array();
+
+            $stm = $this->pdo
+                ->prepare("SELECT * FROM " . $this->table . " WHERE fb = ?");
 
 
             $stm->execute(array($user->username, $user->password));

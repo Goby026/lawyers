@@ -17,8 +17,12 @@ if (isset($modelo)) {
             </div>
 
             <div class="row mt-3">
-                <div class="col-md-4 offset-4">
+                <div class="col-md-2 offset-2">
                     <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                </div>
+                <div class="col-md-2 offset-2">
+<!--                    <button type="submit" class="btn btn-primary btn-block">Guardar</button>-->
+                    <a href="?c=mantenimiento&a=makepdf&idmodelo=<?php echo $modelo->idmodelo;?>" target="_blank">PDF</a>
                 </div>
             </div>
         </form>

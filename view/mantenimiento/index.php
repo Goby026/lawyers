@@ -41,20 +41,20 @@
                 <?php
                 foreach ($instancias as $ins){
                 ?>
-                <div class="card ml-1">
-                    <div class="card-body">
 
-                        <div class="row">
-                            <div class="col-10">
-                                <h5 class="card-title"><?php echo $ins->t_InsNombre;?></h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="card-title">
+                                &nbsp;
                             </div>
-                            <div class="col-2 text-right">
+                            <div class="card-text">
+                                <h5><?php echo $ins->t_InsNombre;?></h5>
+                            </div>
+                            <div class="card-footer">
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#mod_instancia<?php echo $ins->t_InsCod;?>"><i class="fa fa-edit"></i></button>
                             </div>
                         </div>
-<!--                        <a href="?c=instancia&a=eliminar&id=--><?php //echo $ins->t_InsCod;?><!--" class="btn btn-danger"><i class="fa fa-trash"></i></a>-->
                     </div>
-                </div>
 
                     <!--Modificar instancia Modal -->
                     <div class="modal fade" id="mod_instancia<?php echo $ins->t_InsCod;?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -135,54 +135,59 @@
             </div>
 
             <div class="card-group">
-                <?php
-                foreach ($materias as $mate){
-                ?>
-                <div class="card ml-1">
-                    <div class="card-body">
 
-                        <div class="row">
-                            <div class="col-10">
-                                <h5 class="card-title"><?php echo $mate->t_MateDescripcion;?></h5>
-                            </div>
-                            <div class="col-2 text-right">
+                <div class="card">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">DESCRIPCION</th>
+                            <th scope="col">&nbsp;</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        foreach ($materias as $mate){
+                        ?>
+                        <tr>
+                            <td><?php echo $mate->t_MateDescripcion;?></td>
+                            <td>
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#mod_materia<?php echo $mate->t_MateCod;?>"><i class="fa fa-edit"></i></button>
-<!--                                <a href="?c=materia&a=eliminar&id=--><?php //echo $mate->t_MateCod;?><!--" class="btn btn-danger"><i class="fa fa-trash"></i></a>-->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!--Modificar materia Modal -->
-                <div class="modal fade" id="mod_materia<?php echo $mate->t_MateCod;?>" tabindex="-1" role="dialog" aria-hidden="true">
-                    <form action="?c=materia&a=crud" method="post">
-                        <input type="hidden" name="id" value="<?php echo $mate->t_MateCod;?>">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modificar Materia</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="t_MateDescripcion">Nombre de materia</label>
-                                        <input type="text" class="form-control" name="t_MateDescripcion" id="t_MateDescripcion" value="<?php echo $mate->t_MateDescripcion;?>">
+                                <!--                                <a href="?c=materia&a=eliminar&id=--><?php //echo $mate->t_MateCod;?><!--" class="btn btn-danger"><i class="fa fa-trash"></i></a>-->
+                            </td>
+                        </tr>
+                            <!--Modificar materia Modal -->
+                            <div class="modal fade" id="mod_materia<?php echo $mate->t_MateCod;?>" tabindex="-1" role="dialog" aria-hidden="true">
+                                <form action="?c=materia&a=crud" method="post">
+                                    <input type="hidden" name="id" value="<?php echo $mate->t_MateCod;?>">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLabel">Modificar Materia</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="form-group">
+                                                    <label for="t_MateDescripcion">Nombre de materia</label>
+                                                    <input type="text" class="form-control" name="t_MateDescripcion" id="t_MateDescripcion" value="<?php echo $mate->t_MateDescripcion;?>">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <button type="submit" class="btn btn-warning">Modificar</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    <button type="submit" class="btn btn-warning">Modificar</button>
-                                </div>
+                                </form>
                             </div>
-                        </div>
-                    </form>
-                </div>
 
-                    <?php
-                }
-                ?>
+                            <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -229,19 +234,18 @@
                 <?php
                 foreach ($modelos as $model){
                     ?>
-                    <div class="card ml-1">
+                    <div class="card">
                         <div class="card-body">
-
-                            <div class="row">
-                                <div class="col-10">
-                                    <h5 class="card-title"><?php echo $model->t_title;?></h5>
-                                </div>
-                                <div class="col-2 text-right">
-                                    <a href="?c=modelo&a=editar&idmodelo=<?php echo $model->idmodelo;?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
-<!--                                    <a href="?c=modelo&a=eliminar&id=--><?php //echo $model->idmodelo;?><!--" class="btn btn-danger"><i class="fa fa-trash"></i></a>-->
-                                </div>
+                            <div class="card-title">
+                                &nbsp;
                             </div>
-
+                            <div class="card-text">
+                                <h5 class="card-title"><?php echo $model->t_title;?></h5>
+                            </div>
+                            <div class="card-footer">
+                                <a href="?c=modelo&a=editar&idmodelo=<?php echo $model->idmodelo;?>" class="btn btn-primary"><i class="fa fa-edit"></i></a>
+                                <!--                                    <a href="?c=modelo&a=eliminar&id=--><?php //echo $model->idmodelo;?><!--" class="btn btn-danger"><i class="fa fa-trash"></i></a>-->
+                            </div>
                         </div>
                     </div>
                     <?php
