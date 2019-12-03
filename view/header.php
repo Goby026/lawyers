@@ -64,7 +64,7 @@
 
 
     <!--stripe-->
-    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://js.stripe.com/v2/"></script>
 
     <title>System-case</title>
 
@@ -115,6 +115,7 @@ if (isset($_SESSION['auth'])) {
                             </button>
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <div id="notificaciones"></div>
+                                <div class="dropdown-divider"></div>
                                 <a href="?c=notificacion&a=index" class="dropdown-item">Mis Notificaciones</a>
                                 <a href="?c=notificacion&a=config" class="dropdown-item">Configurar Notificaciones</a>
                             </div>
@@ -147,8 +148,9 @@ if (isset($_SESSION['auth'])) {
                                 <a href="?c=cliente&a=index" class="dropdown-item">Clientes</a>
                                 <a href="?c=calendario&a=index" class="dropdown-item">Calendario</a>
                                 <a href="?c=mantenimiento&a=index" class="dropdown-item">Mantenimiento</a>
-                                <a href="/modelos" class="dropdown-item">Modelos</a>
+<!--                                <a href="/modelos" class="dropdown-item">Modelos</a>-->
                                 <a class="dropdown-item" href="?c=usuario&a=perfil">Configuración</a>
+<!--                                <a class="dropdown-item" href="?c=pagosad&a=setPayment">stripe</a>-->
                             </div>
                         </div>
                     </li>
@@ -200,8 +202,3 @@ if (isset($_SESSION['auth'])) {
     <?php
 }
 ?>
-
-
-<script>
-
-</script>

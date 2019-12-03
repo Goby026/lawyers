@@ -8,52 +8,58 @@
         <div class="col-md-12">
             <!-- style="width: 25rem;" -->
             <div class="card mt-3">
-                <div class="card-header">Notificaciones</div>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" aria-label="Checkbox for following text input" />
-                                </div>
-                            </div>
-                            <label>Activar notificaciones de citas</label>
-                        </div>
-                    </li>
+                <div class="card-header">
+                    Notificaciones
+                </div>
 
-                    <li class="list-group-item">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" aria-label="Checkbox for following text input" />
-                                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Alerta de nuevo caso
+                                </label>
                             </div>
-                            <label>Activar notificaciones de correo electrónico</label>
-                        </div>
-                    </li>
+                        </li>
 
-                    <li class="list-group-item">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" aria-label="Checkbox for following text input" />
-                                </div>
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Alerta de nueva audiencia
+                                </label>
                             </div>
-                            <label>Activar notificaciones de busqueda</label>
-                        </div>
-                    </li>
+                        </li>
 
-                    <li class="list-group-item">
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <input type="checkbox" aria-label="Checkbox for following text input" />
-                                </div>
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Alerta de nueva observación
+                                </label>
                             </div>
-                            <label>Activar notificaciones de pagos</label>
-                        </div>
-                    </li>
-                </ul>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Alerta de nuevo documento
+                                </label>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Alerta de registro de pagos
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

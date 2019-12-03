@@ -4,7 +4,7 @@
 
             <div class="form-inline" style="width: 100%">
                 <h3>Configuración</h3>
-                <a href="?c=usuario&a=perfil&payments=ok" class="btn btn-success ml-auto">Configurar pagos</a>
+                <a href="?c=pagosad&a=setPayment" class="btn btn-success ml-auto">Configurar pagos</a>
             </div>
             <hr>
             <form action="?c=usuario&a=actualizar_perfil" method="post">

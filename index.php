@@ -4,6 +4,12 @@ require_once 'model/database.php';
 
 $controller = 'home';
 
+
+//******-solucion para cuando se pulse el boton atras (problema: documento expirado)-******
+ini_set('session.cache_limiter','public');
+session_cache_limiter(false);
+//-----------------------------------------------------------------------------------------
+
 // Todo esta lógica hara el papel de un FrontController
 if(!isset($_REQUEST['c']))
 {
