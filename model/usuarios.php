@@ -111,12 +111,27 @@ class Usuarios
                     )
                 );
 
-            return true;
+            return $this->get_last_id("idt_usuario",$this->table);
         } catch (Exception $e) {
             die($e->getMessage());
         }
 
         return false;
+    }
+
+    function get_last_id($nombre_id, $tabla){
+        try
+        {
+            $result = array();
+            $stm = $this->pdo->prepare("SELECT MAX($nombre_id) AS id FROM $tabla");
+            $stm->execute();
+            $result = $stm->fetch(PDO::FETCH_OBJ);
+            return $result;
+        }
+        catch(Exception $e)
+        {
+            die($e->getMessage());
+        }
     }
 
     public function Login(Usuarios $user)

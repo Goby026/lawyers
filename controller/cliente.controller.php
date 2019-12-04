@@ -64,7 +64,7 @@ class ClienteController{
             $cliente->direccion = $_POST['direccion'];
             $cliente->telefono = $_POST['telefono'];
             $cliente->telefono2 = $_POST['telefono2'];
-            $cliente->fec_nac = '';
+            $cliente->fec_nac = '2019/01/01 01:01:01';
             $cliente->dpto = $_POST['dpto'];
             $cliente->prov = $_POST['prov'];
             $cliente->dist = $_POST['dist'];

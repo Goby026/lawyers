@@ -81,7 +81,27 @@ class UsuarioController{
 
                     if ($this->minMax(20,6, $pass)){
 
-                        if ($this->model->Registrar($usuario)){
+                        $us = $this->model->Registrar($usuario);
+
+                        if ($us->id > 0){
+
+                        //registrar abogado
+
+                            $abogado = new Abogado();
+                            $abogado->t_AboNombre = "";
+                            $abogado->t_AboApellidos = "";
+                            $abogado->t_AboDni = 0;
+                            $abogado->t_AboDireccion = "";
+                            $abogado->t_AboTelfcel = 0;
+                            $abogado->t_AboTelf = 0;
+                            $abogado->t_AboCorreo = $_REQUEST['email'];
+                            $abogado->t_AboDepartamento = "";
+                            $abogado->t_AboProvincia = "";
+                            $abogado->t_AboDistrito = "";
+                            $abogado->t_AboContrasena = "";
+                            $abogado->idt_usuario = $us->id;
+
+                            $this->abogados->Registrar($abogado);
 
                             $success = "Gracias por registrarse, puede ingresar al sistema";
 

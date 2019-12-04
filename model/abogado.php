@@ -105,11 +105,11 @@ class Abogado
 		}
 	}
 
-	public function Registrar(Alumno $data)
+	public function Registrar(Abogado $data)
 	{
 		try 
 		{
-		$sql = "INSERT INTO ".$this->table." (t_AboNombre,t_AboApellidos,t_AboDni,t_AboDireccion,t_AboTelfcel,t_AboTelf,t_AboCorreo,t_AboDepartamento,t_AboProvincia,t_AboDistrito,t_AboContraseña,idt_usuario) 
+		$sql = "INSERT INTO ".$this->table." (t_AboNombre,t_AboApellidos,t_AboDni,t_AboDireccion,t_AboTelfcel,t_AboTelf,t_AboCorreo,t_AboDepartamento,t_AboProvincia,t_AboDistrito,t_AboContrasena,idt_usuario) 
 		        VALUES (?, ?, ?, ?, ?, ?,?, ?, ?, ?, ?, ?)";
 
 		$this->pdo->prepare($sql)
@@ -125,8 +125,8 @@ class Abogado
                     $data->t_AboDepartamento,
                     $data->t_AboProvincia,
                     $data->t_AboDistrito,
-                    $data->t_AboContraseña,
-                    $data->idt_usuario,
+                    $data->t_AboContrasena,
+                    $data->idt_usuario
                 )
 			);
 		} catch (Exception $e) 
